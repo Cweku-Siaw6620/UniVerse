@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login | Student BizHub</title>
+
+  <!-- Google Identity Script -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <link rel="stylesheet" href="/stylesheet/login.css">
+  <style href=></style>
+</head>
+<body>
+
+  <div class="login-container">
+    <h2>Login with Google</h2>
+
+    <!-- Google Sign-In button -->
+    <div id="g_id_onload"
+         data-client_id="464107628893-q7fdm8qv2lqvta0tboj8rdek52n0usrn.apps.googleusercontent.com"
+         data-callback="handleGoogleLogin"
+         data-auto_prompt="false">
+    </div>
+
+    <div class="g_id_signin"
+         data-type="standard"
+         data-size="large"
+         data-theme="outline"
+         data-text="sign_in_with"
+         data-shape="rectangular"
+         data-logo_alignment="left">
+    </div>
+
+    <div class="small-text">
+      Don't have a store? <a href="createStore.html">Create your store</a>
+    </div>
+  </div>
+
+  <script src="/javascript/login.js"></script>
+
+</body>
+</html>

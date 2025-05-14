@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Your Store</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: url('/images/logo.png') no-repeat center center fixed;
+      background-size: cover;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="file"],
+    input[type="password"],
+    input[type="number"],
+    textarea {
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    textarea {
+      resize: vertical;
+    }
+
+    button {
+      margin-top: 25px;
+      padding: 12px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        margin: 20px;
+        padding: 15px;
+      }
+    }
+
+    .add-more{
+    height: 40px;
+    width: 100px;
+}
+
+.small-text {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
+    .small-text a {
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    .small-text a:hover {
+      text-decoration: underline;
+    }
+
+    .dropdown {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.dropdown-btn {
+  width: 100%;
+  padding: 10px;
+  background-color: #f1f1f1;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #ffffff;
+  width: 100%;
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px;
+  z-index: 1;
+  box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
+}
+
+.dropdown-content label {
+  display: block;
+  margin: 5px 0;
+}
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Create Your Store</h2>
+    <form id="storeForm">
+      <label for="storeName">Store Name</label>
+      <input type="text" id="storeName" name="storeName" required>
+
+      <label for="sellerName">Seller's Name</label>
+      <input type="text" id="sellerName" name="sellerName" required>
+
+      <label for="sellerNumber">Seller's Number</label>
+      <input type="text" id="sellerNumber" name="sellerNumber" required>
+
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" placeholder="Enter your password" required>
+
+      <label for="storeLogo">Store Logo</label>
+      <input type="file" id="storeLogo" name="storeLogo" accept="image/*" required>
+
+      <label for="storeDescription">Store Description</label>
+      <textarea id="storeDescription" name="storeDescription" rows="4" required></textarea>
+
+      <!--Menu to select regions-->
+    <label>Select Regions You Operate In:</label>
+      <div class="dropdown">
+    <button type="button" class="dropdown-btn" onclick="toggleDropdown()">Select Regions</button>
+      <div id="checkboxMenu" class="dropdown-content">
+    <label><input type="checkbox" name="regions" value="Greater Accra"> Greater Accra</label>
+    <label><input type="checkbox" name="regions" value="Ashanti"> Ashanti</label>
+    <label><input type="checkbox" name="regions" value="Central"> Central</label>
+    <label><input type="checkbox" name="regions" value="Western"> Western</label>
+    <label><input type="checkbox" name="regions" value="Eastern"> Eastern</label>
+    <label><input type="checkbox" name="regions" value="Volta"> Volta</label>
+    <label><input type="checkbox" name="regions" value="Northern"> Northern</label>
+    <label><input type="checkbox" name="regions" value="Upper East"> Upper East</label>
+    <label><input type="checkbox" name="regions" value="Upper West"> Upper West</label>
+    <label><input type="checkbox" name="regions" value="Bono"> Bono</label>
+    <label><input type="checkbox" name="regions" value="Bono East"> Bono East</label>
+    <label><input type="checkbox" name="regions" value="Ahafo"> Ahafo</label>
+    <label><input type="checkbox" name="regions" value="Savannah"> Savannah</label>
+    <label><input type="checkbox" name="regions" value="North East"> North East</label>
+    <label><input type="checkbox" name="regions" value="Western North"> Western North</label>
+    <label><input type="checkbox" name="regions" value="Oti"> Oti</label>
+  </div>
+</div>
+
+
+    <!--What you sell-->
+      <label for="storeDescription">What Do You Sell?</label>
+      <div id="itemsContainer">
+        <input type="text" name="items[]" placeholder="e.g., Laptops" class="item-input" />
+      </div>
+      <div>
+      <button type="button" onclick="addItem()" class="add-more">+ Add</button>
+      <button type="button" onclick="removeItem()" class="add-more">– Remove</button>
+      </div>
+
+      <button id='submitButton' type="submit">Create Store</button>
+
+      <div class="small-text">
+        Already have an account? <a href="login.html">login</a>
+      </div>
+    </form>
+  </div>
+
+  <script src="/javascript/createStore.js"></script>
+</body>
+</html>

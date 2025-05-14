@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Add Products</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f9f9f9;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: #fff;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .product {
+      margin-bottom: 20px;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      background-color: #f5f5f5;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+
+    input[type="text"],
+    input[type="file"],
+    textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      margin-top: 30px;
+      background: #28a745;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #218838;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Add Up To 7 Products</h2>
+    <form id="productsForm">
+
+      <!-- Generate 10 product blocks -->
+      <!-- You can also use JS to generate these dynamically -->
+
+      <!-- Repeat this block for up to 10 products -->
+      <!-- Product 1 -->
+      <div class="product">
+        <h4>Product 1</h4>
+        <label for="productName1">Product Name</label>
+        <input type="text" id="productName1" name="productName1" required>
+
+        <label for="productImage1">Product Image</label>
+        <input type="file" id="productImage1" name="productImage1" accept="image/*" required>
+
+        <label for="productDesc1">Product Description</label>
+        <textarea id="productDesc1" name="productDesc1" rows="3" required></textarea>
+      </div>
+
+      <!-- Copy and paste the above block and change the numbers up to Product 10 -->
+
+      <!-- Example only includes Product 1 for now — want me to generate all 10? -->
+
+      <button type="submit">Finish and Save Products</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById('productsForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      // Save or send product data to backend here
+
+      alert("Products saved! Redirecting to your store page...");
+      // Redirect to store page - you'd normally use a unique link or store ID
+      window.location.href = "store.html";
+    });
+  </script>
+
+</body>
+</html>
