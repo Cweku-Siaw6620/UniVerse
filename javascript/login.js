@@ -1,7 +1,7 @@
 function handleGoogleLogin(response) {
       const idToken = response.credential;
 
-      fetch('http://localhost:3000/api/auth/google', {
+      fetch('https://universe-api-uabt.onrender.com/api/auth/google', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ token: idToken })
@@ -12,7 +12,7 @@ function handleGoogleLogin(response) {
         // Save to localStorage if needed
         localStorage.setItem("user", JSON.stringify(data));
         // Redirect to store dashboard or homepage
-        window.location.href = "stores.html";
+        window.location.href = "../stores.html";
       })
       .catch(err => {
         console.error("Google login failed:", err);
