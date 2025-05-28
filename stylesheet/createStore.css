@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap');
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: url('/images/background.jpeg');
+      background-size: cover;
+      background-position: bottom;
+      background-repeat: no-repeat;
+
+    }
+    .heading-font {
+      font-family: 'Playfair Display', serif;
+    }
+    
+    .form-container {
+      backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+    }
+    
+    .dropdown-content {
+      scrollbar-width: thin;
+      scrollbar-color: #4f46e5 #f1f1f1;
+    }
+    
+    .dropdown-content::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    .dropdown-content::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+    
+    .dropdown-content::-webkit-scrollbar-thumb {
+      background-color: #4f46e5;
+      border-radius: 20px;
+    }
+    
+    .animate-fade-in {
+      animation: fadeIn 0.3s ease-in-out;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .item-input {
+      transition: all 0.3s ease;
+    }
+    
+    .item-input:focus {
+      box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.3);
+    }
