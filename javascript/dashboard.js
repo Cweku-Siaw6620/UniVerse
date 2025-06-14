@@ -4,6 +4,7 @@
             sellerName: "John Doe",
             sellerNumber: "0244123456"
         };
+        
 
         // Products array
         let products = [];

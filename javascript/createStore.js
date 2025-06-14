@@ -1,74 +1,3 @@
-/*function addItem() {
-    const container = document.getElementById("itemsContainer");
-    const input = document.createElement("input");
-    input.type = "text";
-    input.name = "items[]";
-    input.placeholder = "e.g., More products...";
-    input.className = "item-input";
-    container.appendChild(input);
-  };
-
-  function removeItem() {
-    const container = document.getElementById("itemsContainer");
-    const inputs = container.querySelectorAll("input");
-    
-    if (inputs.length > 1) {
-      container.removeChild(inputs[inputs.length - 1]);
-    }
-  };
-
-  function toggleDropdown() {
-    const menu = document.getElementById("checkboxMenu");
-    menu.style.display = menu.style.display === "block" ? "none" : "block";
-  }
-  
-  document.addEventListener("click", function(event) {
-    const dropdown = document.querySelector(".dropdown");
-    if (!dropdown.contains(event.target)) {
-      document.getElementById("checkboxMenu").style.display = "none";
-    }
-  });
-
-  //handling the createStore button
-  document.getElementById('storeForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-  
-    const storeName = document.getElementById('storeName').value;
-    const storeDescription = document.getElementById('storeDescription').value;
-    const sellerName = document.getElementById('sellerName').value;
-    const password = document.getElementById('password').value;
-    const storeLogo = document.getElementById('storeName').value;
-    const sellerNumber = document.getElementById('sellerNumber').value;
-  
-    // Collect all items
-    const items = Array.from(document.querySelectorAll('input[name="items[]"]'))
-                       .map(input => input.value)
-                       .filter(val => val.trim() !== "");
-
-    const checkedRegions = Array.from(document.querySelectorAll('input[name="regions"]:checked'))
-                                .map(input => input.value);
-
-
-    const storeData = {
-      storeName,
-      sellerName,
-      password,
-      storeLogo,
-      sellerNumber,
-      storeDescription,
-      items,
-      checkedRegions
-      // Store logo will not be stored in localStorage directly
-      // Consider uploading it or previewing it on this page only
-    };
-  
-    localStorage.setItem('storeData', JSON.stringify(storeData));
-  
-    // Redirect to next page
-    window.location.href = 'addProducts.html';
-  });
-  */
-
   //Logo Handling
   document.addEventListener("DOMContentLoaded", function () {
   const storeLogoInput = document.getElementById('storeLogo');
@@ -139,52 +68,41 @@
         container.removeChild(container.lastChild);
       }
     }
-    
-    // Form submission
-    document.addEventListener("DOMContentLoaded", function () {
+   
+  document.addEventListener("DOMContentLoaded", function () {
   const storeForm = document.getElementById('storeForm');
 
   if (storeForm) {
-    storeForm.addEventListener('submit', function (e) {
+    storeForm.addEventListener('submit', async function (e) {
       e.preventDefault();
-      // Your form submission logic here
 
+      const user = JSON.parse(localStorage.getItem("user"));
+      if (!user || !user.id) {
+        alert("User not found in localStorage. Please log in.");
+        return;
+      }
 
-    const storeName = document.getElementById('storeName').value;
-    const storeDescription = document.getElementById('storeDescription').value;
-    const sellerName = document.getElementById('sellerName').value;
-    const storeLogo = document.getElementById('storeLogo').value;
-    const sellerNumber = document.getElementById('sellerNumber').value;
-  
-    // Collect all items
-    const items = Array.from(document.querySelectorAll('input[name="items[]"]'))
-                       .map(input => input.value)
-                       .filter(val => val.trim() !== "");
+      const formData = new FormData(storeForm); // ✅ grab everything
+      formData.append("userId", user.id);       // ✅ add user ID manually
 
-    const checkedRegions = Array.from(document.querySelectorAll('input[name="regions"]:checked'))
-                                .map(input => input.value);
+      try {
+        const response = await fetch("http://localhost:3000/api/stores", {
+          method: "POST",
+           body: formData,
+        });
 
+        const result = await response.json();
 
-    const storeData = {
-      storeName,
-      sellerName,
-      storeLogo,
-      sellerNumber,
-      storeDescription,
-      items,
-      checkedRegions
-      // Store logo will not be stored in localStorage directly
-      // Consider uploading it or previewing it on this page only
-    };
-  
-    localStorage.setItem('storeData', JSON.stringify(storeData));
-  
-    // Redirect to next page
-    window.location.href = 'dashboard.html';
-      // Here you would normally handle the form submission
-  
-
-          });
-  }
+        if (response.ok) {
+          alert("Store created successfully!");
+          window.location.href = `dashboard.html`;
+        } else {
+          alert(result.message || "Failed to create store.");
+        }
+      } catch (error) {
+        console.error("Store creation error:", error);
+        alert("Something went wrong. Please try again.");
+      }
     });
-  
+  }
+});
