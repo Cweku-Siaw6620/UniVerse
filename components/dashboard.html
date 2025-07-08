@@ -3,557 +3,1158 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Store Dashboard</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="/stylesheet/dashboard.css">
+    <title>Dashboard</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>tailwind.config={theme:{extend:{colors:{primary:'#4f46e5',secondary:'#6366f1'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
+    <link rel="stylesheet" href="../stylesheet/dashboard.css">
+    <script src="../javascript/dashboard.js"></script>
 </head>
-<body class="bg-gray-50">
-    <!-- Header -->
-    <header class="gradient-bg text-white shadow-lg">
-        <div class="container mx-auto px-4 py-6">
-            <div class="flex justify-between items-center">
-                <div>
-                    <h1 class="text-2xl font-bold">
-                        <a href="../stores.html">UniVerse</a></h1>
-                    <p class="text-sm opacity-80">Dashboard</p>
-                </div>
-                <div class="flex items-center space-x-4">
-                    <div class="text-right">
-                        <p class="font-semibold" id="storeNameDisplay">Store Name</p>
-                        <p class="text-xs opacity-80" id="sellerNameDisplay">Seller Name</p>
-                    </div>
-                    <div class="w-10 h-10 rounded-full bg-white text-purple-700 flex items-center justify-center font-bold">
-                        <span id="sellerInitial">SN</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="container mx-auto px-4 py-8">
-        <!-- Dashboard Overview -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div class="bg-white rounded-lg shadow p-6">
-                <h3 class="text-gray-500 font-medium">Total Products</h3>
-                <p class="text-3xl font-bold" id="totalProducts">0</p>
-                <p class="text-sm text-gray-500"><span id="availableSlots">10</span> slots available</p>
-            </div>
-            <div class="bg-white rounded-lg shadow p-6">
-                <h3 class="text-gray-500 font-medium">Current Plan</h3>
-                <p class="text-3xl font-bold">Free</p>
-                <p class="text-sm text-gray-500">Basic features</p>
-            </div>
-            <div class="bg-white rounded-lg shadow p-6">
-                <h3 class="text-gray-500 font-medium">Quick Actions</h3>
-                <div class="flex space-x-3 mt-2">
-                    <button onclick="openAddProductModal()" class="bg-purple-600 text-white px-3 py-1 rounded text-sm hover:bg-purple-700 transition">
-                        <i class="fas fa-plus mr-1"></i> Add Product
-                    </button>
-                    <button onclick="openUpgradeModal()" class="bg-yellow-500 text-white px-3 py-1 rounded text-sm hover:bg-yellow-600 transition">
-                        <i class="fas fa-crown mr-1"></i> Upgrade
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Products Section -->
-        <div class="bg-white rounded-lg shadow mb-8">
-            <div class="p-6 border-b border-gray-200">
-                <h2 class="text-xl font-semibold">Your Products</h2>
-                <p class="text-gray-500 text-sm">Manage your product listings</p>
-            </div>
+<body>
+    <div class="min-h-screen flex">
+        <!-- Sidebar -->
+        <div class="w-64 bg-white border-r border-gray-200 hidden lg:block">
             <div class="p-6">
-                <div id="productsContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                    <!-- Products will be added here dynamically -->
-                    <div class="text-center py-10 text-gray-400" id="noProductsMessage">
-                        <i class="fas fa-box-open text-4xl mb-2"></i>
-                        <p>No products added yet</p>
-                        <button onclick="openAddProductModal()" class="mt-4 text-purple-600 hover:text-purple-800 font-medium">
-                            Add your first product
-                        </button>
-                    </div>
-                </div>
+                <h1 class="text-2xl font-['Pacifico'] text-primary">logo</h1>
             </div>
+            <nav class="mt-4">
+                <a href="#" class="flex items-center px-6 py-3 text-gray-900 bg-gray-100 border-l-4 border-primary">
+                    <div class="w-6 h-6 flex items-center justify-center mr-3">
+                        <i class="ri-dashboard-line text-primary"></i>
+                    </div>
+                    <span class="font-medium">Dashboard</span>
+                </a>
+                <a href="#" class="flex items-center px-6 py-3 text-gray-600 hover:bg-gray-50">
+                    <div class="w-6 h-6 flex items-center justify-center mr-3">
+                        <i class="ri-shopping-bag-line"></i>
+                    </div>
+                    <span>Products</span>
+                </a>
+                <a href="#" class="flex items-center px-6 py-3 text-gray-600 hover:bg-gray-50">
+                    <div class="w-6 h-6 flex items-center justify-center mr-3">
+                        <i class="ri-shopping-cart-line"></i>
+                    </div>
+                    <span>Orders</span>
+                </a>
+                <a href="#" class="flex items-center px-6 py-3 text-gray-600 hover:bg-gray-50">
+                    <div class="w-6 h-6 flex items-center justify-center mr-3">
+                        <i class="ri-user-line"></i>
+                    </div>
+                    <span>Customers</span>
+                </a>
+                <a href="#" class="flex items-center px-6 py-3 text-gray-600 hover:bg-gray-50">
+                    <div class="w-6 h-6 flex items-center justify-center mr-3">
+                        <i class="ri-bar-chart-line"></i>
+                    </div>
+                    <span>Analytics</span>
+                </a>
+                <a href="#" class="flex items-center px-6 py-3 text-gray-600 hover:bg-gray-50">
+                    <div class="w-6 h-6 flex items-center justify-center mr-3">
+                        <i class="ri-settings-line"></i>
+                    </div>
+                    <span>Settings</span>
+                </a>
+            </nav>
         </div>
 
-        <!-- Pricing Plans -->
-        <div class="bg-white rounded-lg shadow">
-            <div class="p-6 border-b border-gray-200">
-                <h2 class="text-xl font-semibold">Choose Your Plan</h2>
-                <p class="text-gray-500 text-sm">Select the plan that fits your business needs</p>
-            </div>
-            <div class="p-6">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <!-- Free Plan -->
-                    <div class="border rounded-lg p-6 selected-plan">
-                        <h3 class="font-bold text-lg mb-2">Free</h3>
-                        <p class="text-3xl font-bold mb-4">GHC 0<span class="text-sm font-normal text-gray-500">/month</span></p>
-                        <ul class="space-y-2 mb-6">
-                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> 10 product slots</li>
-                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> Basic analytics</li>
-                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> Standard support</li>
-                        </ul>
-                        <button class="w-full py-2 bg-gray-200 text-gray-700 rounded font-medium cursor-not-allowed" disabled>
-                            Current Plan
-                        </button>
-                    </div>
-                    
-                    <!-- Standard Plan -->
-                    <div class="border rounded-lg p-6 hover:shadow-md transition">
-                        <h3 class="font-bold text-lg mb-2">Standard</h3>
-                        <p class="text-3xl font-bold mb-4">GHC 30<span class="text-sm font-normal text-gray-500">/month</span></p>
-                        <ul class="space-y-2 mb-6">
-                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> 35 product slots (25 extra)</li>
-                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> Advanced analytics</li>
-                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> Priority support</li>
-                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> Basic customization</li>
-                        </ul>
-                        <button onclick="openUpgradeModal('Standard')" class="w-full py-2 bg-purple-600 text-white rounded font-medium hover:bg-purple-700 transition">
-                            Upgrade Now
-                        </button>
-                    </div>
-                    
-                    <!-- Premium Plan -->
-                    <div class="border rounded-lg p-6 hover:shadow-md transition relative">
-                        <div class="premium-badge">Best Value</div>
-                        <h3 class="font-bold text-lg mb-2">Premium</h3>
-                        <p class="text-3xl font-bold mb-4">GHC 80<span class="text-sm font-normal text-gray-500">/month</span></p>
-                        <ul class="space-y-2 mb-6">
-                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> 60 product slots (50 extra)</li>
-                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> Premium analytics dashboard</li>
-                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> 24/7 VIP support</li>
-                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> Advertising tools</li>
-                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> Featured store placement</li>
-                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> Custom domain</li>
-                        </ul>
-                        <button onclick="openUpgradeModal('Premium')" class="w-full py-2 bg-yellow-500 text-white rounded font-medium hover:bg-yellow-600 transition">
-                            Go Premium
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- Header -->
+            <header class="bg-white border-b border-gray-200 flex items-center justify-between px-6 py-4">
 
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-8">
-        <div class="container mx-auto px-4">
-            <div class="flex flex-col md:flex-row justify-between items-center">
-                <div class="mb-4 md:mb-0">
-                    <h2 class="text-xl font-bold">StoreDash</h2>
-                    <p class="text-gray-400 text-sm">Your complete eCommerce solution</p>
+                <div class="flex items-center space-x-4" id="store-info">
+                    <!-- Store info will be loaded here -->
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 flex items-center justify-center bg-gray-200 rounded-full overflow-hidden mr-3">
+                            <i class="ri-store-2-line text-gray-500 text-xl"></i>
+                        </div>
+                        <div class="hidden md:block">
+                            <div class="text-sm font-medium text-gray-900">Loading store...</div>
+                            <div class="text-xs text-gray-500">Loading seller...</div>
+                        </div>
+                    </div>
+                    <div class="relative">
+                        <button class="w-10 h-10 flex items-center justify-center bg-gray-100 rounded-full focus:outline-none">
+                            <div class="w-10 h-10 flex items-center justify-center">
+                                <i class="ri-notification-3-line"></i>
+                            </div>
+                        </button>
+                        <div class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></div>
+                    </div>
+                    <div class="w-10 h-10 flex items-center justify-center bg-gray-100 rounded-full">
+                        <i class="ri-user-line"></i>
+                    </div>
                 </div>
-                <div class="flex space-x-6">
-                    <a href="#" class="hover:text-purple-300 transition">Terms</a>
-                    <a href="#" class="hover:text-purple-300 transition">Privacy</a>
-                    <a href="#" class="hover:text-purple-300 transition">Support</a>
-                    <a href="#" class="hover:text-purple-300 transition">Contact</a>
-                </div>
-            </div>
-            <div class="mt-6 pt-6 border-t border-gray-700 text-center text-gray-400 text-sm">
-                &copy; 2023 StoreDash. All rights reserved.
-            </div>
-        </div>
-    </footer>
+            </header>
 
-    <!-- Add Product Modal -->
-    <div id="addProductModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-        <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
-            <div class="p-6 border-b border-gray-200">
-                <h3 class="text-lg font-semibold">Add New Product</h3>
-            </div>
-            <div class="p-6">
-                <form id="productForm" onsubmit="addProduct(event)">
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-medium mb-2" for="productName">Product Name</label>
-                        <input type="text" id="productName" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600" required>
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-medium mb-2" for="productPrice">Price (GHC)</label>
-                        <input type="number" id="productPrice" min="0" step="0.01" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600" required>
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-medium mb-2" for="productImage">Product Image URL</label>
-                        <input type="url" id="productImage" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600" placeholder="https://example.com/image.jpg">
-                        <p class="text-xs text-gray-500 mt-1">Leave empty for default image</p>
-                    </div>
-                    <div class="flex justify-end space-x-3 mt-6">
-                        <button type="button" onclick="closeAddProductModal()" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100 transition">
-                            Cancel
-                        </button>
-                        <button type="submit" class="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition">
-                            Add Product
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="lg:hidden bg-white w-64 fixed inset-y-0 left-0 z-50 transform -translate-x-full transition-transform duration-300 ease-in-out">
+                <div class="p-6 border-b border-gray-200">
+                    <div class="flex items-center justify-between">
+                        <h1 class="text-2xl font-['Pacifico'] text-primary">logo</h1>
+                        <button id="close-mobile-menu" class="text-gray-600 focus:outline-none">
+                            <div class="w-6 h-6 flex items-center justify-center">
+                                <i class="ri-close-line text-xl"></i>
+                            </div>
                         </button>
                     </div>
-                </form>
+                </div>
+                <nav class="mt-4">
+                    <a href="#" class="flex items-center px-6 py-3 text-gray-900 bg-gray-100 border-l-4 border-primary">
+                        <div class="w-6 h-6 flex items-center justify-center mr-3">
+                            <i class="ri-dashboard-line text-primary"></i>
+                        </div>
+                        <span class="font-medium">Dashboard</span>
+                    </a>
+                    <a href="#" class="flex items-center px-6 py-3 text-gray-600 hover:bg-gray-50">
+                        <div class="w-6 h-6 flex items-center justify-center mr-3">
+                            <i class="ri-shopping-bag-line"></i>
+                        </div>
+                        <span>Products</span>
+                    </a>
+                    <a href="#" class="flex items-center px-6 py-3 text-gray-600 hover:bg-gray-50">
+                        <div class="w-6 h-6 flex items-center justify-center mr-3">
+                            <i class="ri-shopping-cart-line"></i>
+                        </div>
+                        <span>Orders</span>
+                    </a>
+                    <a href="#" class="flex items-center px-6 py-3 text-gray-600 hover:bg-gray-50">
+                        <div class="w-6 h-6 flex items-center justify-center mr-3">
+                            <i class="ri-user-line"></i>
+                        </div>
+                        <span>Customers</span>
+                    </a>
+                    <a href="#" class="flex items-center px-6 py-3 text-gray-600 hover:bg-gray-50">
+                        <div class="w-6 h-6 flex items-center justify-center mr-3">
+                            <i class="ri-bar-chart-line"></i>
+                        </div>
+                        <span>Analytics</span>
+                    </a>
+                    <a href="#" class="flex items-center px-6 py-3 text-gray-600 hover:bg-gray-50">
+                        <div class="w-6 h-6 flex items-center justify-center mr-3">
+                            <i class="ri-settings-line"></i>
+                        </div>
+                        <span>Settings</span>
+                    </a>
+                </nav>
             </div>
+            <!-- Main Content Area -->
+            <main class="flex-1 overflow-y-auto bg-gray-50 p-6">
+                <div class="max-w-7xl mx-auto">
+                    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
+                        <h1 class="text-2xl font-bold text-gray-900">Dashboard</h1>
+                    </div>
+
+                    <!-- KPI Statistics -->
+
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                        <!-- Add Product Section -->
+                        <div class="lg:col-span-2 bg-white rounded-lg shadow-sm p-6">
+                            <div class="flex items-center justify-between mb-6">
+                                <h2 class="text-lg font-bold text-gray-900">Add New Product</h2>
+                                <div class="flex items-center">
+                                    <span class="text-sm text-gray-500 mr-2">Products: </span>
+                                    <span class="text-sm font-medium" id="product-count">0</span>
+                                    <span class="text-sm text-gray-500 mx-1">/</span>
+                                    <span class="text-sm font-medium" id="product-limit">15</span>
+                                </div>
+                            </div>
+                            <form id="add-product-form">
+                                <div class="mb-6">
+                                    <div class="flex items-center justify-center w-full">
+                                        <label for="product-image" class="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+                                            <div class="flex flex-col items-center justify-center pt-5 pb-6" id="upload-placeholder">
+                                                <div class="w-12 h-12 flex items-center justify-center mb-3 text-gray-400">
+                                                    <i class="ri-upload-cloud-line text-3xl"></i>
+                                                </div>
+                                                <p class="mb-2 text-sm text-gray-500"><span class="font-medium">Click to upload</span> or drag and drop</p>
+                                                <p class="text-xs text-gray-500">SVG, PNG, JPG or GIF (MAX. 2MB)</p>
+                                            </div>
+                                            <div id="image-preview" class="hidden w-full h-full flex items-center justify-center">
+                                                <img id="preview-img" src="" alt="Preview" class="max-h-full max-w-full object-contain">
+                                            </div>
+                                            <input id="product-image" type="file" class="hidden" accept="image/*" />
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div>
+                                        <label for="product-name" class="block text-sm font-medium text-gray-700 mb-1">Product Name</label>
+                                        <input type="text" id="product-name" class="w-full px-4 py-2 border border-gray-300 rounded-button text-sm" placeholder="Enter product name">
+                                    </div>
+                                    <div>
+                                        <label for="product-price" class="block text-sm font-medium text-gray-700 mb-1">Price ($)</label>
+                                        <input type="number" id="product-price" class="w-full px-4 py-2 border border-gray-300 rounded-button text-sm" placeholder="0.00">
+                                    </div>
+                                    <div>
+                                        <label for="product-category" class="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                                        <div class="relative">
+                                            <select id="product-category" class="w-full px-4 py-2 border border-gray-300 rounded-button text-sm appearance-none pr-8">
+                                                <option value="">Select category</option>
+                                                <option value="electronics">Electronics</option>
+                                                <option value="clothing">Clothing</option>
+                                                <option value="home">Home & Garden</option>
+                                                <option value="beauty">Beauty & Personal Care</option>
+                                                <option value="sports">Sports & Outdoors</option>
+                                            </select>
+                                            <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                                                <div class="w-4 h-4 flex items-center justify-center text-gray-400">
+                                                    <i class="ri-arrow-down-s-line"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label for="product-stock" class="block text-sm font-medium text-gray-700 mb-1">Stock Quantity</label>
+                                        <input type="number" id="product-stock" class="w-full px-4 py-2 border border-gray-300 rounded-button text-sm" placeholder="0">
+                                    </div>
+                                    <div class="md:col-span-2">
+                                        <label for="product-description" class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                                        <textarea id="product-description" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-button text-sm" placeholder="Enter product description"></textarea>
+                                    </div>
+                                </div>
+                                <div class="mt-6">
+                                    <button type="submit" class="w-full px-4 py-2 bg-primary text-white font-medium rounded-button hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 whitespace-nowrap">
+                                        Add Product
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Product List -->
+                        <div class="bg-white rounded-lg shadow-sm p-6">
+                            <div class="flex items-center justify-between mb-6">
+                                <h2 class="text-lg font-bold text-gray-900">Recent Products</h2>
+                                <a href="#" class="text-sm font-medium text-primary hover:text-primary/80">View all</a>
+                            </div>
+                            <div id="product-list" class="space-y-4 max-h-[500px] overflow-y-auto pr-2">
+                                <div class="text-center text-gray-500 py-8">
+                                    <div class="w-16 h-16 flex items-center justify-center mx-auto mb-4 text-gray-300">
+                                        <i class="ri-shopping-bag-line text-4xl"></i>
+                                    </div>
+                                    <p>No products added yet</p>
+                                    <p class="text-sm mt-2">Add your first product to get started</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Data Visualization Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+                        <!-- Sales Trend Chart -->
+                        <div class="lg:col-span-2 bg-white rounded-lg shadow-sm p-6 widget">
+                            <div class="flex items-center justify-between mb-4">
+                                <h2 class="text-lg font-medium text-gray-900">Sales Trend</h2>
+                                <div class="flex items-center space-x-2">
+                                    <button class="text-sm text-gray-500 hover:text-gray-900 px-2 py-1 rounded">
+                                        Weekly
+                                    </button>
+                                    <button class="text-sm text-primary bg-primary/10 px-2 py-1 rounded">
+                                        Monthly
+                                    </button>
+                                    <button class="text-sm text-gray-500 hover:text-gray-900 px-2 py-1 rounded">
+                                        Yearly
+                                    </button>
+                                    <button class="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-full">
+                                        <div class="w-5 h-5 flex items-center justify-center">
+                                            <i class="ri-more-2-fill"></i>
+                                        </div>
+                                    </button>
+                                </div>
+                            </div>
+                            <div id="sales-chart" class="w-full h-[300px]"></div>
+                        </div>
+                        <!-- Product Category Chart -->
+                        <div class="bg-white rounded-lg shadow-sm p-6 widget">
+                            <div class="flex items-center justify-between mb-4">
+                                <h2 class="text-lg font-medium text-gray-900">Product Categories</h2>
+                                <button class="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-full">
+                                    <div class="w-5 h-5 flex items-center justify-center">
+                                        <i class="ri-more-2-fill"></i>
+                                    </div>
+                                </button>
+                            </div>
+                            <div id="category-chart" class="w-full h-[300px]"></div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <!-- Revenue Chart -->
+                        <div class="bg-white rounded-lg shadow-sm p-6 widget">
+                            <div class="flex items-center justify-between mb-4">
+                                <h2 class="text-lg font-medium text-gray-900">Revenue</h2>
+                                <div class="flex items-center space-x-2">
+                                    <button class="text-sm text-gray-500 hover:text-gray-900 px-2 py-1 rounded">
+                                        Weekly
+                                    </button>
+                                    <button class="text-sm text-primary bg-primary/10 px-2 py-1 rounded">
+                                        Monthly
+                                    </button>
+                                    <button class="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-full">
+                                        <div class="w-5 h-5 flex items-center justify-center">
+                                            <i class="ri-more-2-fill"></i>
+                                        </div>
+                                    </button>
+                                </div>
+                            </div>
+                            <div id="revenue-chart" class="w-full h-[300px]"></div>
+                        </div>
+                        <!-- Customer Growth Chart -->
+                        <div class="bg-white rounded-lg shadow-sm p-6 widget">
+                            <div class="flex items-center justify-between mb-4">
+                                <h2 class="text-lg font-medium text-gray-900">Customer Growth</h2>
+                                <div class="flex items-center space-x-2">
+                                    <button class="text-sm text-gray-500 hover:text-gray-900 px-2 py-1 rounded">
+                                        Weekly
+                                    </button>
+                                    <button class="text-sm text-primary bg-primary/10 px-2 py-1 rounded">
+                                        Monthly
+                                    </button>
+                                    <button class="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-full">
+                                        <div class="w-5 h-5 flex items-center justify-center">
+                                            <i class="ri-more-2-fill"></i>
+                                        </div>
+                                    </button>
+                                </div>
+                            </div>
+                            <div id="customer-chart" class="w-full h-[300px]"></div>
+                        </div>
+                    </div>
+
+                    <!-- Pricing Section -->
+                    <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+                        <div class="text-center mb-8">
+                            <h2 class="text-2xl font-bold text-gray-900 mb-2">Choose Your Plan</h2>
+                            <p class="text-gray-600 max-w-2xl mx-auto">Upgrade your plan to add more products and unlock premium features for your store</p>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <!-- Free Plan -->
+                            <div id="free-plan" class="plan-card active border-2 border-gray-200 rounded-lg p-6 relative">
+                                <div class="absolute top-4 right-4 bg-primary text-white text-xs font-medium px-2 py-1 rounded-full">
+                                    Current Plan
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-900 mb-2">Free</h3>
+                                <div class="flex items-end mb-4">
+                                    <span class="text-3xl font-bold">$0</span>
+                                    <span class="text-gray-500 ml-1">/month</span>
+                                </div>
+                                <div class="mb-6">
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div id="free-progress" class="bg-primary rounded-full h-2" style="width: 0%"></div>
+                                    </div>
+                                    <div class="flex justify-between mt-2 text-sm">
+                                        <span id="free-used">0 products</span>
+                                        <span>15 products</span>
+                                    </div>
+                                </div>
+                                <ul class="space-y-3 mb-6">
+                                    <li class="flex items-start">
+                                        <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2 mt-0.5">
+                                            <i class="ri-check-line"></i>
+                                        </div>
+                                        <span class="text-gray-600">Up to 15 products</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2 mt-0.5">
+                                            <i class="ri-check-line"></i>
+                                        </div>
+                                        <span class="text-gray-600">Basic analytics</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2 mt-0.5">
+                                            <i class="ri-check-line"></i>
+                                        </div>
+                                        <span class="text-gray-600">24/7 support</span>
+                                    </li>
+                                    <li class="flex items-start text-gray-400">
+                                        <div class="w-5 h-5 flex items-center justify-center mr-2 mt-0.5">
+                                            <i class="ri-close-line"></i>
+                                        </div>
+                                        <span>Advanced reports</span>
+                                    </li>
+                                    <li class="flex items-start text-gray-400">
+                                        <div class="w-5 h-5 flex items-center justify-center mr-2 mt-0.5">
+                                            <i class="ri-close-line"></i>
+                                        </div>
+                                        <span>Custom branding</span>
+                                    </li>
+                                </ul>
+                                <button class="w-full px-4 py-2 bg-gray-100 text-gray-700 font-medium rounded-button hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2 whitespace-nowrap">
+                                    Current Plan
+                                </button>
+                            </div>
+
+                            <!-- Standard Plan -->
+                            <div id="standard-plan" class="plan-card border-2 border-gray-200 rounded-lg p-6">
+                                <h3 class="text-xl font-bold text-gray-900 mb-2">Standard</h3>
+                                <div class="flex items-end mb-4">
+                                    <span class="text-3xl font-bold">$29</span>
+                                    <span class="text-gray-500 ml-1">/month</span>
+                                </div>
+                                <div class="mb-6">
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-gray-400 rounded-full h-2 w-0"></div>
+                                    </div>
+                                    <div class="flex justify-between mt-2 text-sm">
+                                        <span>0 products</span>
+                                        <span>30 products</span>
+                                    </div>
+                                </div>
+                                <ul class="space-y-3 mb-6">
+                                    <li class="flex items-start">
+                                        <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2 mt-0.5">
+                                            <i class="ri-check-line"></i>
+                                        </div>
+                                        <span class="text-gray-600">Up to 30 products</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2 mt-0.5">
+                                            <i class="ri-check-line"></i>
+                                        </div>
+                                        <span class="text-gray-600">Advanced analytics</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2 mt-0.5">
+                                            <i class="ri-check-line"></i>
+                                        </div>
+                                        <span class="text-gray-600">24/7 priority support</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2 mt-0.5">
+                                            <i class="ri-check-line"></i>
+                                        </div>
+                                        <span class="text-gray-600">Advanced reports</span>
+                                    </li>
+                                    <li class="flex items-start text-gray-400">
+                                        <div class="w-5 h-5 flex items-center justify-center mr-2 mt-0.5">
+                                            <i class="ri-close-line"></i>
+                                        </div>
+                                        <span>Custom branding</span>
+                                    </li>
+                                </ul>
+                                <button id="upgrade-standard" class="w-full px-4 py-2 bg-primary text-white font-medium rounded-button hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 whitespace-nowrap">
+                                    Upgrade Plan
+                                </button>
+                            </div>
+
+                            <!-- Premium Plan -->
+                            <div id="premium-plan" class="plan-card border-2 border-gray-200 rounded-lg p-6 relative overflow-hidden">
+                                <div class="absolute top-0 right-0 bg-primary text-white text-xs font-medium px-6 py-1 rotate-45 translate-y-2 translate-x-6">
+                                    Popular
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-900 mb-2">Premium</h3>
+                                <div class="flex items-end mb-4">
+                                    <span class="text-3xl font-bold">$79</span>
+                                    <span class="text-gray-500 ml-1">/month</span>
+                                </div>
+                                <div class="mb-6">
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-gray-400 rounded-full h-2 w-0"></div>
+                                    </div>
+                                    <div class="flex justify-between mt-2 text-sm">
+                                        <span>0 products</span>
+                                        <span>65 products</span>
+                                    </div>
+                                </div>
+                                <ul class="space-y-3 mb-6">
+                                    <li class="flex items-start">
+                                        <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2 mt-0.5">
+                                            <i class="ri-check-line"></i>
+                                        </div>
+                                        <span class="text-gray-600">Up to 65 products</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2 mt-0.5">
+                                            <i class="ri-check-line"></i>
+                                        </div>
+                                        <span class="text-gray-600">Advanced analytics</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2 mt-0.5">
+                                            <i class="ri-check-line"></i>
+                                        </div>
+                                        <span class="text-gray-600">24/7 VIP support</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2 mt-0.5">
+                                            <i class="ri-check-line"></i>
+                                        </div>
+                                        <span class="text-gray-600">Advanced reports</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2 mt-0.5">
+                                            <i class="ri-check-line"></i>
+                                        </div>
+                                        <span class="text-gray-600">Custom branding</span>
+                                    </li>
+                                </ul>
+                                <button id="upgrade-premium" class="w-full px-4 py-2 border border-primary bg-white text-primary font-medium rounded-button hover:bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 whitespace-nowrap">
+                                    Upgrade Plan
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
         </div>
     </div>
 
-    <!-- Upgrade Modal -->
-    <div id="upgradeModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-        <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
-            <div class="p-6 border-b border-gray-200">
-                <h3 class="text-lg font-semibold" id="upgradeModalTitle">Upgrade Plan</h3>
-            </div>
-            <div class="p-6">
-                <div id="upgradeModalContent">
-                    <p class="mb-4">Complete payment to upgrade to <span id="selectedPlanName" class="font-semibold">Standard</span> plan.</p>
-                    <div class="mb-6 p-4 bg-gray-50 rounded-lg">
-                        <h4 class="font-medium mb-2">Plan Benefits:</h4>
-                        <ul id="planBenefits" class="list-disc pl-5 space-y-1">
-                            <!-- Benefits will be added dynamically -->
-                        </ul>
-                    </div>
-                    <div class="mb-6">
-                        <label class="block text-gray-700 text-sm font-medium mb-2" for="paymentNumber">Mobile Money Number</label>
-                        <input type="tel" id="paymentNumber" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600" placeholder="0244123456" required>
-                    </div>
-                    <div class="flex justify-end space-x-3">
-                        <button type="button" onclick="closeUpgradeModal()" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100 transition">
-                            Cancel
-                        </button>
-                        <button type="button" onclick="completePayment()" class="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition">
-                            Complete Payment
-                        </button>
-                    </div>
-                </div>
-                <div id="paymentSuccess" class="text-center hidden">
-                    <div class="text-green-500 text-5xl mb-4">
-                        <i class="fas fa-check-circle"></i>
-                    </div>
-                    <h4 class="text-xl font-semibold mb-2">Payment Successful!</h4>
-                    <p class="mb-6">Your account has been upgraded to <span id="upgradedPlanName" class="font-semibold">Standard</span> plan.</p>
-                    <button onclick="closeUpgradeModal()" class="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition">
-                        Continue
-                    </button>
-                </div>
-            </div>
+    <!-- Notification Toast -->
+    <div id="notification" class="fixed top-4 right-4 bg-white border border-gray-200 rounded-lg shadow-lg p-4 transform translate-x-full transition-transform duration-300 ease-in-out z-50 flex items-center">
+        <div class="w-8 h-8 flex items-center justify-center bg-green-100 rounded-full mr-3">
+            <i class="ri-check-line text-green-500"></i>
         </div>
+        <div>
+            <h3 class="font-medium text-gray-900" id="notification-title">Success</h3>
+            <p class="text-sm text-gray-600" id="notification-message">Operation completed successfully.</p>
+        </div>
+        <button id="close-notification" class="ml-4 text-gray-400 hover:text-gray-500">
+            <div class="w-5 h-5 flex items-center justify-center">
+                <i class="ri-close-line"></i>
+            </div>
+        </button>
     </div>
 
-    <!-- Delete Confirmation Modal -->
-    <div id="deleteModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-        <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
-            <div class="p-6 border-b border-gray-200">
-                <h3 class="text-lg font-semibold">Confirm Deletion</h3>
-            </div>
-            <div class="p-6">
-                <p class="mb-6">Are you sure you want to delete this product? This action cannot be undone.</p>
-                <div class="flex justify-end space-x-3">
-                    <button type="button" onclick="closeDeleteModal()" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100 transition">
-                        Cancel
-                    </button>
-                    <button type="button" onclick="confirmDelete()" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition">
-                        Delete Product
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <script>
-                // Store data from previous page
-        const storeData = {
-            storeName: "My Awesome Store",
-            sellerName: "John Doe",
-            sellerNumber: "0244123456"
-        };
-
-        // Products array
-        let products = [];
-        const maxFreeProducts = 10;
-        let currentPlan = "Free";
-        let productToDelete = null;
-
-        // DOM elements
-        const storeNameDisplay = document.getElementById('storeNameDisplay');
-        const sellerNameDisplay = document.getElementById('sellerNameDisplay');
-        const sellerInitial = document.getElementById('sellerInitial');
-        const totalProductsDisplay = document.getElementById('totalProducts');
-        const availableSlotsDisplay = document.getElementById('availableSlots');
-        const productsContainer = document.getElementById('productsContainer');
-        const noProductsMessage = document.getElementById('noProductsMessage');
-
-        // Modal elements
-        const addProductModal = document.getElementById('addProductModal');
-        const upgradeModal = document.getElementById('upgradeModal');
-        const deleteModal = document.getElementById('deleteModal');
-
-        // Initialize the dashboard
-        function initDashboard() {
-            // Set store info
-            storeNameDisplay.textContent = storeData.storeName;
-            sellerNameDisplay.textContent = storeData.sellerName;
-            sellerInitial.textContent = storeData.sellerName.charAt(0);
+    <!-- Mobile Menu Script 
+     Check again-->
+    <script id="mobile-menu-script">
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const closeMobileMenuButton = document.getElementById('close-mobile-menu');
+            const mobileMenu = document.getElementById('mobile-menu');
             
-            // Load products from localStorage if available
-            const savedProducts = localStorage.getItem('storeDashProducts');
-            if (savedProducts) {
-                products = JSON.parse(savedProducts);
-            }
-            
-            // Load plan from localStorage if available
-            const savedPlan = localStorage.getItem('storeDashPlan');
-            if (savedPlan) {
-                currentPlan = savedPlan;
-                updatePlanUI();
-            }
-            
-            updateProductsUI();
-        }
-
-        // Update products UI
-        function updateProductsUI() {
-            totalProductsDisplay.textContent = products.length;
-            
-            // Calculate available slots based on plan
-            let maxProducts = maxFreeProducts;
-            if (currentPlan === "Standard") maxProducts = 35;
-            if (currentPlan === "Premium") maxProducts = 60;
-            
-            const availableSlots = Math.max(0, maxProducts - products.length);
-            availableSlotsDisplay.textContent = availableSlots;
-            
-            // Show/hide no products message
-            if (products.length === 0) {
-                noProductsMessage.classList.remove('hidden');
-            } else {
-                noProductsMessage.classList.add('hidden');
-            }
-            
-            // Clear products container
-            productsContainer.innerHTML = '';
-            
-            // Add product cards
-            products.forEach((product, index) => {
-                const productCard = document.createElement('div');
-                productCard.className = 'product-card bg-white rounded-lg shadow p-4 transition duration-300';
-                productCard.innerHTML = `
-                    <div class="h-40 bg-gray-100 rounded-md mb-3 overflow-hidden">
-                        <img src="${product.image || 'https://via.placeholder.com/300x200?text=No+Image'}" alt="${product.name}" class="w-full h-full object-cover">
-                    </div>
-                    <h3 class="font-medium text-gray-800 truncate">${product.name}</h3>
-                    <p class="text-purple-600 font-bold mt-1">GHC ${product.price.toFixed(2)}</p>
-                    <div class="mt-4 flex justify-between">
-                        <button onclick="editProduct(${index})" class="text-sm text-gray-600 hover:text-purple-600">
-                            <i class="fas fa-edit mr-1"></i> Edit
-                        </button>
-                        <button onclick="openDeleteModal(${index})" class="text-sm text-red-500 hover:text-red-700">
-                            <i class="fas fa-trash-alt mr-1"></i> Delete
-                        </button>
-                    </div>
-                `;
-                productsContainer.appendChild(productCard);
+            closeMobileMenuButton.addEventListener('click', function() {
+                mobileMenu.classList.add('-translate-x-full');
             });
-        }
+        });
+    </script>
 
-        // Add product
-        function addProduct(e) {
-            e.preventDefault();
+    <!-- Product Management Script -->
+    <script id="product-management-script">
+        document.addEventListener('DOMContentLoaded', function() {
+            const addProductForm = document.getElementById('add-product-form');
+            const productImageInput = document.getElementById('product-image');
+            const imagePreview = document.getElementById('image-preview');
+            const previewImg = document.getElementById('preview-img');
+            const uploadPlaceholder = document.getElementById('upload-placeholder');
+            const productList = document.getElementById('product-list');
+            const productCount = document.getElementById('product-count');
+            const productLimit = document.getElementById('product-limit');
+            const freeProgress = document.getElementById('free-progress');
+            const freeUsed = document.getElementById('free-used');
             
-            const name = document.getElementById('productName').value;
-            const price = parseFloat(document.getElementById('productPrice').value);
-            const image = document.getElementById('productImage').value;
-            
-            // Check if we've reached the product limit
-            let maxProducts = maxFreeProducts;
-            if (currentPlan === "Standard") maxProducts = 35;
-            if (currentPlan === "Premium") maxProducts = 60;
-            
-            if (products.length >= maxProducts) {
-                alert(`You've reached your product limit (${maxProducts}). Please upgrade your plan to add more products.`);
-                return;
-            }
-            
-            const newProduct = {
-                name,
-                price,
-                image: image || null
+            let products = [];
+            let currentPlan = 'free';
+            const planLimits = {
+                'free': 15,
+                'standard': 30,
+                'premium': 65
             };
             
-            products.push(newProduct);
-            localStorage.setItem('storeDashProducts', JSON.stringify(products));
-            
-            closeAddProductModal();
-            updateProductsUI();
-            
-            // Reset form
-            document.getElementById('productForm').reset();
-        }
-
-        // Edit product
-        function editProduct(index) {
-            const product = products[index];
-            document.getElementById('productName').value = product.name;
-            document.getElementById('productPrice').value = product.price;
-            document.getElementById('productImage').value = product.image || '';
-            
-            // Change modal title and button
-            const modalTitle = addProductModal.querySelector('h3');
-            modalTitle.textContent = 'Edit Product';
-            
-            const submitButton = addProductModal.querySelector('button[type="submit"]');
-            submitButton.textContent = 'Update Product';
-            submitButton.onclick = function(e) {
-                e.preventDefault();
-                updateProduct(index);
-            };
-            
-            openAddProductModal();
-        }
-
-        // Update product
-        function updateProduct(index) {
-            const name = document.getElementById('productName').value;
-            const price = parseFloat(document.getElementById('productPrice').value);
-            const image = document.getElementById('productImage').value;
-            
-            products[index] = {
-                name,
-                price,
-                image: image || null
-            };
-            
-            localStorage.setItem('storeDashProducts', JSON.stringify(products));
-            
-            closeAddProductModal();
-            updateProductsUI();
-            
-            // Reset form and modal
-            document.getElementById('productForm').reset();
-            const modalTitle = addProductModal.querySelector('h3');
-            modalTitle.textContent = 'Add New Product';
-            
-            const submitButton = addProductModal.querySelector('button[type="submit"]');
-            submitButton.textContent = 'Add Product';
-            submitButton.onclick = function(e) {
-                e.preventDefault();
-                addProduct(e);
-            };
-        }
-
-        // Open delete modal
-        function openDeleteModal(index) {
-            productToDelete = index;
-            deleteModal.classList.remove('hidden');
-        }
-
-        // Close delete modal
-        function closeDeleteModal() {
-            productToDelete = null;
-            deleteModal.classList.add('hidden');
-        }
-
-        // Confirm delete
-        function confirmDelete() {
-            if (productToDelete !== null) {
-                products.splice(productToDelete, 1);
-                localStorage.setItem('storeDashProducts', JSON.stringify(products));
-                updateProductsUI();
-                closeDeleteModal();
-            }
-        }
-
-        // Open add product modal
-        function openAddProductModal() {
-            addProductModal.classList.remove('hidden');
-        }
-
-        // Close add product modal
-        function closeAddProductModal() {
-            addProductModal.classList.add('hidden');
-        }
-
-        // Open upgrade modal
-        function openUpgradeModal(plan = 'Standard') {
-            const modalTitle = document.getElementById('upgradeModalTitle');
-            const selectedPlanName = document.getElementById('selectedPlanName');
-            const planBenefits = document.getElementById('planBenefits');
-            
-            selectedPlanName.textContent = plan;
-            
-            if (plan === 'Standard') {
-                modalTitle.textContent = 'Upgrade to Standard Plan';
-                planBenefits.innerHTML = `
-                    <li>35 product slots (25 extra)</li>
-                    <li>Advanced analytics</li>
-                    <li>Priority support</li>
-                    <li>Basic customization</li>
-                `;
-            } else {
-                modalTitle.textContent = 'Upgrade to Premium Plan';
-                planBenefits.innerHTML = `
-                    <li>60 product slots (50 extra)</li>
-                    <li>Premium analytics dashboard</li>
-                    <li>24/7 VIP support</li>
-                    <li>Advertising tools</li>
-                    <li>Featured store placement</li>
-                    <li>Custom domain</li>
-                `;
+            // Update product limit based on current plan
+            function updateProductLimit() {
+                productLimit.textContent = planLimits[currentPlan];
+                updateProgressBar();
             }
             
-            // Show the upgrade content and hide success message
-            document.getElementById('upgradeModalContent').classList.remove('hidden');
-            document.getElementById('paymentSuccess').classList.add('hidden');
-            
-            upgradeModal.classList.remove('hidden');
-        }
-
-        // Close upgrade modal
-        function closeUpgradeModal() {
-            upgradeModal.classList.add('hidden');
-        }
-
-        // Complete payment
-        function completePayment() {
-            const paymentNumber = document.getElementById('paymentNumber').value;
-            
-            if (!paymentNumber) {
-                alert('Please enter your mobile money number');
-                return;
-            }
-            
-            // Simulate payment processing
-            setTimeout(() => {
-                // Update plan
-                const selectedPlan = document.getElementById('selectedPlanName').textContent;
-                currentPlan = selectedPlan;
-                localStorage.setItem('storeDashPlan', currentPlan);
+            // Update progress bar
+            function updateProgressBar() {
+                const limit = planLimits[currentPlan];
+                const count = products.length;
+                const percentage = (count / limit) * 100;
                 
-                // Show success message
-                document.getElementById('upgradeModalContent').classList.add('hidden');
-                document.getElementById('paymentSuccess').classList.remove('hidden');
-                document.getElementById('upgradedPlanName').textContent = selectedPlan;
+                freeProgress.style.width = `${percentage}%`;
+                freeUsed.textContent = `${count} products`;
+                
+                // Warning color when approaching limit
+                if (percentage > 80) {
+                    freeProgress.classList.add('bg-yellow-500');
+                    freeProgress.classList.remove('bg-primary');
+                } else {
+                    freeProgress.classList.add('bg-primary');
+                    freeProgress.classList.remove('bg-yellow-500');
+                }
+            }
+            
+            // Handle image upload preview
+            productImageInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        previewImg.src = e.target.result;
+                        uploadPlaceholder.classList.add('hidden');
+                        imagePreview.classList.remove('hidden');
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            // Add product form submission
+            addProductForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const productName = document.getElementById('product-name').value;
+                const productPrice = document.getElementById('product-price').value;
+                const productCategory = document.getElementById('product-category').value;
+                const productStock = document.getElementById('product-stock').value;
+                const productDescription = document.getElementById('product-description').value;
+                
+                // Form validation
+                if (!productName || !productPrice || !productCategory || !productStock) {
+                    showNotification('Error', 'Please fill in all required fields', 'error');
+                    return;
+                }
+                
+                // Check product limit
+                if (products.length >= planLimits[currentPlan]) {
+                    showNotification('Limit Reached', `You've reached the maximum number of products for your ${currentPlan} plan. Please upgrade to add more.`, 'error');
+                    return;
+                }
+                
+                // Create new product
+                const newProduct = {
+                    id: Date.now(),
+                    name: productName,
+                    price: parseFloat(productPrice),
+                    category: productCategory,
+                    stock: parseInt(productStock),
+                    description: productDescription,
+                    image: previewImg.src || 'https://readdy.ai/api/search-image?query=generic%20product%20placeholder%20on%20white%20background%2C%20minimal%2C%20clean&width=100&height=100&seq=2&orientation=squarish'
+                };
+                
+                // Add to products array
+                products.push(newProduct);
                 
                 // Update UI
-                updatePlanUI();
-                updateProductsUI();
-            }, 1500);
-        }
-
-        // Update plan UI
-        function updatePlanUI() {
-            // Remove selected class from all plans
-            document.querySelectorAll('.pricing-card').forEach(card => {
-                card.classList.remove('selected-plan');
+                updateProductList();
+                updateProductCount();
+                
+                // Reset form
+                addProductForm.reset();
+                uploadPlaceholder.classList.remove('hidden');
+                imagePreview.classList.add('hidden');
+                
+                // Show success notification
+                showNotification('Product Added', 'Your product has been added successfully', 'success');
             });
             
-            // Add selected class to current plan
-            if (currentPlan === 'Free') {
-                document.querySelectorAll('.pricing-card')[0].classList.add('selected-plan');
-            } else if (currentPlan === 'Standard') {
-                document.querySelectorAll('.pricing-card')[1].classList.add('selected-plan');
-            } else if (currentPlan === 'Premium') {
-                document.querySelectorAll('.pricing-card')[2].classList.add('selected-plan');
+            // Update product count
+            function updateProductCount() {
+                productCount.textContent = products.length;
+                updateProgressBar();
             }
-        }
+            
+            // Update product list
+            function updateProductList() {
+                if (products.length === 0) {
+                    productList.innerHTML = `
+                        <div class="text-center text-gray-500 py-8">
+                            <div class="w-16 h-16 flex items-center justify-center mx-auto mb-4 text-gray-300">
+                                <i class="ri-shopping-bag-line text-4xl"></i>
+                            </div>
+                            <p>No products added yet</p>
+                            <p class="text-sm mt-2">Add your first product to get started</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                productList.innerHTML = '';
+                
+                // Show most recent products first (up to 5)
+                const recentProducts = [...products].reverse().slice(0, 5);
+                
+                recentProducts.forEach(product => {
+                    const productElement = document.createElement('div');
+                    productElement.className = 'flex items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50';
+                    productElement.innerHTML = `
+                        <div class="w-12 h-12 rounded overflow-hidden mr-3 flex-shrink-0">
+                            <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover">
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <h4 class="text-sm font-medium text-gray-900 truncate">${product.name}</h4>
+                            <div class="flex items-center text-xs text-gray-500 mt-1">
+                                <span class="truncate">${product.category}</span>
+                                <span class="mx-1">•</span>
+                                <span>${product.stock} in stock</span>
+                            </div>
+                        </div>
+                        <div class="text-sm font-medium text-gray-900">$${product.price.toFixed(2)}</div>
+                    `;
+                    productList.appendChild(productElement);
+                });
+            }
+            
+            // Show notification
+            function showNotification(title, message, type = 'success') {
+                const notification = document.getElementById('notification');
+                const notificationTitle = document.getElementById('notification-title');
+                const notificationMessage = document.getElementById('notification-message');
+                const notificationIcon = notification.querySelector('i');
+                
+                notificationTitle.textContent = title;
+                notificationMessage.textContent = message;
+                
+                if (type === 'success') {
+                    notification.querySelector('div:first-child').className = 'w-8 h-8 flex items-center justify-center bg-green-100 rounded-full mr-3';
+                    notificationIcon.className = 'ri-check-line text-green-500';
+                } else {
+                    notification.querySelector('div:first-child').className = 'w-8 h-8 flex items-center justify-center bg-red-100 rounded-full mr-3';
+                    notificationIcon.className = 'ri-close-line text-red-500';
+                }
+                
+                notification.classList.remove('translate-x-full');
+                
+                setTimeout(() => {
+                    notification.classList.add('translate-x-full');
+                }, 5000);
+            }
+            
+            // Close notification
+            document.getElementById('close-notification').addEventListener('click', function() {
+                document.getElementById('notification').classList.add('translate-x-full');
+            });
+            
+            // Initialize
+            updateProductLimit();
+            updateProductList();
+        });
+    </script>
 
-        // Initialize the dashboard when the page loads
-        window.onload = initDashboard;
-    
+    <!-- Plan Management Script -->
+    <script id="plan-management-script">
+        document.addEventListener('DOMContentLoaded', function() {
+            const freePlan = document.getElementById('free-plan');
+            const standardPlan = document.getElementById('standard-plan');
+            const premiumPlan = document.getElementById('premium-plan');
+            const upgradeStandard = document.getElementById('upgrade-standard');
+            const upgradePremium = document.getElementById('upgrade-premium');
+            
+            let currentPlan = 'free';
+            
+            function updateActivePlan() {
+                // Remove active class from all plans
+                [freePlan, standardPlan, premiumPlan].forEach(plan => {
+                    plan.classList.remove('active');
+                    plan.querySelector('button').classList.remove('bg-gray-100', 'text-gray-700', 'bg-primary', 'text-white', 'border-primary', 'bg-white', 'text-primary');
+                    
+                    // Remove current plan badge if exists
+                    const badge = plan.querySelector('.absolute');
+                    if (badge) {
+                        badge.remove();
+                    }
+                });
+                
+                // Add active class to current plan
+                let activePlan;
+                if (currentPlan === 'free') {
+                    activePlan = freePlan;
+                    freePlan.querySelector('button').className = 'w-full px-4 py-2 bg-gray-100 text-gray-700 font-medium rounded-button hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2 whitespace-nowrap';
+                    freePlan.querySelector('button').textContent = 'Current Plan';
+                } else if (currentPlan === 'standard') {
+                    activePlan = standardPlan;
+                    standardPlan.querySelector('button').className = 'w-full px-4 py-2 bg-gray-100 text-gray-700 font-medium rounded-button hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2 whitespace-nowrap';
+                    standardPlan.querySelector('button').textContent = 'Current Plan';
+                } else {
+                    activePlan = premiumPlan;
+                    premiumPlan.querySelector('button').className = 'w-full px-4 py-2 bg-gray-100 text-gray-700 font-medium rounded-button hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2 whitespace-nowrap';
+                    premiumPlan.querySelector('button').textContent = 'Current Plan';
+                }
+                
+                activePlan.classList.add('active');
+                
+                // Add current plan badge
+                const badge = document.createElement('div');
+                badge.className = 'absolute top-4 right-4 bg-primary text-white text-xs font-medium px-2 py-1 rounded-full';
+                badge.textContent = 'Current Plan';
+                activePlan.appendChild(badge);
+                
+                // Update product limit
+                const productLimit = document.getElementById('product-limit');
+                if (currentPlan === 'free') {
+                    productLimit.textContent = '15';
+                } else if (currentPlan === 'standard') {
+                    productLimit.textContent = '30';
+                } else {
+                    productLimit.textContent = '65';
+                }
+                
+                // Reset other plan buttons
+                if (currentPlan !== 'standard') {
+                    upgradeStandard.className = 'w-full px-4 py-2 bg-primary text-white font-medium rounded-button hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 whitespace-nowrap';
+                    upgradeStandard.textContent = 'Upgrade Plan';
+                }
+                
+                if (currentPlan !== 'premium') {
+                    upgradePremium.className = 'w-full px-4 py-2 border border-primary bg-white text-primary font-medium rounded-button hover:bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 whitespace-nowrap';
+                    upgradePremium.textContent = 'Upgrade Plan';
+                }
+            }
+            
+            // Upgrade to Standard plan
+            upgradeStandard.addEventListener('click', function() {
+                // Simulate payment process
+                setTimeout(() => {
+                    currentPlan = 'standard';
+                    updateActivePlan();
+                    
+                    // Show success notification
+                    const notification = document.getElementById('notification');
+                    const notificationTitle = document.getElementById('notification-title');
+                    const notificationMessage = document.getElementById('notification-message');
+                    
+                    notificationTitle.textContent = 'Plan Upgraded';
+                    notificationMessage.textContent = 'You have successfully upgraded to the Standard plan';
+                    
+                    notification.classList.remove('translate-x-full');
+                    
+                    setTimeout(() => {
+                        notification.classList.add('translate-x-full');
+                    }, 5000);
+                }, 1000);
+            });
+            
+            // Upgrade to Premium plan
+            upgradePremium.addEventListener('click', function() {
+                // Simulate payment process
+                setTimeout(() => {
+                    currentPlan = 'premium';
+                    updateActivePlan();
+                    
+                    // Show success notification
+                    const notification = document.getElementById('notification');
+                    const notificationTitle = document.getElementById('notification-title');
+                    const notificationMessage = document.getElementById('notification-message');
+                    
+                    notificationTitle.textContent = 'Plan Upgraded';
+                    notificationMessage.textContent = 'You have successfully upgraded to the Premium plan';
+                    
+                    notification.classList.remove('translate-x-full');
+                    
+                    setTimeout(() => {
+                        notification.classList.add('translate-x-full');
+                    }, 5000);
+                }, 1000);
+            });
+            
+            // Initialize
+            updateActivePlan();
+        });
+    </script>
+
+    <!-- Charts Script -->
+    <script id="charts-script">
+        document.addEventListener('DOMContentLoaded', function() {
+            // Sales Trend Chart
+            const salesChart = echarts.init(document.getElementById('sales-chart'));
+            const salesOption = {
+                animation: false,
+                tooltip: {
+                    trigger: 'axis',
+                    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+                    borderColor: '#e5e7eb',
+                    textStyle: {
+                        color: '#1f2937'
+                    }
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    top: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    axisLine: {
+                        lineStyle: {
+                            color: '#e5e7eb'
+                        }
+                    },
+                    axisLabel: {
+                        color: '#1f2937'
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    axisLine: {
+                        show: false
+                    },
+                    axisTick: {
+                        show: false
+                    },
+                    splitLine: {
+                        lineStyle: {
+                            color: '#f3f4f6'
+                        }
+                    },
+                    axisLabel: {
+                        color: '#1f2937'
+                    }
+                },
+                series: [
+                    {
+                        name: 'Sales',
+                        type: 'line',
+                        smooth: true,
+                        showSymbol: false,
+                        lineStyle: {
+                            width: 3,
+                            color: 'rgba(87, 181, 231, 1)'
+                        },
+                        areaStyle: {
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                {
+                                    offset: 0,
+                                    color: 'rgba(87, 181, 231, 0.2)'
+                                },
+                                {
+                                    offset: 1,
+                                    color: 'rgba(87, 181, 231, 0.01)'
+                                }
+                            ])
+                        },
+                        data: [3200, 4500, 5800, 5200, 6500, 7800, 8300, 9100, 8500, 9800, 11000, 12500]
+                    }
+                ]
+            };
+            salesChart.setOption(salesOption);
+            
+            // Product Category Chart
+            const categoryChart = echarts.init(document.getElementById('category-chart'));
+            const categoryOption = {
+                animation: false,
+                tooltip: {
+                    trigger: 'item',
+                    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+                    borderColor: '#e5e7eb',
+                    textStyle: {
+                        color: '#1f2937'
+                    }
+                },
+                legend: {
+                    orient: 'vertical',
+                    right: 10,
+                    top: 'center',
+                    textStyle: {
+                        color: '#1f2937'
+                    }
+                },
+                series: [
+                    {
+                        name: 'Category',
+                        type: 'pie',
+                        radius: ['40%', '70%'],
+                        center: ['40%', '50%'],
+                        avoidLabelOverlap: false,
+                        itemStyle: {
+                            borderRadius: 8,
+                            borderColor: '#fff',
+                            borderWidth: 2
+                        },
+                        label: {
+                            show: false
+                        },
+                        emphasis: {
+                            label: {
+                                show: false
+                            }
+                        },
+                        labelLine: {
+                            show: false
+                        },
+                        data: [
+                            { value: 35, name: 'Electronics', itemStyle: { color: 'rgba(87, 181, 231, 1)' } },
+                            { value: 25, name: 'Clothing', itemStyle: { color: 'rgba(141, 211, 199, 1)' } },
+                            { value: 20, name: 'Home & Garden', itemStyle: { color: 'rgba(251, 191, 114, 1)' } },
+                            { value: 15, name: 'Beauty', itemStyle: { color: 'rgba(252, 141, 98, 1)' } }
+                        ]
+                    }
+                ]
+            };
+            categoryChart.setOption(categoryOption);
+            
+            // Revenue Chart
+            const revenueChart = echarts.init(document.getElementById('revenue-chart'));
+            const revenueOption = {
+                animation: false,
+                tooltip: {
+                    trigger: 'axis',
+                    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+                    borderColor: '#e5e7eb',
+                    textStyle: {
+                        color: '#1f2937'
+                    }
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    top: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    axisLine: {
+                        lineStyle: {
+                            color: '#e5e7eb'
+                        }
+                    },
+                    axisLabel: {
+                        color: '#1f2937'
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    axisLine: {
+                        show: false
+                    },
+                    axisTick: {
+                        show: false
+                    },
+                    splitLine: {
+                        lineStyle: {
+                            color: '#f3f4f6'
+                        }
+                    },
+                    axisLabel: {
+                        color: '#1f2937'
+                    }
+                },
+                series: [
+                    {
+                        name: 'Revenue',
+                        type: 'bar',
+                        barWidth: '60%',
+                        itemStyle: {
+                            color: 'rgba(141, 211, 199, 1)',
+                            borderRadius: [4, 4, 0, 0]
+                        },
+                        data: [4500, 5200, 6800, 7300, 8900, 9500]
+                    }
+                ]
+            };
+            revenueChart.setOption(revenueOption);
+            
+            // Customer Growth Chart
+            const customerChart = echarts.init(document.getElementById('customer-chart'));
+            const customerOption = {
+                animation: false,
+                tooltip: {
+                    trigger: 'axis',
+                    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+                    borderColor: '#e5e7eb',
+                    textStyle: {
+                        color: '#1f2937'
+                    }
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    top: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    axisLine: {
+                        lineStyle: {
+                            color: '#e5e7eb'
+                        }
+                    },
+                    axisLabel: {
+                        color: '#1f2937'
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    axisLine: {
+                        show: false
+                    },
+                    axisTick: {
+                        show: false
+                    },
+                    splitLine: {
+                        lineStyle: {
+                            color: '#f3f4f6'
+                        }
+                    },
+                    axisLabel: {
+                        color: '#1f2937'
+                    }
+                },
+                series: [
+                    {
+                        name: 'New Customers',
+                        type: 'line',
+                        smooth: true,
+                        showSymbol: false,
+                        lineStyle: {
+                            width: 3,
+                            color: 'rgba(251, 191, 114, 1)'
+                        },
+                        areaStyle: {
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                {
+                                    offset: 0,
+                                    color: 'rgba(251, 191, 114, 0.2)'
+                                },
+                                {
+                                    offset: 1,
+                                    color: 'rgba(251, 191, 114, 0.01)'
+                                }
+                            ])
+                        },
+                        data: [120, 182, 191, 234, 290, 330]
+                    },
+                    {
+                        name: 'Returning Customers',
+                        type: 'line',
+                        smooth: true,
+                        showSymbol: false,
+                        lineStyle: {
+                            width: 3,
+                            color: 'rgba(252, 141, 98, 1)'
+                        },
+                        areaStyle: {
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                {
+                                    offset: 0,
+                                    color: 'rgba(252, 141, 98, 0.2)'
+                                },
+                                {
+                                    offset: 1,
+                                    color: 'rgba(252, 141, 98, 0.01)'
+                                }
+                            ])
+                        },
+                        data: [220, 282, 301, 334, 390, 430]
+                    }
+                ]
+            };
+            customerChart.setOption(customerOption);
+            
+            // Resize charts when window is resized
+            window.addEventListener('resize', function() {
+                salesChart.resize();
+                categoryChart.resize();
+                revenueChart.resize();
+                customerChart.resize();
+            });
+        });
     </script>
 </body>
 </html>
