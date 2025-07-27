@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products - Store Management</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>tailwind.config={theme:{extend:{colors:{primary:'#3b82f6',secondary:'#6b7280'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" rel="stylesheet">
+    <style>
+        :where([class^="ri-"])::before {
+            content: "\f3c2";
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <div class="w-64 bg-white shadow-lg fixed h-full z-20 transition-transform duration-300 ease-in-out" id="sidebar">
+            <div class="p-6 border-b border-gray-200">
+                <div class="flex items-center">
+                    <div class="font-['Pacifico'] text-xl text-primary">logo</div>
+                </div>
+            </div>
+            
+            <nav class="mt-6">
+                <div class="px-4 space-y-2">
+                    <a href="https://readdy.ai/home/e6bc8b0c-4b83-4dc1-87a0-ef879f2cc344/ff6e1522-2c72-4ab1-bb1b-488070074aa8" data-readdy="true" class="flex items-center px-4 py-3 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors">
+                        <div class="w-5 h-5 flex items-center justify-center mr-3">
+                            <i class="ri-dashboard-line"></i>
+                        </div>
+                        Dashboard
+                    </a>
+                    
+                    <a href="#" class="flex items-center px-4 py-3 text-white bg-primary rounded-lg">
+                        <div class="w-5 h-5 flex items-center justify-center mr-3">
+                            <i class="ri-shopping-bag-line"></i>
+                        </div>
+                        Products
+                    </a>
+                    
+                    <a href="#" class="flex items-center px-4 py-3 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors">
+                        <div class="w-5 h-5 flex items-center justify-center mr-3">
+                            <i class="ri-file-list-line"></i>
+                        </div>
+                        Orders
+                    </a>
+                    
+                    <a href="#" class="flex items-center px-4 py-3 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors">
+                        <div class="w-5 h-5 flex items-center justify-center mr-3">
+                            <i class="ri-user-line"></i>
+                        </div>
+                        Customers
+                    </a>
+                    
+                    <a href="#" class="flex items-center px-4 py-3 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors">
+                        <div class="w-5 h-5 flex items-center justify-center mr-3">
+                            <i class="ri-bar-chart-line"></i>
+                        </div>
+                        Analytics
+                    </a>
+                    
+                    <a href="#" class="flex items-center px-4 py-3 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors">
+                        <div class="w-5 h-5 flex items-center justify-center mr-3">
+                            <i class="ri-settings-line"></i>
+                        </div>
+                        Settings
+                    </a>
+                </div>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 ml-64">
+            <!-- Header -->
+            <header class="bg-white shadow-sm border-b border-gray-200">
+                <div class="flex items-center justify-between px-6 py-4">
+                    <div class="flex items-center">
+                        <button class="lg:hidden mr-4" id="mobile-menu-toggle">
+                            <div class="w-6 h-6 flex items-center justify-center">
+                                <i class="ri-menu-line text-xl"></i>
+                            </div>
+                        </button>
+                        
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <div class="w-5 h-5 flex items-center justify-center">
+                                    <i class="ri-search-line text-gray-400"></i>
+                                </div>
+                            </div>
+                            <input type="text" placeholder="Search products..." class="w-80 pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-sm" id="global-search">
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center space-x-4">
+                        <button class="relative">
+                            <div class="w-8 h-8 flex items-center justify-center">
+                                <i class="ri-notification-line text-xl text-gray-600"></i>
+                            </div>
+                            <span class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
+                        </button>
+                        
+                        <div class="flex items-center">
+                            <img src="https://readdy.ai/api/search-image?query=professional%20business%20person%20headshot%20portrait%20with%20clean%20background%20modern%20office%20setting&width=40&height=40&seq=user-avatar-1&orientation=squarish" alt="Profile" class="w-8 h-8 rounded-full object-cover">
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <main class="p-6">
+                <div class="mb-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h1 class="text-2xl font-bold text-gray-900">Products</h1>
+                        <div class="flex items-center space-x-3">
+                            <button class="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <div class="w-4 h-4 flex items-center justify-center mr-2">
+                                        <i class="ri-download-line"></i>
+                                    </div>
+                                    Export
+                                </div>
+                            </button>
+                            
+                            <button class="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap" id="filter-btn">
+                                <div class="flex items-center">
+                                    <div class="w-4 h-4 flex items-center justify-center mr-2">
+                                        <i class="ri-filter-line"></i>
+                                    </div>
+                                    Filter
+                                </div>
+                            </button>
+                            
+                            <button class="px-4 py-2 bg-primary text-white rounded-button hover:bg-blue-600 transition-colors whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <div class="w-4 h-4 flex items-center justify-center mr-2">
+                                        <i class="ri-add-line"></i>
+                                    </div>
+                                    Add New Product
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Filter Bar -->
+                    <div class="hidden bg-white p-4 rounded-lg border border-gray-200 mb-4" id="filter-panel">
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                                <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent pr-8">
+                                    <option>All Categories</option>
+                                    <option>Electronics</option>
+                                    <option>Clothing</option>
+                                    <option>Home & Garden</option>
+                                    <option>Sports</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Stock Status</label>
+                                <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent pr-8">
+                                    <option>All Status</option>
+                                    <option>In Stock</option>
+                                    <option>Low Stock</option>
+                                    <option>Out of Stock</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Price Range</label>
+                                <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent pr-8">
+                                    <option>All Prices</option>
+                                    <option>$0 - $50</option>
+                                    <option>$50 - $200</option>
+                                    <option>$200+</option>
+                                </select>
+                            </div>
+                            
+                            <div class="flex items-end">
+                                <button class="px-4 py-2 bg-primary text-white rounded-button hover:bg-blue-600 transition-colors whitespace-nowrap">
+                                    Apply Filters
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Products Table -->
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+                    <div class="p-4 border-b border-gray-200">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-4">
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="select-all" class="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary">
+                                    <label for="select-all" class="ml-2 text-sm text-gray-700">Select All</label>
+                                </div>
+                                
+                                <div class="relative">
+                                    <button class="px-3 py-1 text-sm text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors whitespace-nowrap" id="bulk-actions-btn">
+                                        Bulk Actions
+                                        <div class="inline-block w-4 h-4 ml-1">
+                                            <i class="ri-arrow-down-s-line"></i>
+                                        </div>
+                                    </button>
+                                    
+                                    <div class="hidden absolute top-full left-0 mt-1 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-10" id="bulk-actions-menu">
+                                        <div class="py-1">
+                                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Delete Selected</a>
+                                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Update Status</a>
+                                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Export Selected</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center space-x-2">
+                                <button class="p-2 text-gray-600 hover:text-gray-900 transition-colors" id="grid-view">
+                                    <div class="w-5 h-5 flex items-center justify-center">
+                                        <i class="ri-grid-line"></i>
+                                    </div>
+                                </button>
+                                <button class="p-2 text-primary" id="list-view">
+                                    <div class="w-5 h-5 flex items-center justify-center">
+                                        <i class="ri-list-check"></i>
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="w-12 px-4 py-3 text-left">
+                                        <input type="checkbox" class="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary">
+                                    </th>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Product</th>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 cursor-pointer hover:text-gray-900" data-sort="category">
+                                        Category
+                                        <div class="inline-block w-4 h-4 ml-1">
+                                            <i class="ri-arrow-up-down-line"></i>
+                                        </div>
+                                    </th>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 cursor-pointer hover:text-gray-900" data-sort="price">
+                                        Price
+                                        <div class="inline-block w-4 h-4 ml-1">
+                                            <i class="ri-arrow-up-down-line"></i>
+                                        </div>
+                                    </th>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 cursor-pointer hover:text-gray-900" data-sort="stock">
+                                        Stock
+                                        <div class="inline-block w-4 h-4 ml-1">
+                                            <i class="ri-arrow-up-down-line"></i>
+                                        </div>
+                                    </th>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Status</th>
+                                    <th class="px-4 py-3 text-right text-sm font-medium text-gray-700">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200">
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-4 py-4">
+                                        <input type="checkbox" class="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary">
+                                    </td>
+                                    <td class="px-4 py-4">
+                                        <div class="flex items-center">
+                                            <img src="https://readdy.ai/api/search-image?query=modern%20wireless%20bluetooth%20headphones%20sleek%20design%20black%20color%20clean%20white%20background%20product%20photography%20studio%20lighting&width=48&height=48&seq=product-1&orientation=squarish" alt="Product" class="w-12 h-12 rounded-lg object-cover mr-3">
+                                            <div>
+                                                <div class="font-medium text-gray-900">Wireless Bluetooth Headphones</div>
+                                                <div class="text-sm text-gray-500">Premium Audio Experience</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-4 py-4 text-sm text-gray-700">Electronics</td>
+                                    <td class="px-4 py-4 text-sm text-gray-900 font-medium">$199.99</td>
+                                    <td class="px-4 py-4 text-sm text-gray-700">45</td>
+                                    <td class="px-4 py-4">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                            In Stock
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-4 text-right">
+                                        <div class="flex items-center justify-end space-x-2">
+                                            <button class="p-1 text-gray-600 hover:text-blue-600 transition-colors">
+                                                <div class="w-4 h-4 flex items-center justify-center">
+                                                    <i class="ri-edit-line"></i>
+                                                </div>
+                                            </button>
+                                            <button class="p-1 text-gray-600 hover:text-red-600 transition-colors">
+                                                <div class="w-4 h-4 flex items-center justify-center">
+                                                    <i class="ri-delete-bin-line"></i>
+                                                </div>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-4 py-4">
+                                        <input type="checkbox" class="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary">
+                                    </td>
+                                    <td class="px-4 py-4">
+                                        <div class="flex items-center">
+                                            <img src="https://readdy.ai/api/search-image?query=stylish%20cotton%20t-shirt%20navy%20blue%20color%20folded%20neatly%20clean%20white%20background%20product%20photography%20studio%20lighting&width=48&height=48&seq=product-2&orientation=squarish" alt="Product" class="w-12 h-12 rounded-lg object-cover mr-3">
+                                            <div>
+                                                <div class="font-medium text-gray-900">Premium Cotton T-Shirt</div>
+                                                <div class="text-sm text-gray-500">Comfortable Everyday Wear</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-4 py-4 text-sm text-gray-700">Clothing</td>
+                                    <td class="px-4 py-4 text-sm text-gray-900 font-medium">$29.99</td>
+                                    <td class="px-4 py-4 text-sm text-gray-700">120</td>
+                                    <td class="px-4 py-4">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                            In Stock
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-4 text-right">
+                                        <div class="flex items-center justify-end space-x-2">
+                                            <button class="p-1 text-gray-600 hover:text-blue-600 transition-colors">
+                                                <div class="w-4 h-4 flex items-center justify-center">
+                                                    <i class="ri-edit-line"></i>
+                                                </div>
+                                            </button>
+                                            <button class="p-1 text-gray-600 hover:text-red-600 transition-colors">
+                                                <div class="w-4 h-4 flex items-center justify-center">
+                                                    <i class="ri-delete-bin-line"></i>
+                                                </div>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-4 py-4">
+                                        <input type="checkbox" class="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary">
+                                    </td>
+                                    <td class="px-4 py-4">
+                                        <div class="flex items-center">
+                                            <img src="https://readdy.ai/api/search-image?query=ceramic%20coffee%20mug%20white%20color%20elegant%20design%20handle%20clean%20white%20background%20product%20photography%20studio%20lighting&width=48&height=48&seq=product-3&orientation=squarish" alt="Product" class="w-12 h-12 rounded-lg object-cover mr-3">
+                                            <div>
+                                                <div class="font-medium text-gray-900">Ceramic Coffee Mug</div>
+                                                <div class="text-sm text-gray-500">Perfect for Morning Coffee</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-4 py-4 text-sm text-gray-700">Home & Garden</td>
+                                    <td class="px-4 py-4 text-sm text-gray-900 font-medium">$14.99</td>
+                                    <td class="px-4 py-4 text-sm text-gray-700">8</td>
+                                    <td class="px-4 py-4">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                            Low Stock
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-4 text-right">
+                                        <div class="flex items-center justify-end space-x-2">
+                                            <button class="p-1 text-gray-600 hover:text-blue-600 transition-colors">
+                                                <div class="w-4 h-4 flex items-center justify-center">
+                                                    <i class="ri-edit-line"></i>
+                                                </div>
+                                            </button>
+                                            <button class="p-1 text-gray-600 hover:text-red-600 transition-colors">
+                                                <div class="w-4 h-4 flex items-center justify-center">
+                                                    <i class="ri-delete-bin-line"></i>
+                                                </div>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-4 py-4">
+                                        <input type="checkbox" class="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary">
+                                    </td>
+                                    <td class="px-4 py-4">
+                                        <div class="flex items-center">
+                                            <img src="https://readdy.ai/api/search-image?query=yoga%20mat%20purple%20color%20rolled%20up%20fitness%20equipment%20clean%20white%20background%20product%20photography%20studio%20lighting&width=48&height=48&seq=product-4&orientation=squarish" alt="Product" class="w-12 h-12 rounded-lg object-cover mr-3">
+                                            <div>
+                                                <div class="font-medium text-gray-900">Yoga Exercise Mat</div>
+                                                <div class="text-sm text-gray-500">Non-slip Premium Quality</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-4 py-4 text-sm text-gray-700">Sports</td>
+                                    <td class="px-4 py-4 text-sm text-gray-900 font-medium">$39.99</td>
+                                    <td class="px-4 py-4 text-sm text-gray-700">0</td>
+                                    <td class="px-4 py-4">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                            Out of Stock
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-4 text-right">
+                                        <div class="flex items-center justify-end space-x-2">
+                                            <button class="p-1 text-gray-600 hover:text-blue-600 transition-colors">
+                                                <div class="w-4 h-4 flex items-center justify-center">
+                                                    <i class="ri-edit-line"></i>
+                                                </div>
+                                            </button>
+                                            <button class="p-1 text-gray-600 hover:text-red-600 transition-colors">
+                                                <div class="w-4 h-4 flex items-center justify-center">
+                                                    <i class="ri-delete-bin-line"></i>
+                                                </div>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-4 py-4">
+                                        <input type="checkbox" class="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary">
+                                    </td>
+                                    <td class="px-4 py-4">
+                                        <div class="flex items-center">
+                                            <img src="https://readdy.ai/api/search-image?query=smartphone%20case%20black%20leather%20texture%20protective%20cover%20clean%20white%20background%20product%20photography%20studio%20lighting&width=48&height=48&seq=product-5&orientation=squarish" alt="Product" class="w-12 h-12 rounded-lg object-cover mr-3">
+                                            <div>
+                                                <div class="font-medium text-gray-900">Leather Phone Case</div>
+                                                <div class="text-sm text-gray-500">Premium Protection</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-4 py-4 text-sm text-gray-700">Electronics</td>
+                                    <td class="px-4 py-4 text-sm text-gray-900 font-medium">$24.99</td>
+                                    <td class="px-4 py-4 text-sm text-gray-700">67</td>
+                                    <td class="px-4 py-4">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                            In Stock
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-4 text-right">
+                                        <div class="flex items-center justify-end space-x-2">
+                                            <button class="p-1 text-gray-600 hover:text-blue-600 transition-colors">
+                                                <div class="w-4 h-4 flex items-center justify-center">
+                                                    <i class="ri-edit-line"></i>
+                                                </div>
+                                            </button>
+                                            <button class="p-1 text-gray-600 hover:text-red-600 transition-colors">
+                                                <div class="w-4 h-4 flex items-center justify-center">
+                                                    <i class="ri-delete-bin-line"></i>
+                                                </div>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-4 py-4">
+                                        <input type="checkbox" class="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary">
+                                    </td>
+                                    <td class="px-4 py-4">
+                                        <div class="flex items-center">
+                                            <img src="https://readdy.ai/api/search-image?query=stainless%20steel%20water%20bottle%20silver%20color%20insulated%20design%20clean%20white%20background%20product%20photography%20studio%20lighting&width=48&height=48&seq=product-6&orientation=squarish" alt="Product" class="w-12 h-12 rounded-lg object-cover mr-3">
+                                            <div>
+                                                <div class="font-medium text-gray-900">Stainless Steel Water Bottle</div>
+                                                <div class="text-sm text-gray-500">Insulated 24oz Capacity</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-4 py-4 text-sm text-gray-700">Sports</td>
+                                    <td class="px-4 py-4 text-sm text-gray-900 font-medium">$19.99</td>
+                                    <td class="px-4 py-4 text-sm text-gray-700">89</td>
+                                    <td class="px-4 py-4">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                            In Stock
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-4 text-right">
+                                        <div class="flex items-center justify-end space-x-2">
+                                            <button class="p-1 text-gray-600 hover:text-blue-600 transition-colors">
+                                                <div class="w-4 h-4 flex items-center justify-center">
+                                                    <i class="ri-edit-line"></i>
+                                                </div>
+                                            </button>
+                                            <button class="p-1 text-gray-600 hover:text-red-600 transition-colors">
+                                                <div class="w-4 h-4 flex items-center justify-center">
+                                                    <i class="ri-delete-bin-line"></i>
+                                                </div>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-4 py-4">
+                                        <input type="checkbox" class="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary">
+                                    </td>
+                                    <td class="px-4 py-4">
+                                        <div class="flex items-center">
+                                            <img src="https://readdy.ai/api/search-image?query=wooden%20cutting%20board%20natural%20bamboo%20rectangular%20shape%20kitchen%20utensil%20clean%20white%20background%20product%20photography%20studio%20lighting&width=48&height=48&seq=product-7&orientation=squarish" alt="Product" class="w-12 h-12 rounded-lg object-cover mr-3">
+                                            <div>
+                                                <div class="font-medium text-gray-900">Bamboo Cutting Board</div>
+                                                <div class="text-sm text-gray-500">Eco-Friendly Kitchen Essential</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-4 py-4 text-sm text-gray-700">Home & Garden</td>
+                                    <td class="px-4 py-4 text-sm text-gray-900 font-medium">$34.99</td>
+                                    <td class="px-4 py-4 text-sm text-gray-700">23</td>
+                                    <td class="px-4 py-4">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                            In Stock
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-4 text-right">
+                                        <div class="flex items-center justify-end space-x-2">
+                                            <button class="p-1 text-gray-600 hover:text-blue-600 transition-colors">
+                                                <div class="w-4 h-4 flex items-center justify-center">
+                                                    <i class="ri-edit-line"></i>
+                                                </div>
+                                            </button>
+                                            <button class="p-1 text-gray-600 hover:text-red-600 transition-colors">
+                                                <div class="w-4 h-4 flex items-center justify-center">
+                                                    <i class="ri-delete-bin-line"></i>
+                                                </div>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-4 py-4">
+                                        <input type="checkbox" class="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary">
+                                    </td>
+                                    <td class="px-4 py-4">
+                                        <div class="flex items-center">
+                                            <img src="https://readdy.ai/api/search-image?query=denim%20jeans%20dark%20blue%20color%20folded%20casual%20wear%20clothing%20clean%20white%20background%20product%20photography%20studio%20lighting&width=48&height=48&seq=product-8&orientation=squarish" alt="Product" class="w-12 h-12 rounded-lg object-cover mr-3">
+                                            <div>
+                                                <div class="font-medium text-gray-900">Classic Denim Jeans</div>
+                                                <div class="text-sm text-gray-500">Comfortable Fit</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-4 py-4 text-sm text-gray-700">Clothing</td>
+                                    <td class="px-4 py-4 text-sm text-gray-900 font-medium">$79.99</td>
+                                    <td class="px-4 py-4 text-sm text-gray-700">34</td>
+                                    <td class="px-4 py-4">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                            In Stock
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-4 text-right">
+                                        <div class="flex items-center justify-end space-x-2">
+                                            <button class="p-1 text-gray-600 hover:text-blue-600 transition-colors">
+                                                <div class="w-4 h-4 flex items-center justify-center">
+                                                    <i class="ri-edit-line"></i>
+                                                </div>
+                                            </button>
+                                            <button class="p-1 text-gray-600 hover:text-red-600 transition-colors">
+                                                <div class="w-4 h-4 flex items-center justify-center">
+                                                    <i class="ri-delete-bin-line"></i>
+                                                </div>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Pagination -->
+                    <div class="px-4 py-3 border-t border-gray-200">
+                        <div class="flex items-center justify-between">
+                            <div class="text-sm text-gray-700">
+                                Showing <span class="font-medium">1</span> to <span class="font-medium">8</span> of <span class="font-medium">47</span> results
+                            </div>
+                            
+                            <div class="flex items-center space-x-2">
+                                <button class="px-3 py-1 text-sm text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                                    Previous
+                                </button>
+                                
+                                <button class="px-3 py-1 text-sm text-white bg-primary border border-primary rounded-lg">
+                                    1
+                                </button>
+                                
+                                <button class="px-3 py-1 text-sm text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                                    2
+                                </button>
+                                
+                                <button class="px-3 py-1 text-sm text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                                    3
+                                </button>
+                                
+                                <span class="px-3 py-1 text-sm text-gray-500">...</span>
+                                
+                                <button class="px-3 py-1 text-sm text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                                    6
+                                </button>
+                                
+                                <button class="px-3 py-1 text-sm text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                                    Next
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script id="mobile-menu-script">
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+            const sidebar = document.getElementById('sidebar');
+            
+            mobileMenuToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('-translate-x-full');
+            });
+        });
+    </script>
+
+    <script id="filter-functionality">
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterBtn = document.getElementById('filter-btn');
+            const filterPanel = document.getElementById('filter-panel');
+            
+            filterBtn.addEventListener('click', function() {
+                filterPanel.classList.toggle('hidden');
+            });
+        });
+    </script>
+
+    <script id="bulk-actions-script">
+        document.addEventListener('DOMContentLoaded', function() {
+            const bulkActionsBtn = document.getElementById('bulk-actions-btn');
+            const bulkActionsMenu = document.getElementById('bulk-actions-menu');
+            const selectAllCheckbox = document.getElementById('select-all');
+            const rowCheckboxes = document.querySelectorAll('tbody input[type="checkbox"]');
+            
+            bulkActionsBtn.addEventListener('click', function() {
+                bulkActionsMenu.classList.toggle('hidden');
+            });
+            
+            selectAllCheckbox.addEventListener('change', function() {
+                rowCheckboxes.forEach(checkbox => {
+                    checkbox.checked = selectAllCheckbox.checked;
+                });
+            });
+            
+            document.addEventListener('click', function(e) {
+                if (!bulkActionsBtn.contains(e.target) && !bulkActionsMenu.contains(e.target)) {
+                    bulkActionsMenu.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+
+    <script id="view-toggle-script">
+        document.addEventListener('DOMContentLoaded', function() {
+            const gridViewBtn = document.getElementById('grid-view');
+            const listViewBtn = document.getElementById('list-view');
+            
+            gridViewBtn.addEventListener('click', function() {
+                gridViewBtn.classList.add('text-primary');
+                gridViewBtn.classList.remove('text-gray-600');
+                listViewBtn.classList.add('text-gray-600');
+                listViewBtn.classList.remove('text-primary');
+            });
+            
+            listViewBtn.addEventListener('click', function() {
+                listViewBtn.classList.add('text-primary');
+                listViewBtn.classList.remove('text-gray-600');
+                gridViewBtn.classList.add('text-gray-600');
+                gridViewBtn.classList.remove('text-primary');
+            });
+        });
+    </script>
+
+    <script id="search-functionality">
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('global-search');
+            
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                const rows = document.querySelectorAll('tbody tr');
+                
+                rows.forEach(row => {
+                    const productName = row.querySelector('td:nth-child(2) .font-medium').textContent.toLowerCase();
+                    const category = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
+                    
+                    if (productName.includes(searchTerm) || category.includes(searchTerm)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+
+    <script id="table-sorting">
+        document.addEventListener('DOMContentLoaded', function() {
+            const sortButtons = document.querySelectorAll('[data-sort]');
+            
+            sortButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const sortBy = this.getAttribute('data-sort');
+                    const tbody = document.querySelector('tbody');
+                    const rows = Array.from(tbody.querySelectorAll('tr'));
+                    
+                    rows.sort((a, b) => {
+                        let aValue, bValue;
+                        
+                        switch(sortBy) {
+                            case 'price':
+                                aValue = parseFloat(a.querySelector('td:nth-child(4)').textContent.replace('$', ''));
+                                bValue = parseFloat(b.querySelector('td:nth-child(4)').textContent.replace('$', ''));
+                                break;
+                            case 'stock':
+                                aValue = parseInt(a.querySelector('td:nth-child(5)').textContent);
+                                bValue = parseInt(b.querySelector('td:nth-child(5)').textContent);
+                                break;
+                            case 'category':
+                                aValue = a.querySelector('td:nth-child(3)').textContent;
+                                bValue = b.querySelector('td:nth-child(3)').textContent;
+                                break;
+                        }
+                        
+                        return aValue > bValue ? 1 : -1;
+                    });
+                    
+                    tbody.innerHTML = '';
+                    rows.forEach(row => tbody.appendChild(row));
+                });
+            });
+        });
+    </script>
+</body>
+</html>

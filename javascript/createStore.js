@@ -95,6 +95,7 @@
 
         if (response.ok) {
           alert("Store created successfully!");
+          localStorage.setItem("store", JSON.stringify(result));
           window.location.href = `dashboard.html`;
         } else {
           alert(result.message || "Failed to create store.");
