@@ -1,5 +1,6 @@
+document.addEventListener('DOMContentLoaded', function () {
  //Store Info
- document.addEventListener('DOMContentLoaded', function () {
+ 
         const user = JSON.parse(localStorage.getItem("user"));
         if (!user || !user.id) {
             console.error("User not found.");
