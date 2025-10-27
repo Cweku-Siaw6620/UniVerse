@@ -43,9 +43,7 @@ document.addEventListener('DOMContentLoaded', function () {
           </button>
           <div class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></div>
       </div>
-      <div class="w-10 h-10 flex items-center justify-center bg-gray-100 rounded-full">
-          <i class="ri-user-line"></i>
-      </div>
+     
     `;
   }
   fetchStoreData();
@@ -161,6 +159,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 const result = await response.json();
                 if (response.ok) {
                     showNotification('Product Added', 'Your product has been added successfully', 'success');
+                     setTimeout(() => {
+                        window.location.reload(); // ✅ refresh page
+                    }, 1000); // wait 1s so user sees success message
                 } else {
                     alert(result.message || "Failed to add product");
                 }

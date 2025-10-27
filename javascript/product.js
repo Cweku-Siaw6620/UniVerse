@@ -41,9 +41,6 @@ document.addEventListener('DOMContentLoaded', function () {
           </button>
           <div class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></div>
       </div>
-      <div class="w-10 h-10 flex items-center justify-center bg-gray-100 rounded-full">
-          <i class="ri-user-line"></i>
-      </div>
     `;
   }
   fetchStoreData();
@@ -198,9 +195,9 @@ document.addEventListener('DOMContentLoaded', function () {
                             <div class="p-4">
                                 <div class="flex justify-between items-start mb-2">
                                     <h3 class="font-medium text-gray-900 truncate">${product.title}</h3>
-                                    <span class="font-medium text-gray-900">$${product.price.toFixed(2)}</span>
+                                    <span class="font-medium text-gray-900">Ghc ${product.price.toFixed(2)}</span>
                                 </div>
-                                <p class="text-sm text-gray-500 mb-3 line-clamp-2">${product.description}</p>
+                                <p class="text-sm text-gray-500 mb-3 line-clamp-2">${product.category}</p>
                                 <div class="flex justify-between items-center">
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${statusClass}">
                                         ${stockStatus}
