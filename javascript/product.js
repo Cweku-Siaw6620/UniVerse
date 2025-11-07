@@ -33,14 +33,6 @@ document.addEventListener('DOMContentLoaded', function () {
               <div class="text-xs text-gray-500">${store.sellerName}</div>
           </div>
       </div>
-      <div class="relative">
-          <button class="w-10 h-10 flex items-center justify-center bg-gray-100 rounded-full focus:outline-none">
-              <div class="w-10 h-10 flex items-center justify-center">
-                  <i class="ri-notification-3-line"></i>
-              </div>
-          </button>
-          <div class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></div>
-      </div>
     `;
   }
   fetchStoreData();
@@ -50,19 +42,6 @@ document.addEventListener('DOMContentLoaded', function () {
             const productsContainer = document.getElementById('products-container');
             const paginationContainer = document.getElementById('pagination');
             const loadingSpinner = document.getElementById('loading-spinner');
-            const productModal = document.getElementById('product-modal');
-            const modalTitle = document.getElementById('modal-title');
-            const productForm = document.getElementById('product-form');
-            const productIdInput = document.getElementById('product-id');
-            const productNameInput = document.getElementById('product-name');
-            const productPriceInput = document.getElementById('product-price');
-            const productCategoryInput = document.getElementById('product-category');
-            const productStockInput = document.getElementById('product-stock');
-            const productDescriptionInput = document.getElementById('product-description');
-            const productImageInput = document.getElementById('product-image');
-            const closeModalBtn = document.getElementById('close-modal');
-            const cancelBtn = document.getElementById('cancel-btn');
-            const addProductBtn = document.getElementById('add-product-btn');
             const applyFiltersBtn = document.getElementById('apply-filters');
             const categoryFilter = document.getElementById('category-filter');
             const stockFilter = document.getElementById('stock-filter');
@@ -203,9 +182,6 @@ document.addEventListener('DOMContentLoaded', function () {
                                         ${stockStatus}
                                     </span>
                                     <div class="flex space-x-2">
-                                        <button class="p-1.5 text-gray-600 hover:text-blue-600 transition-colors edit-product" data-id="${product.id}">
-                                            <i class="ri-edit-line"></i>
-                                        </button>
                                         <button class="p-1.5 text-gray-600 hover:text-red-600 transition-colors delete-product" data-id="${product.id}">
                                             <i class="ri-delete-bin-line"></i>
                                         </button>
@@ -219,21 +195,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 productsHTML += '</div>';
                 productsContainer.innerHTML = productsHTML;
                 
-                // Add event listeners to edit and delete buttons
-                document.querySelectorAll('.edit-product').forEach(button => {
-                    button.addEventListener('click', (e) => {
-                        const productId = parseInt(e.currentTarget.getAttribute('data-id'));
-                        openModal('edit', productId);
-                    });
-                });
-                
+                // Add event listeners to edit and delete buttons     
+                // Attach delete event listeners
                 document.querySelectorAll('.delete-product').forEach(button => {
                     button.addEventListener('click', (e) => {
-                        const productId = parseInt(e.currentTarget.getAttribute('data-id'));
-                        deleteProduct(productId);
+                    const productId = e.currentTarget.getAttribute('data-id');
+                    deleteProduct(productId);
                     });
                 });
-            }
+                }
             
             function renderPagination() {
                 const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
@@ -328,88 +298,30 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
             }
             
-            function openModal(mode, productId = null) {
-                if (mode === 'add') {
-                    modalTitle.textContent = 'Add New Product';
-                    productForm.reset();
-                    productIdInput.value = '';
-                } else if (mode === 'edit') {
-                    modalTitle.textContent = 'Edit Product';
-                    const product = products.find(p => p.id === productId);
-                    
-                    if (product) {
-                        productIdInput.value = product.id;
-                        productNameInput.value = product.title;
-                        productPriceInput.value = product.price;
-                        productCategoryInput.value = product.category;
-                        productStockInput.value = product.stock;
-                        productDescriptionInput.value = product.description;
-                        productImageInput.value = product.image;
-                    }
+            // Delete product (backend)
+            async function deleteProduct(productId) {
+            if (!confirm('Are you sure you want to delete this product?')) return;
+
+            try {
+                const res = await fetch(`http://localhost:3000/api/products/${productId}`, {
+                method: 'DELETE',
+                });
+
+                const data = await res.json();
+
+                if (!res.ok) {
+                throw new Error(data.message || 'Failed to delete product');
                 }
-                
-                productModal.classList.remove('hidden');
-            }
-            
-            function closeModal() {
-                productModal.classList.add('hidden');
-            }
-            
-            function saveProduct() {
-                const productId = productIdInput.value;
-                const productData = {
-                    title: productNameInput.value,
-                    price: parseFloat(productPriceInput.value),
-                    category: productCategoryInput.value,
-                    stock: parseInt(productStockInput.value),
-                    description: productDescriptionInput.value,
-                    image: productImageInput.value || 'https://via.placeholder.com/400?text=No+Image'
-                };
-                
-                // In a real app, you would send this to your API
-                if (productId) {
-                    // Update existing product
-                    const index = products.findIndex(p => p.id === parseInt(productId));
-                    if (index !== -1) {
-                        products[index] = { ...products[index], ...productData };
-                    }
-                } else {
-                    // Add new product
-                    const newId = Math.max(...products.map(p => p.id)) + 1;
-                    products.unshift({
-                        id: newId,
-                        ...productData
-                    });
-                }
-                
-                closeModal();
-                filterAndSortProducts();
-                currentPage = 1;
+
+                // Remove deleted product from frontend
+                products = products.filter(p => p._id !== productId);
                 renderProducts();
-                renderPagination();
-                
-                // Show success message
-                showToast(productId ? 'Product updated successfully' : 'Product added successfully');
+                showToast('Product deleted successfully');
+                setTimeout(() => {location.reload();}, 1700);
+            } catch (error) {
+                console.error('Delete error:', error);
+                alert('Something went wrong deleting the product. Please try again.');
             }
-            
-            function deleteProduct(productId) {
-                if (confirm('Are you sure you want to delete this product?')) {
-                    // In a real app, you would send a DELETE request to your API
-                    products = products.filter(p => p.id !== productId);
-                    
-                    // Reset to first page if current page would be empty
-                    const startIndex = (currentPage - 1) * productsPerPage;
-                    if (startIndex >= filteredProducts.length) {
-                        currentPage = Math.max(1, currentPage - 1);
-                    }
-                    
-                    filterAndSortProducts();
-                    renderProducts();
-                    renderPagination();
-                    
-                    // Show success message
-                    showToast('Product deleted successfully');
-                }
             }
             
             function showToast(message) {

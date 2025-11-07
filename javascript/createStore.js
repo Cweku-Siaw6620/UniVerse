@@ -24,85 +24,79 @@
   }
 });
 
-  
-    // Toggle dropdown function
-    function toggleDropdown() {
-      const dropdown = document.getElementById('checkboxMenu');
-      const chevron = document.querySelector('.dropdown-btn i');
-      
-      dropdown.classList.toggle('hidden');
-      chevron.classList.toggle('transform');
-      chevron.classList.toggle('rotate-180');
-    }
-    
-    // Close dropdown when clicking outside
-    document.addEventListener('click', function(event) {
-      const dropdown = document.getElementById('checkboxMenu');
-      const dropdownBtn = document.querySelector('.dropdown-btn');
-      
-      if (!dropdown.contains(event.target) && !dropdownBtn.contains(event.target)) {
-        dropdown.classList.add('hidden');
-        document.querySelector('.dropdown-btn i').classList.remove('transform', 'rotate-180');
-      }
-    });
-    
-    // Add item field
-    function addItem() {
-      const container = document.getElementById('itemsContainer');
-      const newItem = document.createElement('div');
-      newItem.className = 'relative';
-      newItem.innerHTML = `
-        <input type="text" name="items[]" placeholder="e.g., Laptops, Clothing, Electronics" 
-               class="item-input w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition duration-200">
-        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-          <i class="fas fa-tags text-gray-400"></i>
-        </div>
-      `;
-      container.appendChild(newItem);
-    }
-    
-    // Remove item field
-    function removeItem() {
-      const container = document.getElementById('itemsContainer');
-      if (container.children.length > 1) {
-        container.removeChild(container.lastChild);
-      }
-    }
-   
-  document.addEventListener("DOMContentLoaded", function () {
-  const storeForm = document.getElementById('storeForm');
+// ✅ Toast Notification Utility
+function showNotification(message, type = "success") {
+  const existingToast = document.querySelector(".toast");
+  if (existingToast) existingToast.remove(); // remove existing toasts
+
+  const toast = document.createElement("div");
+  toast.className = `
+    toast fixed top-6 right-6 z-50 px-5 py-3 rounded-lg shadow-lg text-white 
+    ${type === "success" ? "bg-green-600" : "bg-red-600"} 
+    flex items-center space-x-2 animate-fade-in-up
+  `;
+  toast.innerHTML = `
+    <i class="fa-solid ${type === "success" ? "fa-check-circle" : "fa-exclamation-circle"}"></i>
+    <span>${message}</span>
+  `;
+  document.body.appendChild(toast);
+
+  // remove after 4 seconds
+  setTimeout(() => toast.remove(), 4000);
+}
+
+
+document.addEventListener("DOMContentLoaded", function () {
+  const storeForm = document.getElementById("storeForm");
+  const createBtn = document.querySelector("#storeForm button[type='submit']");
 
   if (storeForm) {
-    storeForm.addEventListener('submit', async function (e) {
+    storeForm.addEventListener("submit", async function (e) {
       e.preventDefault();
 
       const user = JSON.parse(localStorage.getItem("user"));
       if (!user || !user.id) {
-        alert("User not found in localStorage. Please log in.");
+        showNotification("User not found in localStorage. Please log in.", "error");
         return;
       }
 
-      const formData = new FormData(storeForm); // ✅ grab everything
-      formData.append("userId", user.id);       // ✅ add user ID manually
+      const formData = new FormData(storeForm);
+      formData.append("userId", user.id);
+
+      // ✅ Disable and blur the button
+      createBtn.disabled = true;
+      createBtn.classList.add("opacity-60", "cursor-not-allowed", "blur-[1px]");
+      createBtn.textContent = "Creating...";
 
       try {
         const response = await fetch("http://localhost:3000/api/stores", {
           method: "POST",
-           body: formData,
+          body: formData,
         });
 
         const result = await response.json();
 
         if (response.ok) {
-          alert("Store created successfully!");
+          showNotification("Store created successfully!", "success");
           localStorage.setItem("store", JSON.stringify(result));
-          window.location.href = `dashboard.html`;
+
+          // ✅ Keep button blurred until redirect
+          setTimeout(() => (window.location.href = "dashboard.html"), 2000);
         } else {
-          alert(result.message || "Failed to create store.");
+          showNotification(result.message || "Failed to create store.", "error");
+          // ✅ Re-enable if failed
+          createBtn.disabled = false;
+          createBtn.classList.remove("opacity-60", "cursor-not-allowed", "blur-[1px]");
+          createBtn.textContent = "Create Store";
         }
       } catch (error) {
         console.error("Store creation error:", error);
-        alert("Something went wrong. Please try again.");
+        showNotification("Something went wrong. Please try again.", "error");
+
+        // ✅ Re-enable on error
+        createBtn.disabled = false;
+        createBtn.classList.remove("opacity-60", "cursor-not-allowed", "blur-[1px]");
+        createBtn.textContent = "Create Store";
       }
     });
   }

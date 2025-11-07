@@ -13,7 +13,7 @@
         html,body{height:100%}
         body{
         margin:0;
-        background: linear-gradient(180deg,#bebebe 0%, #666768 60%);
+        background: linear-gradient(#646363e4 );
         align-items:flex-start;
         justify-content:center;
         padding:36px 18px;
@@ -39,11 +39,11 @@
         display:flex;
         gap:8px;
         align-items:center;
-        background:var(--glass);
+        background-color: #ffffff;
         padding:8px 12px;border-radius:12px;
         }
         .search input{
-        flex:1;background:transparent;border:0;outline:none;color:inherit;font-size:14px;
+        flex:1;background:transparent;border:0;outline:none;color:black;font-size:14px;
         }
         .cards {
         display: grid;

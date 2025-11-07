@@ -35,14 +35,6 @@ document.addEventListener('DOMContentLoaded', function () {
               <div class="text-xs text-gray-500">${store.sellerName}</div>
           </div>
       </div>
-      <div class="relative">
-          <button class="w-10 h-10 flex items-center justify-center bg-gray-100 rounded-full focus:outline-none">
-              <div class="w-10 h-10 flex items-center justify-center">
-                  <i class="ri-notification-3-line"></i>
-              </div>
-          </button>
-          <div class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></div>
-      </div>
      
     `;
   }
@@ -68,9 +60,9 @@ document.addEventListener('DOMContentLoaded', function () {
             let product = [];
             let currentPlan = 'free';
             const planLimits = {
-                'free': 15,
-                'standard': 30,
-                'premium': 65
+                'free': 20,
+                'standard': 45,
+                'premium': 90
             };
             
             // Update product limit based on current plan
@@ -158,11 +150,17 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
                 const result = await response.json();
                 if (response.ok) {
-                    showNotification('Product Added', 'Your product has been added successfully', 'success');
-                     setTimeout(() => {
-                        window.location.reload(); // ✅ refresh page
-                    }, 1000); // wait 1s so user sees success message
-                } else {
+                showNotification('Product Added', 'Your product has been added successfully', 'success');
+                setTimeout(() => window.location.reload(), 1500);
+                // Add the new product locally
+               // product.push(result);
+                
+               
+                // Reset the form and spinner
+                
+                }
+
+                else {
                     alert(result.message || "Failed to add product");
                 }
                 } catch (error) {
@@ -171,14 +169,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 
-                // Reset form
-                addProductForm.reset();
-                uploadPlaceholder.classList.remove('hidden');
-                imagePreview.classList.add('hidden');
-                addProductBtn.disabled = false;
-                addProductBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-                addProductSpinner.classList.add('hidden');
-                addProductText.textContent = 'Add Product';
             });
             
             // Update product count
@@ -197,6 +187,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
                    product = await response.json();
                     updateProductList(product);
+                     // Update UI dynamically
+                    updateProductCount();
+                    updateProgressBar();
+
                 } catch (error) {
                     console.error('Failed to get product:', error);
                 }
@@ -242,8 +236,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     `;
                     productList.appendChild(productElement);
                 });
-                    updateProductLimit();
-                    updateProductCount()
             }
             
             // Show notification
@@ -277,7 +269,9 @@ document.addEventListener('DOMContentLoaded', function () {
             });
             
             // Initialize
-            fetchProducts();
+           fetchProducts();
+           updateProductLimit();
+           //updateProductCount()
         });
 
 //pricing
@@ -330,11 +324,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Update product limit
                 const productLimit = document.getElementById('product-limit');
                 if (currentPlan === 'free') {
-                    productLimit.textContent = '15';
+                    productLimit.textContent = '20';
                 } else if (currentPlan === 'standard') {
-                    productLimit.textContent = '30';
+                    productLimit.textContent = '45';
                 } else {
-                    productLimit.textContent = '65';
+                    productLimit.textContent = '90';
                 }
                 
                 // Reset other plan buttons

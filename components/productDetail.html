@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Product Details | UniVerse</title>
+  <script defer src="../javascript/productDetail.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body style="background: url(../images/leaf.png); background-attachment: fixed;">
+  <div class="max-w-5xl mx-auto p-6">
+    <button onclick="history.back()" class="text-green-600 mb-4">← Back</button>
+    <div id="productDetail" class="bg-white rounded-lg shadow p-6"></div>
+
+    <h2 class="mt-10 text-xl font-semibold text-gray-800">More in this category</h2>
+    <div id="relatedProducts" class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4"></div>
+  </div>
+</body>
+</html>
