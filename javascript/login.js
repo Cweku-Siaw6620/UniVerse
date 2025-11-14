@@ -11,8 +11,8 @@ function handleGoogleLogin(response) {
         console.log("User authenticated:", data);
         // Save to localStorage if needed
         localStorage.setItem("user", JSON.stringify(data));
-        // Redirect to store dashboard or homepage
-        window.location.href = "../homepage.html";
+        // Redirect to store dashboard or index
+        window.location.href = "../index.html";
       })
       .catch(err => {
         console.error("Google login failed:", err);

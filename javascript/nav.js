@@ -48,7 +48,7 @@
       // Handle logout
       dropdown.querySelector('#logoutBtn').addEventListener('click', () => {
         localStorage.removeItem("user");
-        window.location.href = './homepage.html';
+        window.location.href = './index.html';
       });
 
       profileWrapper.appendChild(profileImg);
