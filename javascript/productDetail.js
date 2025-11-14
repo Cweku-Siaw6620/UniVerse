@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   if (!productId) return alert("No product found!");
 
   try {
-    const res = await fetch(`http://localhost:3000/api/products/id/${productId}`);
+    const res = await fetch(`https://universe-api-uabt.onrender.com/api/products/id/${productId}`);
     const product = await res.json();
 
     // Display product info
@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     `;
 
     // Fetch related products (same category)
-    const relRes = await fetch(`http://localhost:3000/api/products/category/${encodeURIComponent(product.productCategory)}`);
+    const relRes = await fetch(`https://universe-api-uabt.onrender.com/api/products/category/${encodeURIComponent(product.productCategory)}`);
     const related = await relRes.json();
     const relatedContainer = document.getElementById("relatedProducts");
 

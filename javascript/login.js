@@ -1,7 +1,7 @@
 function handleGoogleLogin(response) {
       const idToken = response.credential;
 
-      fetch('http://localhost:3000/api/auth/google', {
+      fetch('https://universe-api-uabt.onrender.com/api/auth/google', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ token: idToken })

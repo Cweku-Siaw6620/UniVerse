@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function fetchStoreDetails() {
     try {
-      const res = await fetch(`http://localhost:3000/api/stores/storeID/${storeId}`);
+      const res = await fetch(`https://universe-api-uabt.onrender.com/api/stores/storeID/${storeId}`);
       if (!res.ok) throw new Error("Failed to fetch store info");
       const store = await res.json();
 
@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function fetchStoreProducts() {
     try {
-      const res = await fetch(`http://localhost:3000/api/products/${storeId}`);
+      const res = await fetch(`https://universe-api-uabt.onrender.com/api/products/${storeId}`);
       if (!res.ok) throw new Error("Failed to fetch products");
       const products = await res.json();
 

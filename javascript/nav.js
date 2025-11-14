@@ -23,7 +23,7 @@
       // Fetch whether user has a store
       let hasStore = false;
       try {
-        const res = await fetch(`http://localhost:3000/api/stores/${encodeURIComponent(user.id)}/exists`);
+        const res = await fetch(`https://universe-api-uabt.onrender.com/api/stores/${encodeURIComponent(user.id)}/exists`);
         const result = await res.json();
         hasStore = result.hasStore;
       } catch (err) {
@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded", fetchAllProducts);
       const loading = document.getElementById("loading");
 
       try {
-        const res = await fetch("http://localhost:3000/api/products/all");
+        const res = await fetch("https://universe-api-uabt.onrender.com/api/products/all");
         if (!res.ok) throw new Error("Failed to fetch products");
         const products = await res.json();
 

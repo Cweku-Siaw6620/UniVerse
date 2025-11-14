@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", function () {
       createBtn.textContent = "Creating...";
 
       try {
-        const response = await fetch("http://localhost:3000/api/stores", {
+        const response = await fetch("https://universe-api-uabt.onrender.com/api/stores", {
           method: "POST",
           body: formData,
         });
