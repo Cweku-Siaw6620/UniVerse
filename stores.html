@@ -95,6 +95,38 @@
   </div>
 </footer>
 
+<script>
+        // Simple JavaScript for mobile menu toggle (can be expanded)
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuButton = document.querySelector('button.md\\:hidden');
+            const navLinks = document.querySelector('nav.hidden.md\\:flex');
+            
+            mobileMenuButton.addEventListener('click', function() {
+                navLinks.classList.toggle('hidden');
+                navLinks.classList.toggle('flex');
+                navLinks.classList.toggle('flex-col');
+                navLinks.classList.toggle('absolute');
+                navLinks.classList.toggle('top-16');
+                navLinks.classList.toggle('left-0');
+                navLinks.classList.toggle('right-0');
+                navLinks.classList.toggle('bg-white');
+                navLinks.classList.toggle('p-4');
+                navLinks.classList.toggle('shadow-md');
+                navLinks.classList.toggle('space-y-4');
+            });
+            
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        });
+    </script>
 
     <script>
   async function fetchShops() {
