@@ -12,12 +12,13 @@ function handleGoogleLogin(response) {
         // Save to localStorage if needed
         localStorage.setItem("user", JSON.stringify(data));
         // Redirect to store dashboard or index
-        //window.location.href = "../index.html";
-
+        window.location.href = "../index.html";
+/*
          // No redirection here — just log success
     console.log("Login successful, staying on current page for testing.");
     // Check immediately after
 console.log('Local Storage Status:', localStorage.getItem('user'));
+*/
       })
       .catch(err => {
         console.error("Google login failed:", err);

@@ -70,54 +70,59 @@
   //products on home screen
 document.addEventListener("DOMContentLoaded", fetchAllProducts);
 
-    async function fetchAllProducts() {
-      const grid = document.getElementById("productGrid");
-      const loading = document.getElementById("loading");
+  async function fetchAllProducts() {
+  const grid = document.getElementById("productGrid");
+  const loading = document.getElementById("loading");
 
-      try {
-        const res = await fetch("https://universe-api-uabt.onrender.com/api/products/all");
-        if (!res.ok) throw new Error("Failed to fetch products");
-        const products = await res.json();
+  // FIX: Stop the function here if these elements don't exist on the current page
+  if (!grid || !loading) {
+    return; 
+  }
 
-        loading.style.display = "none";
-        grid.innerHTML = "";
+  try {
+    const res = await fetch("https://universe-api-uabt.onrender.com/api/products/all");
+    if (!res.ok) throw new Error("Failed to fetch products");
+    const products = await res.json();
 
-        if (!products.length) {
-          grid.innerHTML = `
-            <div class="col-span-full text-center text-gray-500 py-12">
-              <i data-feather="package" class="w-12 h-12 mx-auto text-gray-400"></i>
-              <p class="mt-4">No products available right now.</p>
-            </div>`;
-          feather.replace();
-          return;
-        }
+    loading.style.display = "none"; // This line won't crash now
+    grid.innerHTML = "";
 
-        products.forEach(prod => {
-          const card = document.createElement("div");
-          card.className = "product-card bg-white rounded-lg overflow-hidden shadow";
-          card.innerHTML = `
-            <img src="${prod.productImage}" alt="${prod.productName}"  class="w-full h-80 object-cover transform hover:scale-105 transition-transform duration-300">
-            <div class="p-4">
-              <h3 class="text-lg font-semibold text-gray-800">${prod.productName}</h3>
-              <p class="text-green-600 font-bold">₵${prod.productPrice.toFixed(2)}</p>
-              <p class="text-sm text-gray-500">${prod.productCategory || "Uncategorized"}</p>
-              <p class="text-xs text-gray-400">${prod.productStock} in stock</p>
-              <button  onclick="window.location.href='./components/productDetail.html?id=${prod._id}'"
-                      class="mt-3 w-full bg-green-600 hover:bg-green-700 text-white text-sm font-medium py-2 rounded">
-                View Details
-              </button>
-            </div>
-          `;
-          grid.appendChild(card);
-        });
-
-        feather.replace();
-      } catch (error) {
-        console.error("Error fetching all products:", error);
-        loading.textContent = "Failed to load products. Try again later.";
-      }
+    if (!products.length) {
+      grid.innerHTML = `
+        <div class="col-span-full text-center text-gray-500 py-12">
+          <i data-feather="package" class="w-12 h-12 mx-auto text-gray-400"></i>
+          <p class="mt-4">No products available right now.</p>
+        </div>`;
+      if (typeof feather !== 'undefined') feather.replace();
+      return;
     }
 
+    products.forEach(prod => {
+      const card = document.createElement("div");
+      card.className = "product-card bg-white rounded-lg overflow-hidden shadow";
+      card.innerHTML = `
+        <img src="${prod.productImage}" alt="${prod.productName}" class="w-full h-80 object-cover transform hover:scale-105 transition-transform duration-300">
+        <div class="p-4">
+          <h3 class="text-lg font-semibold text-gray-800">${prod.productName}</h3>
+          <p class="text-green-600 font-bold">₵${prod.productPrice.toFixed(2)}</p>
+          <p class="text-sm text-gray-500">${prod.productCategory || "Uncategorized"}</p>
+          <p class="text-xs text-gray-400">${prod.productStock} in stock</p>
+          <button onclick="window.location.href='./components/productDetail.html?id=${prod._id}'"
+                  class="mt-3 w-full bg-green-600 hover:bg-green-700 text-white text-sm font-medium py-2 rounded">
+            View Details
+          </button>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+
+    if (typeof feather !== 'undefined') feather.replace();
+  } catch (error) {
+    console.error("Error fetching all products:", error);
+    // Only try to modify loading text if the element actually exists
+    if (loading) loading.textContent = "Failed to load products. Try again later.";
+  }
+}
     function contactSeller(ownerId) {
       alert("Contacting seller with ID: " + ownerId + " (You can integrate WhatsApp link here)");
       // In future: fetch seller info from your /api/users/:id and open WhatsApp

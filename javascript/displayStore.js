@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
   }
 
-  async function fetchStoreProducts() {
+async function fetchStoreProducts() {
     try {
       const res = await fetch(`https://universe-api-uabt.onrender.com/api/products/${storeId}`);
       if (!res.ok) throw new Error("Failed to fetch products");
@@ -79,17 +79,33 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
+      // Get store info from local storage
       const store = JSON.parse(localStorage.getItem("currentViewedStore")) || {};
       const sellerNumber = store.sellerNumber || '';
 
       products.forEach((prod, index) => {
-        const message = encodeURIComponent(
-          `Hi, I’m interested in your product "${prod.productName}" from your store "${store.storeName}".`
-        );
+        
+        // --- WHATSAPP LOGIC START ---
+        const countryCode = '233';
+        let whatsappLink = '#';
+        
+        if (sellerNumber) {
+            const cleanNumber = sellerNumber.replace(/\D/g, '');
 
-        const whatsappLink = sellerNumber
-          ? `https://wa.me/${sellerNumber.replace(/\D/g, '')}?text=${message}`
-          : '#';
+            // We put the Image URL on its own line at the bottom or top.
+            // This maximizes the chance WhatsApp generates the "Card Preview".
+            const text = `Hi, I am interested in this product:
+          *${prod.productName}*
+          Price: ₵${prod.productPrice.toFixed(2)}
+
+          ${prod.productImage}
+          `;
+
+            const encodedMessage = encodeURIComponent(text);
+           // whatsappLink = `https://wa.me/${cleanNumber}?text=${encodedMessage}`;
+           whatsappLink = `https://api.whatsapp.com/send?phone=${countryCode}${cleanNumber}&text=${encodedMessage}`;
+        }
+        // --- WHATSAPP LOGIC END ---
 
         const card = document.createElement('div');
         card.className = 'product-card bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300';
@@ -105,6 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
               <i data-feather="package" class="w-4 h-4 mr-1"></i>
               <span>${prod.productStock} in stock</span>
             </div>
+            
             <a href="${whatsappLink}" target="_blank"
                class="block text-center bg-green-600 hover:bg-green-700 text-white text-sm font-medium py-2 px-3 rounded-md transition-colors duration-200">
                <i data-feather="message-circle" class="w-4 h-4 inline mr-1"></i> Contact Seller
@@ -120,6 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
       throw error;
     }
   }
+
 
   function showErrorAlert(message) {
     const alert = document.createElement('div');

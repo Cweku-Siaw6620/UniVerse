@@ -224,15 +224,15 @@ document.addEventListener('DOMContentLoaded', function () {
                             <img src="${product.productImage}" alt="${product.productName}" class="w-full h-full object-cover">
                         </div>
                         <div class="flex-1 min-w-0">
-                            <h4 class="text-sm font-medium text-gray-900 truncate">${product.productName}</h4>
-                            <span class="mx-1">•</span>
-                            <span>${product.productCategory}</span>
+                            <h3 class="text-sm font-medium text-gray-900 truncate">${product.productName}</h3>
+                            <div class="text-sm text-gray-400">GHC ${product.productPrice.toFixed(2)}</div>
                             <div class="flex items-center text-xs text-gray-500 mt-1">
                                 <span class="mx-1">•</span>
                                 <span>${product.productStock} in stock</span>
                             </div>
+                            
                         </div>
-                        <div class="text-sm font-medium text-gray-900">GHC ${product.productPrice.toFixed(2)}</div>
+                       
                     `;
                     productList.appendChild(productElement);
                 });
