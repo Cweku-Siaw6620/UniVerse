@@ -28,12 +28,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function fetchStoreDetails() {
     try {
-      const res = await fetch(`https://universe-api-uabt.onrender.com/api/stores/storeID/${storeId}`);
+      const res = await fetch(`https://corsproxy.io/?https://universe-api-uabt.onrender.com/api/stores/storeID/${storeId}`);
       if (!res.ok) throw new Error("Failed to fetch store info");
       const store = await res.json();
 
       // Save store for later use (for WhatsApp)
-      localStorage.setItem("currentViewedStore", JSON.stringify(store));
+      try {
+        localStorage.setItem("currentViewedStore", JSON.stringify(store));
+      } catch (err) {
+        console.error("Failed to save store to localStorage:", err);
+      }
 
       updateStoreHeader(store);
     } catch (error) {
@@ -61,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function fetchStoreProducts() {
     try {
-      const res = await fetch(`https://universe-api-uabt.onrender.com/api/products/${storeId}`);
+      const res = await fetch(`https://corsproxy.io/?https://universe-api-uabt.onrender.com/api/products/${storeId}`);
       if (!res.ok) throw new Error("Failed to fetch products");
       const products = await res.json();
 
@@ -80,7 +84,13 @@ async function fetchStoreProducts() {
       }
 
       // Get store info from local storage
-      const store = JSON.parse(localStorage.getItem("currentViewedStore")) || {};
+      let store = {};
+      try {
+        const storeData = localStorage.getItem("currentViewedStore");
+        store = storeData ? JSON.parse(storeData) : {};
+      } catch (err) {
+        console.error("Failed to parse store from localStorage:", err);
+      }
       const sellerNumber = store.sellerNumber || '';
 
       products.forEach((prod, index) => {

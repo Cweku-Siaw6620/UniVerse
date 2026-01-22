@@ -54,9 +54,17 @@ document.addEventListener("DOMContentLoaded", function () {
     storeForm.addEventListener("submit", async function (e) {
       e.preventDefault();
 
-      const user = JSON.parse(localStorage.getItem("user"));
+      let user = null;
+      try {
+        const userData = localStorage.getItem("user");
+        user = userData ? JSON.parse(userData) : null;
+      } catch (err) {
+        console.error("Failed to parse user from localStorage:", err);
+      }
+      
       if (!user || !user.id) {
-        showNotification("User not found in localStorage. Please log in.", "error");
+        showNotification("User not found. Please log in first.", "error");
+        window.location.href = "/components/login.html";
         return;
       }
 
@@ -69,7 +77,7 @@ document.addEventListener("DOMContentLoaded", function () {
       createBtn.textContent = "Creating...";
 
       try {
-        const response = await fetch("https://universe-api-uabt.onrender.com/api/stores", {
+        const response = await fetch("https://corsproxy.io/?https://universe-api-uabt.onrender.com/api/stores", {
           method: "POST",
           body: formData,
         });
@@ -78,7 +86,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (response.ok) {
           showNotification("Store created successfully!", "success");
-          localStorage.setItem("store", JSON.stringify(result));
+          try {
+            localStorage.setItem("store", JSON.stringify(result));
+          } catch (err) {
+            console.error("Failed to save store to localStorage:", err);
+          }
 
           // ✅ Keep button blurred until redirect
           setTimeout(() => (window.location.href = "dashboard.html"), 2000);

@@ -1,5 +1,11 @@
   document.addEventListener('DOMContentLoaded', async function () {
-    const user = JSON.parse(localStorage.getItem("user"));
+    let user = null;
+    try {
+      const userData = localStorage.getItem("user");
+      user = userData ? JSON.parse(userData) : null;
+    } catch (err) {
+      console.error("Failed to parse user from localStorage:", err);
+    }
 
     if (user && user.picture) {
       const nav = document.querySelector('nav');
@@ -23,7 +29,7 @@
       // Fetch whether user has a store
       let hasStore = false;
       try {
-        const res = await fetch(`https://universe-api-uabt.onrender.com/api/stores/${encodeURIComponent(user.id)}/exists`);
+        const res = await fetch(`https://corsproxy.io/?https://universe-api-uabt.onrender.com/api/stores/${encodeURIComponent(user.id)}/exists`);
         const result = await res.json();
         hasStore = result.hasStore;
       } catch (err) {
@@ -47,7 +53,11 @@
 
       // Handle logout
       dropdown.querySelector('#logoutBtn').addEventListener('click', () => {
-        localStorage.removeItem("user");
+        try {
+          localStorage.removeItem("user");
+        } catch (err) {
+          console.error("Failed to remove user from localStorage:", err);
+        }
         window.location.href = './index.html';
       });
 
@@ -80,7 +90,7 @@ document.addEventListener("DOMContentLoaded", fetchAllProducts);
   }
 
   try {
-    const res = await fetch("https://universe-api-uabt.onrender.com/api/products/all");
+    const res = await fetch("https://corsproxy.io/?https://universe-api-uabt.onrender.com/api/products/all");
     if (!res.ok) throw new Error("Failed to fetch products");
     const products = await res.json();
 

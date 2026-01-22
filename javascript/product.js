@@ -1,7 +1,15 @@
 document.addEventListener('DOMContentLoaded', function () {
-        const user = JSON.parse(localStorage.getItem("user"));
+        let user = null;
+        try {
+          const userData = localStorage.getItem("user");
+          user = userData ? JSON.parse(userData) : null;
+        } catch (err) {
+          console.error("Failed to parse user from localStorage:", err);
+        }
+        
         if (!user || !user.id) {
-            console.error("User not found.");
+            console.error("User not found. Please log in first.");
+            window.location.href = "/components/login.html";
             return;
          }
          
@@ -9,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   async function fetchStoreData() {
     try {
-      const res = await fetch(`https://universe-api-uabt.onrender.com/api/stores/${encodeURIComponent(userId)}`);
+      const res = await fetch(`https://corsproxy.io/?https://universe-api-uabt.onrender.com/api/stores/${encodeURIComponent(userId)}`);
       if (!res.ok) throw new Error("Failed to fetch store");
 
       const store = await res.json();
@@ -67,10 +75,21 @@ document.addEventListener('DOMContentLoaded', function () {
             async function fetchProducts() {
         try {
                     loadingSpinner.classList.remove('hidden');
-                    const store = JSON.parse(localStorage.getItem("store"));
+                    let store = null;
+                    try {
+                      const storeData = localStorage.getItem("store");
+                      store = storeData ? JSON.parse(storeData) : null;
+                    } catch (err) {
+                      console.error("Failed to parse store from localStorage:", err);
+                    }
+                    
+                    if (!store || !store._id) {
+                      throw new Error("Store not found. Please create a store first.");
+                    }
+                    
                     const storeId = store._id;
 
-        const response = await fetch(`https://universe-api-uabt.onrender.com/api/products/${encodeURIComponent(storeId)}`);
+        const response = await fetch(`https://corsproxy.io/?https://universe-api-uabt.onrender.com/api/products/${encodeURIComponent(storeId)}`);
         if (!response.ok) throw new Error("Failed to fetch products");
 
         const result = await response.json();
@@ -303,7 +322,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!confirm('Are you sure you want to delete this product?')) return;
 
             try {
-                const res = await fetch(`https://universe-api-uabt.onrender.com/api/products/${productId}`, {
+                const res = await fetch(`https://corsproxy.io/?https://universe-api-uabt.onrender.com/api/products/${productId}`, {
                 method: 'DELETE',
                 });
 
