@@ -1,4 +1,10 @@
 # netlify.toml
+
+[build]
+  publish = "."     # Your site root folder
+  command = ""      # No build command (HTML site)
+
+# --- Fix Google OAuth + localStorage issues ---
 [[headers]]
   for = "/*"
   [headers.values]
@@ -6,6 +12,17 @@
     Cross-Origin-Embedder-Policy = "unsafe-none"
     X-Frame-Options = "ALLOWALL"
     Referrer-Policy = "no-referrer-when-downgrade"
+
+    # Allow Google OAuth to send token back
     Access-Control-Allow-Origin = "*"
     Access-Control-Allow-Headers = "*"
-    Access-Control-Allow-Methods = "*"
+    Access-Control-Allow-Methods = "GET, POST, OPTIONS"
+
+    # Prevent tracking-prevention from blocking storage
+    Permissions-Policy = "storage-access=()"
+
+# --- Ensure SPA-like routing support (components folder works) ---
+[[redirects]]
+  from = "/components/*"
+  to = "/components/:splat"
+  status = 200
