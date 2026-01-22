@@ -9,7 +9,7 @@
 
     if (user && user.picture) {
       const nav = document.querySelector('nav');
-      const loginLink = nav.querySelector('a[href*="login.html"]');
+      const loginLink = nav.querySelector('a[href*="./components/login.html"]');
 
       // Create wrapper for profile & dropdown
       const profileWrapper = document.createElement("div");
