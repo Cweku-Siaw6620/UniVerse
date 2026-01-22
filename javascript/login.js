@@ -1,7 +1,7 @@
 function handleGoogleLogin(response) {
       const idToken = response.credential;
 
-      fetch('https://universe-api-uabt.onrender.com/api/auth/google', {
+      fetch('https://corsproxy.io/?https://universe-api-uabt.onrender.com/api/auth/google', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ token: idToken })
@@ -10,9 +10,15 @@ function handleGoogleLogin(response) {
       .then(data => {
         console.log("User authenticated:", data);
         // Save to localStorage if needed
-        localStorage.setItem("user", JSON.stringify(data));
+        try {
+          localStorage.setItem("user", JSON.stringify(data));
+        } catch (err) {
+          console.error("Failed to save user to localStorage:", err);
+        }
         // Redirect to store dashboard or index
-        window.location.href = "/index.html";
+        setTimeout(() => {
+          window.location.href = "/index.html";
+        }, 500);
 
       })
       .catch(err => {

@@ -124,7 +124,7 @@
     <script>
   async function fetchShops() {
     try {
-      const res = await fetch('https://universe-api-uabt.onrender.com/api/stores');
+      const res = await fetch('https://corsproxy.io/?https://universe-api-uabt.onrender.com/api/stores');
       if (!res.ok) throw new Error("Failed to fetch stores");
 
       const shops = await res.json();
