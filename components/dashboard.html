@@ -102,6 +102,9 @@
                 <div class="max-w-7xl mx-auto">
                     <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
                         <h1 class="text-2xl font-bold text-gray-900">Dashboard</h1>
+                        <button id="shareStoreBtn" class="text-sm bg-green-100 text-green-700 px-3 py-1 rounded-md hover:bg-green-200">
+                            Share Store
+                        </button>
                     </div>
 
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
@@ -396,6 +399,17 @@
     </div>
 
     <script>
+        document.getElementById("shareStoreBtn")?.addEventListener("click", () => {
+        const store = JSON.parse(localStorage.getItem("store"));
+
+        if (!store?.slug) return;
+
+        const link = `https://universeweb.netlify.app/store/${store.slug}`;
+
+        navigator.clipboard.writeText(link);
+        alert("Store link copied!");
+        });
+
         document.addEventListener('DOMContentLoaded', function() {
             const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
             const sidebar = document.getElementById('sidebar');

@@ -9,6 +9,8 @@
 
     if (user && user.picture) {
       const nav = document.querySelector('nav');
+
+      //Remove the * before commiting
       const loginLink = nav.querySelector('a[href="/components/login"]');
 
       // Create wrapper for profile & dropdown
@@ -29,7 +31,7 @@
       // Fetch whether user has a store
       let hasStore = false;
       try {
-        const res = await fetch(`https://corsproxy.io/?https://universe-api-uabt.onrender.com/api/stores/${encodeURIComponent(user.id)}/exists`);
+        const res = await fetch(`https://universe-api-uabt.onrender.com/api/stores/${encodeURIComponent(user.id)}/exists`);
         const result = await res.json();
         hasStore = result.hasStore;
       } catch (err) {
@@ -38,6 +40,9 @@
 
       // Dropdown menu HTML
       dropdown.innerHTML = `
+        <a href="/components/profile.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+          Profile
+        </a>
         <a href="${hasStore ? '/components/dashboard.html' : '/components/createStore.html'}"  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
           ${hasStore ?  "Open Store" :"Create Your Store"}
         </a>
@@ -90,7 +95,7 @@ document.addEventListener("DOMContentLoaded", fetchAllProducts);
   }
 
   try {
-    const res = await fetch("https://corsproxy.io/?https://universe-api-uabt.onrender.com/api/products/all");
+    const res = await fetch("https://universe-api-uabt.onrender.com/api/products/all");
     if (!res.ok) throw new Error("Failed to fetch products");
     const products = await res.json();
 

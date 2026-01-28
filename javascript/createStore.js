@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", function () {
       createBtn.textContent = "Creating...";
 
       try {
-        const response = await fetch("https://corsproxy.io/?https://universe-api-uabt.onrender.com/api/stores", {
+        const response = await fetch("https://universe-api-uabt.onrender.com/api/stores", {
           method: "POST",
           body: formData,
         });
