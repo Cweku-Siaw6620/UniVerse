@@ -11,7 +11,7 @@
       const nav = document.querySelector('nav');
 
       //Remove the * before commiting
-      const loginLink = nav.querySelector('a[href*="/components/login"]');
+      const loginLink = nav.querySelector('a[href="/components/login"]');
 
       // Create wrapper for profile & dropdown
       const profileWrapper = document.createElement("div");
