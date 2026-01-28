@@ -1,13 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   // Extract storeId from URL
   const urlParams = new URLSearchParams(window.location.search);
-  const storeId = urlParams.get('id');
   const storeSlug = urlParams.get('slug');
-
-  if (!storeId) {
-    showErrorAlert('Invalid store ID');
-    return;
-  }
 
   // ✅ Add Go Back button
   const headerContainer = document.getElementById('storeHeader');
@@ -21,11 +15,13 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   headerContainer.parentElement.insertBefore(backBtn, headerContainer);
 
-  Promise.all([fetchStoreDetails(), fetchStoreProducts()])
-    .catch(error => {
-      console.error('Error:', error);
-      showErrorAlert('Failed to load store data. Please try again later.');
+    fetchStoreDetails()
+    .then(fetchStoreProducts)
+    .catch(err => {
+      console.error(err);
+      showErrorAlert("Failed to load store.");
     });
+
 
   /*async function fetchStoreDetails() {
     try {
@@ -47,18 +43,26 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
     */
-   async function fetchStoreDetails() {
-  const endpoint = storeSlug
-    ? `https://universe-api-uabt.onrender.com/api/stores/slug/${storeSlug}`
-    : `https://universe-api-uabt.onrender.com/api/stores/storeID/${storeId}`;
+    let resolvedStoreId = null;
 
-  const res = await fetch(`${endpoint}`);
-  if (!res.ok) throw new Error("Failed to fetch store");
+    async function fetchStoreDetails() {
+      const res = await fetch(
+        `https://universe-api-uabt.onrender.com/api/stores/slug/${storeSlug}`
+      );
 
-  const store = await res.json();
-  localStorage.setItem("currentViewedStore", JSON.stringify(store));
-  updateStoreHeader(store);
-}
+      if (!res.ok) throw new Error("Store not found");
+
+      const store = await res.json();
+
+      // ✅ Save storeId for product fetching
+      resolvedStoreId = store._id;
+
+      localStorage.setItem("currentViewedStore", JSON.stringify(store));
+      updateStoreHeader(store);
+
+      return store;
+    }
+
 
   function updateStoreHeader(store) {
     const storeHeader = document.getElementById('storeHeader');
@@ -78,8 +82,11 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 async function fetchStoreProducts() {
+    if (!resolvedStoreId) return;
     try {
-      const res = await fetch(`https://universe-api-uabt.onrender.com/api/products/${storeId}`);
+      const res = await fetch(`https://universe-api-uabt.onrender.com/api/products/${resolvedStoreId}`
+      );
+
       if (!res.ok) throw new Error("Failed to fetch products");
       const products = await res.json();
 

@@ -160,7 +160,7 @@
               <span class="seller-number">${escapeHtml(shop.sellerNumber || 'N/A')}</span>
             </div>
           </div>
-          <a href="./components/displayStore.html?id=${encodeURIComponent(shop._id)}"
+          <a href="./components/displayStore.html?slug=${encodeURIComponent(shop.slug)}"
              class="btn"
              role="button"
              aria-label="Go to ${escapeHtml(shop.storeName)}">
