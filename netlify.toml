@@ -26,3 +26,13 @@
   from = "/components/*"
   to = "/components/:splat"
   status = 200
+
+[[redirects]]
+  from = "/store/*"
+  to = "/components/displayStore.html"
+  status = 200
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
