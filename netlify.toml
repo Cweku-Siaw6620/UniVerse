@@ -28,11 +28,9 @@
   status = 200
 
 [[redirects]]
-from = "/store/*"
-to = "https://universe-api-uabt.onrender.com/store/:splat"
-status = 200
-force = true
-
+  from = "/store/*"
+  to = "/components/displayStore.html"
+  status = 200
 
 [[redirects]]
   from = "/*"
