@@ -402,8 +402,8 @@
         document.getElementById("shareStoreBtn")?.addEventListener("click", () => {
         const store = JSON.parse(localStorage.getItem("store"));
 
-        //const link = `https://universeweb.netlify.app/components/displaystore?slug=${store.slug}`;
-          const link = `https://universeweb.netlify.app/stores/${store.slug}`;  ; 
+        const link = `https://universeweb.netlify.app/components/displaystore?slug=${store.slug}`;
+        //const link = `https://universeweb.netlify.app/stores/${store.slug}`;
 
         navigator.clipboard.writeText(link);
         alert("Store link copied!");

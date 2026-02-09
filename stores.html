@@ -5,219 +5,250 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UniVerse | Stores</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="/stylesheet/stores.css">
-    <script src="/javascript/nav.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="/stylesheet/stores.css">
+    <script src="/javascript/feather.min.js"></script>
+    <script src="/javascript/nav.js"></script>
 </head>
-<body class="bg-gray-50">
-    <!-- Header Section -->
+<body>
+    <!-- Header -->
     <header class="sticky top-0 z-50 bg-white shadow-sm">
-        <div class="container mx-auto px-6 py-4">
+        <div class="container mx-auto px-4 py-4">
             <div class="flex items-center justify-between">
                 <!-- Logo -->
                 <div class="flex items-center">
-                     <img src="/images/logo.png"alt="UniVerse Logo" class="h-14 w-14 md:h-16 md:w-16 object-contain rounded-full"/>
+                    <a href="index.html">
+                        <img src="/images/logo.png" alt="UniVerse Logo" class="h-12 w-12 md:h-14 md:w-14 object-contain rounded-full"/>
+                    </a>
                 </div>
                 
-               <nav class="hidden md:flex items-center gap-2 text-sm font-semibold text-gray-800">
-                <a href="index.html" class="px-4 py-2 rounded hover:bg-gray-100 transition">Home</a>
-                <a href="stores.html" class="px-4 py-2 rounded hover:bg-gray-100 transition">Stores</a>
-                <a href="blog.html" class="px-4 py-2 rounded hover:bg-gray-100 transition">Blog</a>
-                <a href="./components/login.html"
-                  class="ml-6 px-5 py-2 bg-gray-900 text-white rounded hover:bg-gray-700 transition">
-                  Sign In
-                </a>
-              </nav>
+                <!-- Desktop Navigation -->
+                <nav class="hidden md:flex items-center gap-2 text-sm font-semibold text-gray-800">
+                    <a href="index.html" class="px-4 py-2 rounded hover:bg-gray-100 transition">Home</a>
+                    <a href="stores.html" class="px-4 py-2 rounded hover:bg-gray-100 transition bg-gray-100">Stores</a>
+                    <a href="blog.html" class="px-4 py-2 rounded hover:bg-gray-100 transition">Blog</a>
+                    <a href="./components/login.html" class="ml-6 px-5 py-2 bg-gray-900 text-white rounded hover:bg-gray-700 transition">
+                        Sign In
+                    </a>
+                </nav>
+                
                 <!-- Mobile menu button -->
-                <button class="md:hidden text-gray-700 focus:outline-none">
+                <button id="mobileMenuButton" class="md:hidden text-gray-700 focus:outline-none">
                     <i class="fas fa-bars text-2xl"></i>
                 </button>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="mobile-menu">
+                <div class="flex flex-col p-6 space-y-4">
+                    <a href="index.html" class="text-gray-800 font-medium py-2 hover:text-gray-900">Home</a>
+                    <a href="stores.html" class="text-gray-800 font-medium py-2 hover:text-gray-900 text-gray-900">Stores</a>
+                    <a href="blog.html" class="text-gray-800 font-medium py-2 hover:text-gray-900">Blog</a>
+                    <a href="/components/login.html"
+                      class="auth-link block mt-4 px-5 py-2 bg-gray-900 text-white rounded text-center hover:bg-gray-700 transition">
+                      Sign In
+                    </a>
+
+
+                </div>
             </div>
         </div>
     </header>
 
-            
-
     <!-- Main Content -->
-    <main class="max-w-7xl mx-auto px-6 py-12">
-        <div class="text-center mb-16">
-            <h1 class="text-4xl font-bold text-gray-900 mb-4">Discover Student Businesses</h1>
-            <p class="text-lg text-white-600 max-w-2xl mx-auto">Support your fellow students by exploring their products and services. Quality items, great prices.</p>
+    <main class="container mx-auto px-4 py-8">
+        <!-- Page Header -->
+        <div class="text-center mb-12">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Discover Student Businesses</h1>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto">Support your fellow students by exploring their products and services. Quality items, great prices.</p>
         </div>
+        
+        <!-- Search and Filters -->
+        <div class="mb-10">
+            <div class="search-container">
+                <div class="search-icon">
+                    <i class="fas fa-search"></i>
+                </div>
+                <input type="text" id="searchInput" class="search-input" placeholder="Search shops by name, description, or seller...">
+            </div>
 
-        <div class="controls" role="region" aria-label="Search and filters">
-        <div class="search" aria-hidden="false">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 21l-4.35-4.35" stroke="#9aa7b7" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="11" cy="11" r="6" stroke="#9aa7b7" stroke-width="1.6"/></svg>
-            <input id="searchInput" type="search" placeholder="Search shops (name or description)" aria-label="Search shops" />
-        </div>
-        <button id="showAll" class="btn ghost" aria-pressed="true">Show all</button>
-        </div>
-
-        <section id="shops" class="cards" aria-live="polite">
-        <!-- Cards injected here -->
+        
+        <!-- Stores Grid -->
+        <section id="shops" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <!-- Cards will be injected here -->
+            <div class="text-center py-10 col-span-full">
+                <div class="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gray-900 mb-4"></div>
+                <p class="text-gray-600">Loading stores...</p>
+            </div>
         </section>
+        
+        <!-- No Results Message -->
+        <div id="noResults" class="hidden text-center py-12">
+            <i class="fas fa-search text-gray-300 text-5xl mb-4"></i>
+            <h3 class="text-xl font-medium text-gray-700 mb-2">No stores found</h3>
+            <p class="text-gray-500">Try adjusting your search or filter to find what you're looking for.</p>
+        </div>
     </main>
 
-      <!-- Footer -->
-<footer class="bg-gray-900 text-white py-12">
-  <div class="container mx-auto px-6">
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-8 items-center">
-      
-      <!-- Brand Info -->
-      <div class="col-span-3">
-        <div class="flex items-center mb-4">
-          <img src="./images/keltec.jpg" alt="KeltecSales Logo" class="h-10 rounded-md shadow-md">
-          <span class="ml-3 text-2xl font-semibold tracking-wide">Keltec</span>
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12 mt-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 items-center">
+                
+                <!-- Brand Info -->
+                <div class="col-span-3">
+                    <div class="flex items-center mb-4">
+                        <img src="./images/keltec.jpg" alt="KeltecSales Logo" class="h-10 rounded-md shadow-md">
+                        <span class="ml-3 text-2xl font-semibold tracking-wide">Keltec</span>
+                    </div>
+                    <p class="text-gray-400 max-w-md">
+                        Your premier destination for luxury shopping experiences.
+                        Discover curated products from trusted sellers across all categories.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Bottom Line -->
+            <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 text-sm mb-4 md:mb-0">
+                    © 2025 Keltec. All rights reserved.
+                </p>
+                <p class="text-gray-500 text-sm">
+                    Crafted by <a href="aboutMe.html" target="_blank" class="text-green-400 hover:text-green-300 font-medium">Kelvin Ashong</a>
+                </p>
+            </div>
         </div>
-        <p class="text-gray-400 max-w-md">
-          Your premier destination for luxury shopping experiences.
-          Discover curated products from trusted sellers across all categories.
-        </p>
-      </div>
+    </footer>
 
-    <!-- Bottom Line -->
-    <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
-      <p class="text-gray-400 text-sm mb-4 md:mb-0">
-        © 2025 Keltec. All rights reserved.
-      </p>
-      <p class="text-gray-500 text-sm">
-        Crafted by <a href="aboutMe.html" target="_blank" class="text-green-400 hover:text-green-300 font-medium">Kelvin Ashong</a>
-      </p>
-    </div>
-  </div>
-</footer>
-
-<script>
-        // Simple JavaScript for mobile menu toggle (can be expanded)
+    <script>
+        // Mobile menu toggle
         document.addEventListener('DOMContentLoaded', function() {
-            const mobileMenuButton = document.querySelector('button.md\\:hidden');
-            const navLinks = document.querySelector('nav.hidden.md\\:flex');
+            const mobileMenuButton = document.getElementById('mobileMenuButton');
+            const mobileMenu = document.getElementById('mobileMenu');
             
             mobileMenuButton.addEventListener('click', function() {
-                navLinks.classList.toggle('hidden');
-                navLinks.classList.toggle('flex');
-                navLinks.classList.toggle('flex-col');
-                navLinks.classList.toggle('absolute');
-                navLinks.classList.toggle('top-16');
-                navLinks.classList.toggle('left-0');
-                navLinks.classList.toggle('right-0');
-                navLinks.classList.toggle('bg-white');
-                navLinks.classList.toggle('p-4');
-                navLinks.classList.toggle('shadow-md');
-                navLinks.classList.toggle('space-y-4');
+                mobileMenu.classList.toggle('active');
+                // Change icon based on menu state
+                const icon = mobileMenuButton.querySelector('i');
+                if (mobileMenu.classList.contains('active')) {
+                    icon.classList.remove('fa-bars');
+                    icon.classList.add('fa-times');
+                } else {
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
             });
             
-            // Smooth scrolling for anchor links
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    
-                    document.querySelector(this.getAttribute('href')).scrollIntoView({
-                        behavior: 'smooth'
-                    });
+            // Close mobile menu when clicking a link
+            mobileMenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.remove('active');
+                    mobileMenuButton.querySelector('i').classList.remove('fa-times');
+                    mobileMenuButton.querySelector('i').classList.add('fa-bars');
                 });
             });
         });
-    </script>
+        
+        async function fetchShops() {
+          try {
+            const res = await fetch("https://universe-api-uabt.onrender.com/api/stores");
+            if (!res.ok) throw new Error("Failed to fetch stores");
 
-    <script>
-  async function fetchShops() {
-    try {
-      const res = await fetch('https://universe-api-uabt.onrender.com/api/stores');
-      if (!res.ok) throw new Error("Failed to fetch stores");
+            const stores = await res.json();
+            allShops = stores;
+            renderShops(allShops);
 
-      const shops = await res.json();
-      renderShops(shops); // ✅ Directly render fetched shops
-      window.allShops = shops; // ✅ Store globally for search filtering
-    } catch (error) {
-      console.error('Error fetching shops:', error);
-      document.getElementById('shops').innerHTML = `
-        <p style="color:red;grid-column:1/-1;padding:20px">
-          Failed to load shops. Please try again later.
-        </p>`;
-    }
-  }
+          } catch (error) {
+            console.error("Error fetching stores:", error);
+            document.getElementById('shops').innerHTML = `
+              <div class="text-center py-10 col-span-full text-red-600">
+                <i class="fas fa-exclamation-triangle text-3xl mb-4"></i>
+                <h3 class="text-xl font-medium mb-2">Failed to load stores</h3>
+                <p class="text-gray-600">Please try again later.</p>
+              </div>
+            `;
+          }
+        }
 
-  // Utility: create a single card DOM for a shop object
-  function createShopCard(shop) {
-    const card = document.createElement('article');
-    card.className = 'card';
-    card.setAttribute('role', 'article');
-    card.innerHTML = `
-      <div class="media" aria-hidden="true">
-        <img src="${shop.storeLogo || '/placeholder.png'}" 
-             alt="${escapeHtml(shop.storeName)} shop image" 
-             loading="lazy" />
-      </div>
-      <div class="body">
-        <h3 class="title">${escapeHtml(shop.storeName)}</h3>
-        <p class="meta">by <strong>${escapeHtml(shop.sellerName || 'Unknown Seller')}</strong></p>
-        <p class="desc">${escapeHtml(shop.storeDescription || 'No description available.')}</p>
-        <div class="footer">
-          <div style="flex:1">
-            <div class="info-row">
-              <span class="seller-number">${escapeHtml(shop.sellerNumber || 'N/A')}</span>
+        
+      function renderShops(shops) {
+        const container = document.getElementById('shops');
+        const noResults = document.getElementById('noResults');
+
+        if (!shops.length) {
+          container.innerHTML = "";
+          noResults.classList.remove("hidden");
+          return;
+        }
+
+        noResults.classList.add("hidden");
+
+        container.innerHTML = shops.map(shop => `
+          <article class="store-card">
+            <img src="${shop.storeLogo || '/images/placeholder.png'}"
+                alt="${escapeHtml(shop.storeName)}"
+                loading="lazy">
+
+            <div class="store-card-content">
+              <h3 class="store-card-title">${escapeHtml(shop.storeName)}</h3>
+              <p class="store-card-seller">by ${escapeHtml(shop.sellerName || "Unknown")}</p>
+              <p class="store-card-description">
+                ${escapeHtml(shop.storeDescription || "No description available")}
+              </p>
+
+              <div class="store-card-footer">
+                <div class="store-card-contact">
+                  <i class="fas fa-phone-alt mr-1"></i>
+                  ${escapeHtml(shop.sellerNumber || "N/A")}
+                </div>
+
+                <a href="./components/displayStore.html?slug=${shop.slug}"
+                  class="store-card-btn">
+                  Visit Store
+                </a>
+              </div>
             </div>
-          </div>
-          <a href="./components/displayStore.html?slug=${encodeURIComponent(shop.slug)}"
-             class="btn"
-             role="button"
-             aria-label="Go to ${escapeHtml(shop.storeName)}">
-             Go to
-          </a>
-        </div>
-      </div>
-    `;
-    return card;
-  }
+          </article>
+        `).join("");
+      }
 
-  // Render list of shops
-  const container = document.getElementById('shops');
-  function renderShops(list) {
-    container.innerHTML = '';
-    if (!list || !list.length) {
-      container.innerHTML = '<p style="color:var(--muted);grid-column:1/-1;padding:20px">No shops found.</p>';
-      return;
-    }
-    const frag = document.createDocumentFragment();
-    list.forEach(shop => frag.appendChild(createShopCard(shop)));
-    container.appendChild(frag);
-  }
-
-  // Search logic
-  const searchInput = document.getElementById('searchInput');
-  searchInput.addEventListener('input', (e) => {
-    const q = e.target.value.trim().toLowerCase();
-    const filtered = !q
-      ? window.allShops
-      : window.allShops.filter(s =>
-          s.storeName?.toLowerCase().includes(q) ||
-          s.description?.toLowerCase().includes(q) ||
-          s.sellerName?.toLowerCase().includes(q)
-        );
-    renderShops(filtered);
-  });
-
-  document.getElementById('showAll').addEventListener('click', () => {
-    searchInput.value = '';
-    renderShops(window.allShops);
-    searchInput.focus();
-  });
-
-  // Escape HTML helper
-  function escapeHtml(str) {
-    return String(str)
-      .replace(/&/g, '&amp;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#39;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;');
-  }
-
-  // ✅ Fetch shops immediately when the page loads
-  fetchShops();
-</script>
-
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase().trim();
+            
+            if (!searchTerm) {
+                // Reset to show all shops if search is empty
+                const activeFilter = document.querySelector('.filter-btn.active').getAttribute('data-filter');
+                if (activeFilter === 'all') {
+                    renderShops(allShops);
+                } else {
+                    filterShops(activeFilter);
+                }
+                return;
+            }
+            
+            const filtered = allShops.filter(shop => 
+                shop.storeName.toLowerCase().includes(searchTerm) ||
+                shop.storeDescription.toLowerCase().includes(searchTerm) ||
+                shop.sellerName.toLowerCase().includes(searchTerm)
+            );
+            
+            renderShops(filtered);
+        });
+        
+        // Utility function to escape HTML
+        function escapeHtml(str) {
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+        }
+        
+        // Initialize the page
+        fetchShops();
+    </script>
 </body>
 </html>

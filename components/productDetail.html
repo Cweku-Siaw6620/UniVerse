@@ -4,16 +4,220 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>UniVerse | Product Details</title>
-  <script defer src="../javascript/productDetail.js"></script>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../stylesheet/productDetail.css" />
 </head>
-<body style="background: url(../images/leaf.png); background-attachment: fixed;">
-  <div class="max-w-5xl mx-auto p-6">
-    <button onclick="history.back()" class="text-green-600 mb-4">← Back</button>
-    <div id="productDetail" class="bg-white rounded-lg shadow p-6"></div>
-
-    <h2 class="mt-10 text-xl font-semibold text-gray-800">More in this category</h2>
-    <div id="relatedProducts" class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4"></div>
+<body>
+  <div class="max-w-7xl mx-auto px-4 py-8"> 
+    <!-- Back Button -->
+    <button onclick="history.back()" class="mb-6 flex items-center text-primary hover:text-primary-dark transition">
+      <i class="ri-arrow-left-line mr-2"></i>
+      <span>Back to Previous</span>
+    </button>
+    
+    <!-- Main Product Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+      <!-- Product Images -->
+      <div>
+        <div class="classic-card p-4">
+          <!-- Main Image -->
+          <div id="mainImageContainer" class="relative overflow-hidden rounded">
+            <div class="skeleton h-[400px] w-full rounded"></div>
+          </div>
+          
+          <!-- Image Gallery -->
+          <div id="imageGallery" class="image-gallery">
+            <!-- Will be populated by JavaScript -->
+          </div>
+        </div>
+        
+        <!-- Additional Info Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+          <div class="classic-card p-4 text-center">
+            <i class="ri-truck-line text-2xl text-primary mb-2"></i>
+            <h4 class="font-semibold mb-1">Free Shipping</h4>
+            <p class="text-sm text-gray-600">On orders over ₵100</p>
+          </div>
+          <div class="classic-card p-4 text-center">
+            <i class="ri-shield-check-line text-2xl text-primary mb-2"></i>
+            <h4 class="font-semibold mb-1">Quality Guaranteed</h4>
+            <p class="text-sm text-gray-600">Student-vetted products</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Product Info -->
+      <div>
+        <!-- Product Header -->
+        <div class="mb-6" id="productHeader">
+          <div class="skeleton h-8 w-3/4 mb-2 rounded"></div>
+          <div class="skeleton h-6 w-1/2 mb-4 rounded"></div>
+          <div class="skeleton h-10 w-1/4 rounded"></div>
+        </div>
+        
+        <div class="gold-divider"></div>
+        
+        <!-- Product Description -->
+        <div class="mb-6">
+          <h3 class="serif-heading text-xl mb-4">Product Description</h3>
+          <div id="productDescription">
+            <div class="skeleton h-4 w-full mb-2 rounded"></div>
+            <div class="skeleton h-4 w-full mb-2 rounded"></div>
+            <div class="skeleton h-4 w-5/6 mb-2 rounded"></div>
+            <div class="skeleton h-4 w-4/6 rounded"></div>
+          </div>
+        </div>
+        
+        <!-- Specifications -->
+        <div class="mb-6">
+          <h3 class="serif-heading text-xl mb-4">Specifications</h3>
+          <table class="spec-table" id="productSpecs">
+            <tr>
+              <td>Category</td>
+              <td><div class="skeleton h-4 w-32 rounded"></div></td>
+            </tr>
+            <tr>
+              <td>Stock Available</td>
+              <td><div class="skeleton h-4 w-24 rounded"></div></td>
+            </tr>
+            <tr>
+              <td>Condition</td>
+              <td><div class="skeleton h-4 w-20 rounded"></div></td>
+            </tr>
+            <tr>
+              <td>Store</td>
+              <td><div class="skeleton h-4 w-40 rounded"></div></td>
+            </tr>
+          </table>
+        </div>
+        
+        <!-- Action Buttons -->
+        <div class="flex flex-wrap gap-4 mt-8">
+          <button id="visitStoreBtn" class="classic-btn">
+            <i class="ri-store-2-line mr-2"></i> Visit Store
+          </button>
+          <button id="contactSellerBtn" class="classic-btn whatsapp-btn">
+            <i class="ri-shopping-cart-line mr-2"></i> Buy Now
+          </button>
+          <button id="shareProductBtn" class="classic-btn secondary-btn">
+            <i class="ri-share-line mr-2"></i> Share
+          </button>
+        </div>
+        
+        <!-- Additional Info -->
+        <div class="info-grid mt-8">
+          <div class="info-item">
+            <i class="ri-award-line text-primary mb-2"></i>
+            <h4 class="font-semibold">Student Verified</h4>
+            <p class="text-sm mt-1">Product listed by verified student seller</p>
+          </div>
+          <div class="info-item">
+            <i class="ri-customer-service-2-line text-primary mb-2"></i>
+            <h4 class="font-semibold">Direct Support</h4>
+            <p class="text-sm mt-1">Get help directly from the seller</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Store Info Section -->
+    <div class="classic-card p-6 mb-12">
+      <h3 class="serif-heading text-xl mb-6">About the Seller</h3>
+      <div id="storeInfo" class="flex items-center gap-4">
+        <div class="skeleton h-16 w-16 rounded-full"></div>
+        <div>
+          <div class="skeleton h-6 w-40 mb-2 rounded"></div>
+          <div class="skeleton h-4 w-32 rounded"></div>
+        </div>
+      </div>
+      <div class="mt-4">
+        <div class="skeleton h-4 w-full mb-2 rounded"></div>
+        <div class="skeleton h-4 w-5/6 rounded"></div>
+      </div>
+    </div>
+    
+    <!-- Related Products -->
+    <div class="mb-12">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="serif-heading text-2xl">More in this category</h2>
+        <a href="#" id="viewAllCategory" class="text-primary hover:text-primary-dark transition">
+          View all <i class="ri-arrow-right-line ml-1"></i>
+        </a>
+      </div>
+      
+      <div id="relatedProducts" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <!-- Loading skeletons for related products -->
+        <div class="related-product classic-card">
+          <div class="relative">
+            <div class="skeleton h-48 w-full"></div>
+          </div>
+          <div class="p-4">
+            <div class="skeleton h-5 w-3/4 mb-2 rounded"></div>
+            <div class="skeleton h-4 w-1/2 mb-3 rounded"></div>
+            <div class="skeleton h-10 w-full rounded"></div>
+          </div>
+        </div>
+        <div class="related-product classic-card">
+          <div class="relative">
+            <div class="skeleton h-48 w-full"></div>
+          </div>
+          <div class="p-4">
+            <div class="skeleton h-5 w-3/4 mb-2 rounded"></div>
+            <div class="skeleton h-4 w-1/2 mb-3 rounded"></div>
+            <div class="skeleton h-10 w-full rounded"></div>
+          </div>
+        </div>
+        <div class="related-product classic-card">
+          <div class="relative">
+            <div class="skeleton h-48 w-full"></div>
+          </div>
+          <div class="p-4">
+            <div class="skeleton h-5 w-3/4 mb-2 rounded"></div>
+            <div class="skeleton h-4 w-1/2 mb-3 rounded"></div>
+            <div class="skeleton h-10 w-full rounded"></div>
+          </div>
+        </div>
+        <div class="related-product classic-card">
+          <div class="relative">
+            <div class="skeleton h-48 w-full"></div>
+          </div>
+          <div class="p-4">
+            <div class="skeleton h-5 w-3/4 mb-2 rounded"></div>
+            <div class="skeleton h-4 w-1/2 mb-3 rounded"></div>
+            <div class="skeleton h-10 w-full rounded"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- FAQ Section -->
+    <div class="classic-card p-6">
+      <h3 class="serif-heading text-xl mb-6">Frequently Asked Questions</h3>
+      <div class="space-y-4">
+        <div class="border-b border-gray-200 pb-4">
+          <h4 class="font-semibold mb-2">How do I purchase this product?</h4>
+          <p class="text-gray-600">Contact the seller directly using the "Contact Seller" button to arrange purchase details, payment, and delivery.</p>
+        </div>
+        <div class="border-b border-gray-200 pb-4">
+          <h4 class="font-semibold mb-2">Is the seller a verified student?</h4>
+          <p class="text-gray-600">Yes, all sellers on UniVerse are verified students from accredited institutions.</p>
+        </div>
+        <div>
+          <h4 class="font-semibold mb-2">What payment methods are accepted?</h4>
+          <p class="text-gray-600">Payment methods vary by seller. Discuss available options when you contact them.</p>
+        </div>
+      </div>
+    </div>
   </div>
+
+  <script src="../javascript/productDetail.js"></script>
+  <script>
+    // Initialize any additional functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('Classic product page loaded');
+    });
+  </script>
 </body>
 </html>

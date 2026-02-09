@@ -17,12 +17,14 @@
             <div class="flex items-center justify-between">
                 <!-- Logo -->
                 <div class="flex items-center">
+                  <a href="index.html">
                      <img src="/images/logo.png"alt="UniVerse Logo" class="h-14 w-14 md:h-16 md:w-16 object-contain rounded-full"/>
+                  </a>
                 </div>
                 
                 <!-- Navigation -->
                 <nav class="hidden md:flex items-center gap-2 text-sm font-semibold text-gray-800">
-                  <a href="index.html" class="px-4 py-2 rounded hover:bg-gray-100 transition">Home</a>
+                  <a href="index.html" class="px-4 py-2 rounded hover:bg-gray-100 transition bg-gray-100">Home</a>
                   <a href="stores.html" class="px-4 py-2 rounded hover:bg-gray-100 transition">Stores</a>
                   <a href="blog.html" class="px-4 py-2 rounded hover:bg-gray-100 transition">Blog</a>
                   <a href="./components/login.html"
@@ -32,9 +34,23 @@
                 </nav>
                 
                 <!-- Mobile menu button -->
-                <button class="md:hidden text-gray-700 focus:outline-none">
+                <button id="mobileMenuButton" class="md:hidden text-gray-700 focus:outline-none">
                     <i class="fas fa-bars text-2xl"></i>
                 </button>
+            </div>
+
+            <div id="mobileMenu" class="mobile-menu">
+                <div class="flex flex-col p-6 space-y-4">
+                    <a href="index.html" class="text-gray-800 font-medium py-2 hover:text-gray-900">Home</a>
+                    <a href="stores.html" class="text-gray-800 font-medium py-2 hover:text-gray-900 text-gray-900">Stores</a>
+                    <a href="blog.html" class="text-gray-800 font-medium py-2 hover:text-gray-900">Blog</a>
+                    <a href="/components/login.html"
+                      class="auth-link block mt-4 px-5 py-2 bg-gray-900 text-white rounded text-center hover:bg-gray-700 transition">
+                      Sign In
+                    </a>
+
+
+                </div>
             </div>
         </div>
     </header>
@@ -68,7 +84,10 @@
       <!-- Products will be injected here -->
     </div>
 
-    <div id="loading" class="text-center text-gray-500 mt-12">Loading products...</div>
+    <div class="text-center py-10 col-span-full" id="loading">
+                <div class="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gray-900 mb-4"></div>
+                <p class="text-gray-600">Loading stores...</p>
+            </div>
   </main>
 
    <!-- Footer -->
@@ -104,32 +123,20 @@
     <script>
         // Simple JavaScript for mobile menu toggle (can be expanded)
         document.addEventListener('DOMContentLoaded', function() {
-            const mobileMenuButton = document.querySelector('button.md\\:hidden');
-            const navLinks = document.querySelector('nav.hidden.md\\:flex');
+            const mobileMenuButton = document.getElementById('mobileMenuButton');
+            const mobileMenu = document.getElementById('mobileMenu');
             
             mobileMenuButton.addEventListener('click', function() {
-                navLinks.classList.toggle('hidden');
-                navLinks.classList.toggle('flex');
-                navLinks.classList.toggle('flex-col');
-                navLinks.classList.toggle('absolute');
-                navLinks.classList.toggle('top-16');
-                navLinks.classList.toggle('left-0');
-                navLinks.classList.toggle('right-0');
-                navLinks.classList.toggle('bg-white');
-                navLinks.classList.toggle('p-4');
-                navLinks.classList.toggle('shadow-md');
-                navLinks.classList.toggle('space-y-4');
-            });
-            
-            // Smooth scrolling for anchor links
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    
-                    document.querySelector(this.getAttribute('href')).scrollIntoView({
-                        behavior: 'smooth'
-                    });
-                });
+                mobileMenu.classList.toggle('active');
+                // Change icon based on menu state
+                const icon = mobileMenuButton.querySelector('i');
+                if (mobileMenu.classList.contains('active')) {
+                    icon.classList.remove('fa-bars');
+                    icon.classList.add('fa-times');
+                } else {
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
             });
         });
     </script>
