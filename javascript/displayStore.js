@@ -275,24 +275,24 @@ document.addEventListener('DOMContentLoaded', () => {
       noProducts.classList.add('hidden');
       grid.innerHTML = '';
 
-      // Get store info for WhatsApp links
-      const sellerNumber = storeData?.sellerNumber || '';
+            // Get store info for WhatsApp links
+            const sellerNumber = storeData?.sellerNumber || '';
 
-      products.forEach((product, index) => {
-        // Create WhatsApp message with product info
-        let whatsappLink = '#';
-        if (sellerNumber) {
-          const countryCode = '233';
-          const cleanNumber = sellerNumber.replace(/\D/g, '');
-          
-          const message = `Hi, I'm interested in this product from your store:
-          
-*${product.productName}*
-Price: ₵${product.productPrice?.toFixed(2) || '0.00'}
+            products.forEach((product, index) => {
+              // Create WhatsApp message with product info
+              let whatsappLink = '#';
+              if (sellerNumber) {
+                const countryCode = '233';
+                const cleanNumber = sellerNumber.replace(/\D/g, '');
+                
+                const message = `Hi, I'm interested in this product from your store:
+                
+      *${product.productName}*
+      Price: ₵${product.productPrice?.toFixed(2) || '0.00'}
 
-${product.productImage ? 'Product Image: ' + product.productImage : ''}
+      ${product.productImage ? 'Product Image: ' + product.productImage : ''}
 
-Please let me know if this is available.`;
+      Please let me know if this is available.`;
           
           const encodedMessage = encodeURIComponent(message);
           whatsappLink = `https://api.whatsapp.com/send?phone=${countryCode}${cleanNumber}&text=${encodedMessage}`;
@@ -300,41 +300,43 @@ Please let me know if this is available.`;
 
         // Create product card
         const card = document.createElement('div');
-        card.className = 'product-card';
+        card.className = "premium-product-card fade-up";
         card.style.animationDelay = `${index * 0.05}s`;
+
+        // Determine stock status
+            const stockStatus = product.productStock > 10 ? 'In Stock' : product.productStock > 0 ? 'Low Stock' : 'Sold Out';
+            const stockClass = product.productStock > 10 ? 'text-green-600' : product.productStock > 0 ? 'text-gold' : 'text-red-500';
         
         card.innerHTML = `
-          <div class="relative overflow-hidden">
-            <img src="${product.productImage || 'https://images.unsplash.com/photo-1555982105-d25af4182e4e?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80'}" onclick="window.location.href='../components/productDetail.html?id=${product._id}'"
-                 alt="${product.productName}" 
-                 class="product-image">
-            ${product.productStock <= 5 ? `
-              <span class="absolute top-3 right-3 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
-                Low Stock
-              </span>
-            ` : ''}
-          </div>
-          <div class="p-5">
-            <h3 class="font-semibold text-gray-800 text-lg mb-2 truncate">${escapeHtml(product.productName)}</h3>
-            <p class="text-green-600 font-bold text-xl mb-3">₵${(product.productPrice || 0).toFixed(2)}</p>
-            
-            <div class="flex items-center justify-between text-sm text-gray-500 mb-4">
-              <div class="flex items-center">
-                <i data-feather="package" class="w-4 h-4 mr-1"></i>
-                <span>${product.productStock || 0} in stock</span>
-              </div>
-              ${product.category ? `
-                <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs">
-                  ${escapeHtml(product.category)}
-                </span>
-              ` : ''}
-            </div>
-            
-            <a href="${whatsappLink}" target="_blank"
-               class="whatsapp-btn w-full flex items-center justify-center font-medium py-3 px-4 rounded-lg transition-all duration-300">
-              <i data-feather="shopping-cart" class="w-4 h-4 mr-2"></i>
-              BUY NOW
-            </a>
+          <div class="image-container relative group">
+                    <img src="${product.productImage || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'}" 
+                         alt="${escapeHtml(product.productName)}"
+                         loading="lazy"
+                         class="w-full h-80 object-cover transform group-hover:scale-105 transition-transform duration-300 cursor-pointer"
+                         onclick="window.location.href='../components/productDetail.html?id=${product._id}'">
+                    <div class="absolute top-4 right-4">
+                        <span class="bg-white px-3 py-1 text-xs font-medium shadow-md rounded-full ${stockClass}">
+                            ${stockStatus}
+                        </span>
+                    </div>
+                </div>
+
+          <div class="pt-6 pb-2">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="product-name">${escapeHtml(product.productName)}</h3>
+                        <span class="product-price">₵${(product.productPrice || 0).toFixed(2)}</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="product-category">${escapeHtml(product.productCategory || 'Uncategorized')}</span>
+                        <span class="product-stock ${stockClass}">${stockStatus}</span>
+                    </div>
+                    <a href="${whatsappLink}" target="_blank">
+                    <button class="w-full mt-6 py-3 border border-charcoal text-charcoal hover:bg-green-500 hover:text-white 
+                            text-xs uppercase tracking-[0.2em] font-medium transition-all duration-300"
+                    >
+                        BUY NOW
+                    </button>
+                    </a>
           </div>
         `;
         

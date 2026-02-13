@@ -182,3 +182,10 @@
                 padding-bottom: 10px;
             }
         }
+
+        h1, h2, h3, h4, .serif-font {
+            font-family: 'Playfair Display', serif;
+            font-weight: 500;
+            letter-spacing: -0.02em;
+        }
+        

@@ -56,68 +56,110 @@
     </header>
 
     <!-- Hero Section -->
-    <section class="hero-gradient" style="background-image: url('/images/section.jpeg');">
-        <div class="container mx-auto px-6 py-20 md:py-32">
-            <div class="max-w-3xl mx-auto text-center">
-                <h1 class="title-font text-4xl md:text-6xl font-bold text-gray-800 mb-6">
-                    Discover <span class="text-indigo-600">New Stores</span>
-                </h1>
-                <h2 class="text-xl md:text-3xl text-gray-600 mb-8">
-                    Everything Everywhere All in One Place
-                </h2>
-                <div class="flex flex-col sm:flex-row justify-center gap-4">
-                    <a href="stores.html" class="px-8 py-3 bg-indigo-600 text-white font-medium rounded-full hover:bg-indigo-700 transition duration-300 shadow-lg hover:shadow-xl">
-                        Explore Stores
-                    </a>
+    <section class="hero-section py-24 md:py-32">
+            <div class="premium-container mx-auto">
+                <div class="max-w-3xl mx-auto text-center fade-up">
+                    <span class="text-xs uppercase tracking-[0.3em] text-gold mb-6 block">Curated Student Commerce</span>
+                    <h1 class="hero-title mb-6">
+                        Discover the <span class="text-gold">Finest</span><br>Student Collections
+                    </h1>
+                    <div class="gold-divider-center"></div>
+                    <p class="hero-subtitle mb-12 max-w-2xl mx-auto leading-relaxed">
+                        A curated marketplace of exceptional quality. Every item, every seller—thoughtfully selected.
+                    </p>
+                    <div class="flex flex-col sm:flex-row justify-center gap-6">
+                        <a href="stores.html" class="btn-primary inline-block">
+                            Explore Collections
+                        </a>
+                    </div>
                 </div>
+            </div>
+        </section>
+    <!--Products View-->
+
+  <!-- Main content -->
+  <section class="py-20 bg-white">
+        <div class="premium-container mx-auto">
+            <!-- Section Header -->
+            <div class="text-center mb-16 fade-up">
+                <span class="text-xs uppercase tracking-[0.2em] text-gold mb-3 block">Curated Selection</span>
+                <h2 class="section-header">Featured Products</h2>
+                <p class="section-subheader">Exceptional pieces from our student artisans</p>
+                <div class="gold-divider-center mt-6"></div>
+            </div>
+
+            <!-- Product Grid - Will be populated by nav.js -->
+            <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12">
+                <!-- Loading skeletons for premium feel -->
+                <div class="skeleton h-80 w-full"></div>
+                <div class="skeleton h-80 w-full"></div>
+                <div class="skeleton h-80 w-full"></div>
+                <div class="skeleton h-80 w-full"></div>
+            </div>
+
+            <!-- Loading indicator (hidden by default) -->
+            <div id="loading" class="hidden text-center py-16">
+                <div class="inline-block w-8 h-8 border-2 border-gold border-t-transparent rounded-full animate-spin"></div>
+                <p class="mt-4 text-sm text-graphite">Loading Products...</p>
+            </div>
+
+            <!-- View All Link -->
+            <div class="text-center mt-16">
+                <a href="stores.html" class="inline-flex items-center text-charcoal hover:text-gold transition-colors group">
+                    <span class="text-sm uppercase tracking-[0.2em] font-medium">View All Stores</span>
+                    <i data-feather="arrow-right" class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform"></i>
+                </a>
             </div>
         </div>
     </section>
 
-    <!--Products View-->
+    <!-- Footer - Premium Minimalist -->
+    <footer class="premium-footer py-16">
+        <div class="premium-container mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+                <!-- Brand Info -->
+                <div class="col-span-1 md:col-span-2">
+                    <div class="flex items-center mb-6">
+                        <img src="./images/keltec.jpg" alt="Keltec" class="h-12 w-12 rounded-full border border-white border-opacity-20">
+                        <span class="ml-4 serif-font text-2xl font-medium text-white">Keltec</span>
+                    </div>
+                    <p class="text-white text-opacity-60 max-w-md text-sm leading-relaxed">
+                        A curation of exceptional student commerce. Where quality meets authenticity.
+                    </p>
+                </div>
 
-  <!-- Main content -->
-  <main class="flex-1 container mx-auto px-4 py-8">
-    <h2 class="text-2xl font-bold text-gray-800 mb-6">🌿 All Available Products</h2>
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="text-white text-sm uppercase tracking-[0.2em] mb-6">Explore</h4>
+                    <ul class="space-y-4">
+                        <li><a href="stores.html" class="text-white text-opacity-60 hover:text-gold text-sm transition-colors">Collections</a></li>
+                        <li><a href="blog.html" class="text-white text-opacity-60 hover:text-gold text-sm transition-colors">Journal</a></li>
+                        <li><a href="aboutMe.html" class="text-white text-opacity-60 hover:text-gold text-sm transition-colors">The Curator</a></li>
+                    </ul>
+                </div>
 
-    <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-      <!-- Products will be injected here -->
-    </div>
-
-    <div class="text-center py-10 col-span-full" id="loading">
-                <div class="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gray-900 mb-4"></div>
-                <p class="text-gray-600">Loading stores...</p>
+                <!-- Legal -->
+                <div>
+                    <h4 class="text-white text-sm uppercase tracking-[0.2em] mb-6">Connect</h4>
+                    <ul class="space-y-4">
+                        <li><a href="#" class="text-white text-opacity-60 hover:text-gold text-sm transition-colors">Instagram</a></li>
+                        <li><a href="#" class="text-white text-opacity-60 hover:text-gold text-sm transition-colors">Twitter</a></li>
+                        <li><a href="#" class="text-white text-opacity-60 hover:text-gold text-sm transition-colors">LinkedIn</a></li>
+                    </ul>
+                </div>
             </div>
-  </main>
 
-   <!-- Footer -->
-<footer class="bg-gray-900 text-white py-12">
-  <div class="container mx-auto px-6">
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-8 items-center">
-      
-      <!-- Brand Info -->
-      <div class="col-span-3">
-        <div class="flex items-center mb-4">
-          <img src="./images/keltec.jpg" alt="KeltecSales Logo" class="h-10 rounded-md shadow-md">
-          <span class="ml-3 text-2xl font-semibold tracking-wide">Keltec</span>
+            <!-- Bottom Bar -->
+            <div class="border-t border-white border-opacity-10 mt-16 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-white text-opacity-40 text-xs mb-4 md:mb-0">
+                    © 2025 Keltec. All rights reserved.
+                </p>
+                <p class="text-white text-opacity-40 text-xs">
+                    Crafted by <a href="aboutMe.html" target="_blank" class="text-gold hover:text-gold-light transition-colors font-medium">Kelvin Ashong</a>
+                </p>
+            </div>
         </div>
-        <p class="text-gray-400 max-w-md">
-          Your premier destination for luxury shopping experiences.
-          Discover curated products from trusted sellers across all categories.
-        </p>
-      </div>
-
-    <!-- Bottom Line -->
-    <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
-      <p class="text-gray-400 text-sm mb-4 md:mb-0">
-        © 2025 Keltec. All rights reserved.
-      </p>
-      <p class="text-gray-500 text-sm">
-        Crafted by <a href="aboutMe.html" target="_blank" class="text-green-400 hover:text-green-300 font-medium">Kelvin Ashong</a>
-      </p>
-    </div>
-  </div>
-</footer>
+    </footer>
 
 
     <script>

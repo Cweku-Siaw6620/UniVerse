@@ -136,6 +136,7 @@ function updateStoreInfo(store) {
           <i class="ri-phone-line text-sm text-gray-500 mr-2"></i>
           <span class="text-gray-700">${escapeHtml(store.sellerNumber || 'Contact via WhatsApp')}</span>
         </div>
+        <p class="text-gray-600"> ${escapeHtml(store.storeDescription || 'Unknown')}</p>
       </div>
     `;
   }
