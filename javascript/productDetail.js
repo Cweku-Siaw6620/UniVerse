@@ -43,13 +43,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 // Fetch product details from API
 async function fetchProductDetails(productId) {
-  const res = await fetch(`https://universe-api-uabt.onrender.com/api/products/id/${productId}`);
+  const res = await fetch(`https://universe-api-u0rj.onrender.com/api/products/id/${productId}`);
   if (!res.ok) throw new Error("Failed to fetch product");
   return await res.json();
 }
 
 async function fetchStoreDetails(storeId) {
-const res = await fetch(`https://universe-api-uabt.onrender.com/api/stores/storeID/${storeId}`);
+const res = await fetch(`https://universe-api-u0rj.onrender.com/api/stores/storeID/${storeId}`);
   if (!res.ok) throw new Error("Failed to fetch store");
   return await res.json();
 }
@@ -244,7 +244,7 @@ function setupShareFunctionality(product) {
 // Fetch and display related products
 async function fetchRelatedProducts(category, currentProductId) {
   try {
-    const res = await fetch(`https://universe-api-uabt.onrender.com/api/products/category/${encodeURIComponent(category)}`);
+    const res = await fetch(`https://universe-api-u0rj.onrender.com/api/products/category/${encodeURIComponent(category)}`);
     const related = await res.json();
     const relatedContainer = document.getElementById('relatedProducts');
     

@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
   async function fetchStoreDetails() {
     try {
       const res = await fetch(
-        `https://universe-api-uabt.onrender.com/api/stores/slug/${storeSlug}`
+        `https://universe-api-u0rj.onrender.com/api/stores/slug/${storeSlug}`
       );
 
       if (!res.ok) throw new Error("Store not found");
@@ -254,7 +254,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     try {
       const res = await fetch(
-        `https://universe-api-uabt.onrender.com/api/products/${resolvedStoreId}`
+        `https://universe-api-u0rj.onrender.com/api/products/${resolvedStoreId}`
       );
 
       if (!res.ok) throw new Error("Failed to fetch products");

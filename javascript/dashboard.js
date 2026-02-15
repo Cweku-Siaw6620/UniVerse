@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   async function fetchStoreData() {
     try {
-      const res = await fetch(`https://universe-api-uabt.onrender.com/api/stores/${encodeURIComponent(userId)}`);
+      const res = await fetch(`https://universe-api-u0rj.onrender.com/api/stores/${encodeURIComponent(userId)}`);
       if (!res.ok) throw new Error("Failed to fetch store");
 
       const store = await res.json();
@@ -165,7 +165,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 formData.append("userId", currentUser.id);
 
                  try {
-                  const response = await fetch("https://universe-api-uabt.onrender.com/api/products", {
+                  const response = await fetch("https://universe-api-u0rj.onrender.com/api/products", {
                     method: "POST",
                     body: formData,
                 });
@@ -214,7 +214,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
               }
                 try {
-                    const response = await fetch(`https://universe-api-uabt.onrender.com/api/products/${encodeURIComponent(storeId)}`);
+                    const response = await fetch(`https://universe-api-u0rj.onrender.com/api/products/${encodeURIComponent(storeId)}`);
                     if (!response.ok) throw new Error("Failed to fetch product");
 
                    product = await response.json();

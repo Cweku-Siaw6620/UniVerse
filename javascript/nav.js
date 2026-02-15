@@ -10,8 +10,8 @@ document.addEventListener('DOMContentLoaded', async function () {
     if (user && user.picture) {
       // Login selectors
       const loginSelectors = [
-        'nav a[href*="/components/login"]',           // Desktop nav
-        '#mobileMenu a[href*="/components/login"]',   // Mobile menu
+        'nav a[href="/components/login"]',           // Desktop nav
+        '#mobileMenu a[href="/components/login"]',   // Mobile menu
         '.auth-link'                                  // Fallback for mobile
       ];
       
@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         profileWrapper.appendChild(dropdown);
 
         // Fetch store status and update link
-        fetch(`https://universe-api-uabt.onrender.com/api/stores/${encodeURIComponent(user.id)}/exists`)
+        fetch(`https://universe-api-u0rj.onrender.com/api/stores/${encodeURIComponent(user.id)}/exists`)
           .then(res => res.json())
           .then(result => {
             const storeLink = dropdown.querySelector('#storeLink');
@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', async function () {
       // Replace desktop nav login link
       const desktopNav = document.querySelector('nav');
       if (desktopNav) {
-        const desktopLogin = desktopNav.querySelector('a[href="/components/login"]');
+        const desktopLogin = desktopNav.querySelector('a[href*="/components/login"]');
         if (desktopLogin) {
           const desktopProfile = createProfileComponent(false);
           desktopLogin.replaceWith(desktopProfile);
@@ -151,7 +151,7 @@ async function fetchAllProducts() {
     grid.innerHTML = ''; // Clear skeletons
 
     try {
-        const res = await fetch("https://universe-api-uabt.onrender.com/api/products/all");
+        const res = await fetch("https://universe-api-u0rj.onrender.com/api/products/all");
         if (!res.ok) throw new Error("Failed to fetch products");
         const products = await res.json();
 
@@ -272,7 +272,7 @@ async function getWhatsAppLink(product) {
     
     try {
         // Fetch store info to get phone number
-        const sellerRes = await fetch(`https://universe-api-uabt.onrender.com/api/stores/${encodeURIComponent(product.sellerId)}`);
+        const sellerRes = await fetch(`https://universe-api-u0rj.onrender.com/api/stores/${encodeURIComponent(product.sellerId)}`);
         
         if (!sellerRes.ok) {
             throw new Error(`Failed to fetch store info: ${sellerRes.status}`);
