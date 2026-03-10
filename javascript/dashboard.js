@@ -34,15 +34,27 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!storeInfoContainer) return;
 
     storeInfoContainer.innerHTML = `
-      <div class="flex items-center">
-          <div class="w-10 h-10 flex items-center justify-center bg-gray-200 rounded-full overflow-hidden mr-3">
-              <img src="${store.storeLogo}" alt="${store.storeName}" class="w-full h-full object-cover">
-          </div>
-          <div class="hidden md:block">
-              <div class="text-sm font-medium text-gray-900">${store.storeName}</div>
-              <div class="text-xs text-gray-500">${store.sellerName}</div>
-          </div>
-      </div>
+      <div class="flex items-center space-x-4 p-2 bg-white rounded-lg shadow-sm">
+        <!-- Store Logo -->
+        <div class="w-12 h-12 flex items-center justify-center bg-gray-200 rounded-full overflow-hidden">
+            <img src="${store.storeLogo}" alt="${store.storeName}" class="w-full h-full object-cover">
+        </div>
+
+        <!-- Store Info -->
+        <div class="hidden md:block">
+            <div class="text-sm font-semibold text-gray-900">${store.storeName}</div>
+            <div class="text-xs text-gray-500">${store.sellerName}</div>
+        </div>
+
+        <!-- Private Website Button (only if personalWebsite exists) -->
+        ${store.personalWebsite ? `
+            <a href="${store.personalWebsite}" target="_blank"
+            class="ml-auto text-sm bg-gradient-to-r from-green-500 to-green-600 text-white px-4 py-2 rounded-lg font-medium shadow-md hover:shadow-lg transition duration-200 ease-in-out">
+            Private Website
+            </a>
+        ` : ``}
+        </div>
+
      
     `;
   }

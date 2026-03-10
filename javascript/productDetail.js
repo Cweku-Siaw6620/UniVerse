@@ -28,9 +28,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Fetch and display related products
     await fetchRelatedProducts(product.productCategory, productId);
     
-    // Set up image gallery functionality
-    setupImageGallery(product);
-    
+
     // Set up share functionality
     //check later
     setupShareFunctionality(product);
@@ -172,26 +170,7 @@ function setupButtonActions(product, store) {
   }
 }
 
-// Set up image gallery
-function setupImageGallery(product) {
-  const galleryContainer = document.getElementById('imageGallery');
-  if (!galleryContainer) return;
 
-  // Check if product has multiple images
-  const images = product.additionalImages || [];
-  
-  // Add main image as first thumbnail
-  images.unshift(product.productImage);
-  
-  // Create thumbnails
-  galleryContainer.innerHTML = images.slice(0, 4).map((img, index) => `
-    <img src="${img}" 
-         alt="Product view ${index + 1}" 
-         class="gallery-thumb ${index === 0 ? 'active' : ''}"
-         data-image="${img}"
-         onclick="changeMainImage('${img}', this)">
-  `).join('');
-}
 
 // Change main image function (global for onclick)
 window.changeMainImage = function(imageUrl, element) {
@@ -274,7 +253,7 @@ async function fetchRelatedProducts(category, currentProductId) {
         <div class="relative overflow-hidden">
           <img src="${p.productImage || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80'}" 
                alt="${escapeHtml(p.productName)}" 
-               class="w-full h-48 object-cover transition-transform duration-300 hover:scale-105">
+               class="w-full h-48 object-contain transition-transform duration-300 hover:scale-105">
           <span class="vintage-tag absolute top-3 right-3">${escapeHtml(p.productCategory || 'General')}</span>
         </div>
         <div class="p-4">

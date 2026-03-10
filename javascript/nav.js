@@ -134,6 +134,14 @@ document.addEventListener('DOMContentLoaded', async function () {
     fetchAllProducts();
 });
 
+// Add this to your profile page script
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.get('verified') === 'true') {
+    alert("🎉 Success! Your student status is verified. Your store now has boosted visibility.");
+    // Clean up the URL so the alert doesn't keep popping up on refresh
+    window.history.replaceState({}, document.title, window.location.pathname);
+}
+
 /**
  * Fetch all products from API - With WhatsApp Buy Now functionality
  */
