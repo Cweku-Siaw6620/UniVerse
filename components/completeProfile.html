@@ -198,44 +198,40 @@
 </div>
 
 <script>
-  // ... (Existing toggle logic) ...
   const affiliationSelect = document.getElementById("affiliation");
   const studentFields = document.getElementById("studentFields");
-  const storeOption = document.getElementById("storeOption");
   const profileForm = document.getElementById("profileForm");
+  const submitBtn = document.getElementById("submitBtn");
 
   const user = JSON.parse(localStorage.getItem("user"));
-  const store = JSON.parse(localStorage.getItem("store"));
-  const userHasStore = !!store;
-
   if (!user || !user.id) {
     alert("You must be logged in");
     window.location.href = "login.html";
   }
 
+  // Toggle fields and make them required ONLY if student is selected
   affiliationSelect.addEventListener("change", () => {
-    studentFields.classList.toggle(
-      "hidden",
-      affiliationSelect.value !== "student"
-    );
-
-    if (!userHasStore) {
-      storeOption.classList.remove("hidden");
-    }
+    const isStudent = affiliationSelect.value === "student";
+    studentFields.classList.toggle("hidden", !isStudent);
+    
+    // Dynamically set required attributes so the form doesn't submit empty student data
+    document.getElementById("studentEmail").required = isStudent;
+    document.getElementById("graduationDate").required = isStudent;
+    document.getElementById("university").required = isStudent;
   });
 
   profileForm.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const submitBtn = document.getElementById("submitBtn");
     submitBtn.innerText = "Processing...";
     submitBtn.disabled = true;
 
+    // Build payload conditionally
     const payload = {
         userId: user.id,
         affiliation: affiliationSelect.value,
-        university: document.getElementById("university").value,
-        graduationDate: document.getElementById("graduationDate").value,
-        studentEmail: document.getElementById("studentEmail").value
+        university: document.getElementById("university").value || null,
+        graduationDate: document.getElementById("graduationDate").value || null,
+        studentEmail: document.getElementById("studentEmail").value || null
     };
 
     try {
@@ -245,17 +241,31 @@
           body: JSON.stringify(payload)
       });
 
+      const data = await res.json();
+
       if (res.ok) {
-          document.getElementById("formContainer").classList.add("hidden");
-          document.getElementById("successState").classList.remove("hidden");
+          if (payload.affiliation === "student") {
+              // Show the check email state
+              document.getElementById("formContainer").classList.add("hidden");
+              document.getElementById("successState").classList.remove("hidden");
+          } else {
+              // If not a student, go straight to profile
+              localStorage.setItem("user", JSON.stringify(data.user));
+              window.location.href = "profile.html";
+          }
       } else {
-          alert("Error: " + (await res.json()).message);
+          // This alert will now show the specific error from your backend
+          alert("Error: " + data.message);
           submitBtn.disabled = false;
           submitBtn.innerText = "Verify & Save";
       }
     } catch (err) {
       console.error(err);
-      alert("Something went wrong.");
+      alert("Something went wrong. Please check if your server is running.");
+      submitBtn.disabled = false;
+      submitBtn.innerText = "Verify & Save";
     }
   });
 </script>
+</body>
+</html>

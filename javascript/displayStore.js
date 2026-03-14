@@ -78,6 +78,14 @@ document.addEventListener('DOMContentLoaded', () => {
             <span class="font-medium">Contact:</span> 
             <span id="sellerNumber">${escapeHtml(store.sellerNumber || 'Not provided')}</span>
           </p>
+          ${store.personalWebsite ? `
+            <p class="text-gray-600 mt-1">
+              <a href="${store.personalWebsite}" target="_blank" class="whatsapp-btn w-full flex items-center justify-center font-medium py-2.5 px-4 rounded-lg transition-all duration-300">
+                <i data-feather="globe" class="w-4 h-4 inline mr-1"></i>
+              Visit Personal Website
+              </a>
+            </p>
+          ` : ''}
         </div>
       `;
       feather.replace();
@@ -88,9 +96,6 @@ document.addEventListener('DOMContentLoaded', () => {
   function updateSellerContact(store) {
     const sellerContact = document.getElementById('sellerContact');
     if (sellerContact) {
-      // Check if seller has a personal website
-      const hasWebsite = store.sellerWebsite || store.website || store.personalUrl;
-      const websiteUrl = store.sellerWebsite || store.website || store.personalUrl;
       
       sellerContact.innerHTML = `
         <!-- Seller Profile -->
@@ -126,21 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
           ` : ''}
         </div>
         
-        <!-- Personal Website (if available) -->
-        ${hasWebsite ? `
-          <div id="sellerWebsite" class="pt-6 mt-6 border-t border-blue-100">
-            <h4 class="font-medium text-gray-700 mb-3 flex items-center">
-              <i data-feather="globe" class="w-4 h-4 mr-2"></i>
-              Personal Website
-            </h4>
-            <a href="${websiteUrl.startsWith('http') ? websiteUrl : 'https://' + websiteUrl}" 
-               target="_blank" 
-               class="block text-center bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition-all duration-300 hover:shadow-lg">
-              <i data-feather="external-link" class="w-4 h-4 inline mr-2"></i>
-              Visit Website
-            </a>
-          </div>
-        ` : ''}
+      
         
         <!-- Action Buttons -->
         <div class="space-y-3 pt-6 mt-6 border-t border-gray-100">
