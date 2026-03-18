@@ -10,7 +10,8 @@
   [headers.values]
     Cross-Origin-Opener-Policy = "unsafe-none"
     Cross-Origin-Embedder-Policy = "unsafe-none"
-    X-Frame-Options = "ALLOWALL"
+    X-Frame-Options = "DENY"
+    Content-Security-Policy = "frame-ancestors 'none';"
     Referrer-Policy = "no-referrer-when-downgrade"
 
     # Allow Google OAuth to send token back
