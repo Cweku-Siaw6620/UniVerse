@@ -1,271 +1,441 @@
-<!-- Complete Profile 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>UniVerse | Complete Profile</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-
-<body class="bg-gray-50 min-h-screen flex items-center justify-center p-4">
-
-  <div class="bg-white w-full max-w-lg rounded-xl shadow p-6">
-    <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">
-      Complete Your Profile
-    </h2>
-
-    <form id="profileForm" class="space-y-5">
-
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">
-          Affiliation
-        </label>
-        <select id="affiliation" class="w-full border rounded-lg p-2" required>
-          <option value="">Select</option>
-          <option value="student">Student</option>
-          <option value="non-student">Non-student</option>
-        </select>
-      </div>
-
-   
-      <div id="studentFields" class="hidden space-y-4">
-        <div>
-          <label class="block text-sm font-medium text-gray-700">
-            University
-          </label>
-          <select id="university" class="w-full border rounded-lg p-2">
-            <option value="">Select University</option>
-            <option>University of Ghana</option>
-            <option>KNUST</option>
-            <option>UCC</option>
-            <option>UEW</option>
-            <option>UDS</option>
-            <option>Other</option>
-          </select>
-        </div>
-      </div>
-
-    
-      <div id="storeOption" class="hidden">
-        <label class="inline-flex items-center">
-          <input type="checkbox" id="createStore" class="mr-2">
-          Create a store after saving profile
-        </label>
-      </div>
-
-      <button
-        type="submit"
-        class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700">
-        Save Profile
-      </button>
-
-    </form>
-  </div>
-
-<script>
-  const affiliationSelect = document.getElementById("affiliation");
-  const studentFields = document.getElementById("studentFields");
-  const storeOption = document.getElementById("storeOption");
-  const profileForm = document.getElementById("profileForm");
-
-  const user = JSON.parse(localStorage.getItem("user"));
-  const store = JSON.parse(localStorage.getItem("store"));
-  const userHasStore = !!store;
-
-  if (!user || !user.id) {
-    alert("You must be logged in");
-    window.location.href = "login.html";
-  }
-
-  affiliationSelect.addEventListener("change", () => {
-    studentFields.classList.toggle(
-      "hidden",
-      affiliationSelect.value !== "student"
-    );
-
-    if (!userHasStore) {
-      storeOption.classList.remove("hidden");
-    }
-  });
-
-  profileForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    const affiliation = affiliationSelect.value;
-    const university = document.getElementById("university").value || null;
-    const wantsStore = document.getElementById("createStore")?.checked;
-
-    try {
-      const res = await fetch(
-        "https://universe-api-u0rj.onrender.com/api/auth/google/user/completeProfile",
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            userId: user.id,
-            affiliation,
-            university
-          })
+    <meta charset="UTF-8" />
+    <title>UniVerse | Complete Profile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Smooth transitions */
+        .transition-all {
+            transition: all 0.3s ease;
         }
-      );
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        alert(data.message || "Failed to update profile");
-        return;
-      }
-
-      // ✅ Update localStorage with latest user info
-      localStorage.setItem("user", JSON.stringify(data.user));
-
-      // ✅ Redirect logic
-      if (wantsStore && !userHasStore) {
-        window.location.href = "createStore.html";
-      } else {
-        window.location.href = "profile.html";
-      }
-
-    } catch (err) {
-      console.error("Profile update failed:", err);
-      alert("Something went wrong. Try again.");
-    }
-  });
-</script>
-
-</body>
-</html>
--->
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>UniVerse | Complete Profile</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+        
+        /* OTP input styling */
+        .otp-input {
+            width: 60px;
+            height: 70px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            margin: 0 5px;
+        }
+        
+        .otp-input:focus {
+            border-color: #22c55e;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+        }
+        
+        /* Countdown timer */
+        .countdown {
+            font-family: monospace;
+            font-size: 14px;
+            color: #6b7280;
+        }
+    </style>
 </head>
-
 <body class="bg-gray-50 min-h-screen flex items-center justify-center p-4">
- <div id="formContainer" class="bg-white w-full max-w-lg rounded-2xl shadow-xl p-8 border border-gray-100">
+
+<!-- Main Form Container -->
+<div id="formContainer" class="bg-white w-full max-w-lg rounded-2xl shadow-xl p-8 border border-gray-100">
     <div class="text-center mb-8">
-        <h2 class="text-3xl font-extrabold text-gray-900">Final Step</h2>
-        <p class="text-gray-500 mt-2">Verify your status to unlock student perks.</p>
+        <h2 class="text-3xl font-extrabold text-gray-900">Complete Your Profile</h2>
+        <p class="text-gray-500 mt-2">Tell us a bit about yourself</p>
     </div>
 
     <form id="profileForm" class="space-y-6">
+        <!-- Affiliation Selection -->
         <div>
-            <label class="block text-sm font-semibold text-gray-700 mb-2">Affiliation</label>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                I am a:
+            </label>
             <select id="affiliation" class="w-full border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-green-500 outline-none transition" required>
-                <option value="">Select Affiliation</option>
-                <option value="student">🎓 University Student</option>
-                <option value="non-student">💼 Independent Seller</option>
+                <option value="external">💼 External Affiliate (No verification needed)</option>
+                <option value="student">🎓 University Student (Verify to unlock perks)</option>
             </select>
         </div>
 
+        <!-- Student Fields (Hidden by default) -->
         <div id="studentFields" class="hidden space-y-5 bg-green-50 p-5 rounded-xl border border-green-100">
             <div>
-                <label class="block text-sm font-semibold text-gray-800 mb-1">Institutional Email</label>
-                <input type="email" id="studentEmail" placeholder="yourname@st.ug.edu.gh" class="w-full border-gray-200 rounded-lg p-2.5 focus:ring-2 focus:ring-green-500">
+                <label class="block text-sm font-semibold text-gray-800 mb-1">
+                    Institutional Email <span class="text-red-500">*</span>
+                </label>
+                <input type="email" id="studentEmail" 
+                       placeholder="e.g., your.name@st.ug.edu.gh" 
+                       class="w-full border-gray-200 rounded-lg p-2.5 focus:ring-2 focus:ring-green-500">
+                <p class="text-xs text-gray-500 mt-1">Use your school email address for verification</p>
             </div>
 
             <div class="grid grid-cols-2 gap-4">
                 <div>
                     <label class="block text-sm font-semibold text-gray-800">University</label>
                     <select id="university" class="w-full border-gray-200 rounded-lg p-2.5 mt-1">
-                        <option>University of Ghana</option>
-                        <option>KNUST</option>
-                        <option>UCC</option>
+                        <option value="">Select University</option>
+                        <option value="University of Ghana">University of Ghana</option>
+                        <option value="KNUST">KNUST</option>
+                        <option value="UCC">UCC</option>
+                        <option value="UEW">UEW</option>
+                        <option value="UDS">UDS</option>
+                        <option value="Ashesi University">Ashesi University</option>
+                        <option value="Other">Other</option>
                     </select>
                 </div>
                 <div>
-                    <label class="block text-sm font-semibold text-gray-800">Graduation Date</label>
-                    <input type="date" id="graduationDate" class="w-full border-gray-200 rounded-lg p-2.5 mt-1">
+                    <label class="block text-sm font-semibold text-gray-800">Expected Graduation</label>
+                    <input type="number" id="graduationYear" placeholder="2025" 
+                           class="w-full border-gray-200 rounded-lg p-2.5 mt-1">
                 </div>
+            </div>
+            
+            <!-- Send Code Button (appears after email is entered) -->
+            <div id="sendCodeSection" class="hidden">
+                <button type="button" id="sendCodeBtn" 
+                        class="w-full bg-blue-600 text-white font-medium py-2.5 rounded-lg hover:bg-blue-700 transition">
+                    📧 Send Verification Code
+                </button>
             </div>
         </div>
 
-        <button type="submit" id="submitBtn" class="w-full bg-green-600 text-white font-bold py-3 rounded-xl hover:bg-green-700 transition shadow-lg">
-            Verify & Save
+        <button type="submit" id="submitBtn" class="w-full bg-gray-600 text-white font-bold py-3 rounded-xl hover:bg-gray-700 transition shadow-lg">
+            Save Profile
         </button>
     </form>
 </div>
 
+<!-- OTP Verification Modal (Popup) -->
+<div id="otpModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+    <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4">
+        <div class="text-center mb-6">
+            <div class="text-5xl mb-3">📧</div>
+            <h3 class="text-2xl font-bold text-gray-800">Verify Your Email</h3>
+            <p class="text-gray-600 mt-2">We've sent a 6-digit code to</p>
+            <p id="displayEmail" class="font-semibold text-green-600 mt-1"></p>
+        </div>
+        
+        <!-- 6-digit OTP Inputs -->
+        <div class="flex justify-center gap-2 mb-6">
+            <input type="text" maxlength="1" class="otp-input" id="otp1" autofocus>
+            <input type="text" maxlength="1" class="otp-input" id="otp2">
+            <input type="text" maxlength="1" class="otp-input" id="otp3">
+            <input type="text" maxlength="1" class="otp-input" id="otp4">
+            <input type="text" maxlength="1" class="otp-input" id="otp5">
+            <input type="text" maxlength="1" class="otp-input" id="otp6">
+        </div>
+        
+        <button id="verifyCodeBtn" class="w-full bg-green-600 text-white font-bold py-3 rounded-xl hover:bg-green-700 transition">
+            Verify Code
+        </button>
+        
+        <div class="text-center mt-4">
+            <span class="text-sm text-gray-500">Didn't receive code? </span>
+            <button id="resendCodeBtn" class="text-blue-600 text-sm font-medium hover:underline">
+                Resend
+            </button>
+            <span id="countdownText" class="text-sm text-gray-400 ml-2 countdown"></span>
+        </div>
+        
+        <button id="closeModalBtn" class="w-full mt-3 text-gray-500 text-sm hover:text-gray-700">
+            Cancel
+        </button>
+    </div>
+</div>
+
+<!-- Success State -->
 <div id="successState" class="hidden text-center p-10 bg-white rounded-2xl shadow-xl max-w-lg">
-    <div class="text-6xl mb-4">📩</div>
-    <h2 class="text-2xl font-bold text-gray-800">Check Your Email!</h2>
-    <p class="text-gray-600 mt-2">We've sent a verification link to your student email. Please click it to activate your student perks.</p>
-    <button onclick="window.location.href='profile.html'" class="mt-6 text-green-600 font-semibold underline">Continue to Profile</button>
+    <div class="text-6xl mb-4">🎓</div>
+    <h2 class="text-2xl font-bold text-gray-800">Student Verified!</h2>
+    <p class="text-gray-600 mt-2">Your student status has been confirmed.</p>
+    <button onclick="window.location.href='profile.html'" class="mt-6 bg-green-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-green-700 transition">
+        Continue to Profile →
+    </button>
 </div>
 
 <script>
-  const affiliationSelect = document.getElementById("affiliation");
-  const studentFields = document.getElementById("studentFields");
-  const profileForm = document.getElementById("profileForm");
-  const submitBtn = document.getElementById("submitBtn");
+// Get user from localStorage
+const user = JSON.parse(localStorage.getItem("user"));
 
-  const user = JSON.parse(localStorage.getItem("user"));
-  if (!user || !user.id) {
-    alert("You must be logged in");
+// Check if user is logged in
+if (!user || !user.id) {
+    alert("Please log in first");
     window.location.href = "login.html";
-  }
+}
 
-  // Toggle fields and make them required ONLY if student is selected
-  affiliationSelect.addEventListener("change", () => {
+// DOM Elements
+const affiliationSelect = document.getElementById("affiliation");
+const studentFields = document.getElementById("studentFields");
+const sendCodeSection = document.getElementById("sendCodeSection");
+const studentEmailInput = document.getElementById("studentEmail");
+const sendCodeBtn = document.getElementById("sendCodeBtn");
+const profileForm = document.getElementById("profileForm");
+const submitBtn = document.getElementById("submitBtn");
+const otpModal = document.getElementById("otpModal");
+const verifyCodeBtn = document.getElementById("verifyCodeBtn");
+const resendCodeBtn = document.getElementById("resendCodeBtn");
+const closeModalBtn = document.getElementById("closeModalBtn");
+
+let storedStudentEmail = "";
+let countdownInterval = null;
+
+// Show/Hide student fields based on affiliation
+affiliationSelect.addEventListener("change", () => {
     const isStudent = affiliationSelect.value === "student";
     studentFields.classList.toggle("hidden", !isStudent);
     
-    // Dynamically set required attributes so the form doesn't submit empty student data
-    document.getElementById("studentEmail").required = isStudent;
-    document.getElementById("graduationDate").required = isStudent;
-    document.getElementById("university").required = isStudent;
-  });
-
-  profileForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    submitBtn.innerText = "Processing...";
-    submitBtn.disabled = true;
-
-    // Build payload conditionally
-    const payload = {
-        userId: user.id,
-        affiliation: affiliationSelect.value,
-        university: document.getElementById("university").value || null,
-        graduationDate: document.getElementById("graduationDate").value || null,
-        studentEmail: document.getElementById("studentEmail").value || null
-    };
-
-    try {
-      const res = await fetch("https://universe-api-u0rj.onrender.com/api/auth/google/user/completeProfile", {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-          if (payload.affiliation === "student") {
-              // Show the check email state
-              document.getElementById("formContainer").classList.add("hidden");
-              document.getElementById("successState").classList.remove("hidden");
-          } else {
-              // If not a student, go straight to profile
-              localStorage.setItem("user", JSON.stringify(data.user));
-              window.location.href = "profile.html";
-          }
-      } else {
-          // This alert will now show the specific error from your backend
-          alert("Error: " + data.message);
-          submitBtn.disabled = false;
-          submitBtn.innerText = "Verify & Save";
-      }
-    } catch (err) {
-      console.error(err);
-      alert("Something went wrong. Please check if your server is running.");
-      submitBtn.disabled = false;
-      submitBtn.innerText = "Verify & Save";
+    // Show send code section only if email is entered
+    if (isStudent && studentEmailInput.value.trim()) {
+        sendCodeSection.classList.remove("hidden");
+    } else {
+        sendCodeSection.classList.add("hidden");
     }
-  });
+});
+
+// Show send code button when email is entered
+studentEmailInput.addEventListener("input", () => {
+    if (affiliationSelect.value === "student" && studentEmailInput.value.trim()) {
+        sendCodeSection.classList.remove("hidden");
+    } else {
+        sendCodeSection.classList.add("hidden");
+    }
+});
+
+// Function to move to next OTP input automatically
+function setupOtpInputs() {
+    const inputs = document.querySelectorAll('.otp-input');
+    inputs.forEach((input, index) => {
+        input.addEventListener('input', (e) => {
+            if (e.target.value.length === 1 && index < 5) {
+                inputs[index + 1].focus();
+            }
+        });
+        
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Backspace' && !e.target.value && index > 0) {
+                inputs[index - 1].focus();
+            }
+        });
+    });
+}
+
+// Function to get full OTP code
+function getOtpCode() {
+    const inputs = document.querySelectorAll('.otp-input');
+    let code = '';
+    inputs.forEach(input => {
+        code += input.value;
+    });
+    return code;
+}
+
+// Function to clear OTP inputs
+function clearOtpInputs() {
+    const inputs = document.querySelectorAll('.otp-input');
+    inputs.forEach(input => {
+        input.value = '';
+    });
+    if (inputs[0]) inputs[0].focus();
+}
+
+// Start countdown timer for resend
+function startCountdown(seconds = 60) {
+    let timeLeft = seconds;
+    const countdownText = document.getElementById('countdownText');
+    const resendBtn = document.getElementById('resendCodeBtn');
+    
+    if (countdownInterval) clearInterval(countdownInterval);
+    
+    resendBtn.disabled = true;
+    resendBtn.classList.add('opacity-50', 'cursor-not-allowed');
+    
+    countdownInterval = setInterval(() => {
+        if (timeLeft <= 0) {
+            clearInterval(countdownInterval);
+            resendBtn.disabled = false;
+            resendBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            countdownText.textContent = '';
+        } else {
+            countdownText.textContent = `(${timeLeft}s)`;
+            timeLeft--;
+        }
+    }, 1000);
+}
+
+// Send verification code to backend
+sendCodeBtn.addEventListener("click", async () => {
+    const studentEmail = studentEmailInput.value.trim();
+    const university = document.getElementById("university").value;
+    const graduationYear = document.getElementById("graduationYear").value;
+    
+    if (!studentEmail) {
+        alert("Please enter your student email address");
+        return;
+    }
+    
+    // Disable button while sending
+    sendCodeBtn.disabled = true;
+    sendCodeBtn.textContent = "Sending...";
+    
+    try {
+        const response = await fetch("https://universe-api-u0rj.onrender.com/api/verification/send-code", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                userId: user.id,
+                studentEmail: studentEmail,
+                university: university,
+                graduationYear: graduationYear ? parseInt(graduationYear) : null
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            // Show OTP modal
+            storedStudentEmail = studentEmail;
+            document.getElementById("displayEmail").textContent = studentEmail;
+            otpModal.classList.remove("hidden");
+            otpModal.classList.add("flex");
+            clearOtpInputs();
+            setupOtpInputs();
+            startCountdown(60); // 60 seconds countdown
+            
+            alert("Verification code sent! Please check your student email inbox.");
+        } else {
+            alert(data.message || "Failed to send verification code");
+        }
+    } catch (error) {
+        console.error("Error sending code:", error);
+        alert("Something went wrong. Please try again.");
+    } finally {
+        sendCodeBtn.disabled = false;
+        sendCodeBtn.textContent = "📧 Send Verification Code";
+    }
+});
+
+// Verify the code user entered
+verifyCodeBtn.addEventListener("click", async () => {
+    const otpCode = getOtpCode();
+    
+    if (otpCode.length !== 6) {
+        alert("Please enter the 6-digit verification code");
+        return;
+    }
+    
+    verifyCodeBtn.disabled = true;
+    verifyCodeBtn.textContent = "Verifying...";
+    
+    try {
+        const response = await fetch("https://universe-api-u0rj.onrender.com/api/verification/verify-code", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                userId: user.id,
+                code: otpCode
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            // Update local storage with updated user info
+            localStorage.setItem("user", JSON.stringify(data.user));
+            
+            // Close modal
+            otpModal.classList.remove("flex");
+            otpModal.classList.add("hidden");
+            
+            // Show success state
+            document.getElementById("formContainer").classList.add("hidden");
+            document.getElementById("successState").classList.remove("hidden");
+        } else {
+            alert(data.message || "Invalid verification code");
+        }
+    } catch (error) {
+        console.error("Error verifying code:", error);
+        alert("Something went wrong. Please try again.");
+    } finally {
+        verifyCodeBtn.disabled = false;
+        verifyCodeBtn.textContent = "Verify Code";
+    }
+});
+
+// Resend code
+resendCodeBtn.addEventListener("click", async () => {
+    try {
+        resendCodeBtn.disabled = true;
+        resendCodeBtn.textContent = "Sending...";
+        
+        const response = await fetch("https://universe-api-u0rj.onrender.com/api/verification/resend-code", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ userId: user.id })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            alert("New verification code sent!");
+            clearOtpInputs();
+            startCountdown(60);
+        } else {
+            alert(data.message || "Failed to resend code");
+        }
+    } catch (error) {
+        console.error("Error resending code:", error);
+        alert("Failed to resend code. Please try again.");
+    } finally {
+        resendCodeBtn.disabled = false;
+        resendCodeBtn.textContent = "Resend";
+    }
+});
+
+// Close modal
+closeModalBtn.addEventListener("click", () => {
+    otpModal.classList.remove("flex");
+    otpModal.classList.add("hidden");
+    if (countdownInterval) clearInterval(countdownInterval);
+});
+
+// Handle form submission for external affiliates
+profileForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    
+    const affiliation = affiliationSelect.value;
+    
+    if (affiliation === "external") {
+        // External affiliate - just save profile without verification
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Saving...";
+        
+        try {
+            const response = await fetch("https://universe-api-u0rj.onrender.com/api/auth/google/user/completeProfile", {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    userId: user.id,
+                    affiliation: "external"
+                })
+            });
+            
+            const data = await response.json();
+            
+            if (response.ok) {
+                localStorage.setItem("user", JSON.stringify(data.user));
+                window.location.href = "profile.html";
+            } else {
+                alert(data.message || "Failed to save profile");
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("Something went wrong");
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Save Profile";
+        }
+    }
+});
 </script>
 </body>
 </html>
