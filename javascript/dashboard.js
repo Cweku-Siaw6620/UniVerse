@@ -23,13 +23,16 @@ document.addEventListener('DOMContentLoaded', function () {
       if (!res.ok) throw new Error("Failed to fetch store");
 
       const store = await res.json();
-      updateStoreInfo(store);
+            const verification = window.uniVerseVerification
+                ? await window.uniVerseVerification.fetchVerificationStatus(userId)
+                : { isVerified: false };
+            updateStoreInfo(store, verification);
     } catch (error) {
       console.error('Failed to get store:', error);
     }
   }
 
-  function updateStoreInfo(store) {
+    function updateStoreInfo(store, verification = { isVerified: false }) {
     const storeInfoContainer = document.getElementById('store-info');
     if (!storeInfoContainer) return;
 
@@ -43,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function () {
         <!-- Store Info -->
         <div class="hidden md:block">
             <div class="text-sm font-semibold text-gray-900">${store.storeName}</div>
-            <div class="text-xs text-gray-500">${store.sellerName}</div>
+            <div class="text-xs text-gray-500 flex items-center gap-2 flex-wrap">${store.sellerName}${verification.isVerified ? window.uniVerseVerification.getVerifiedBadgeHtml() : ''}</div>
         </div>
 
         <!-- Private Website Button (only if personalWebsite exists) -->

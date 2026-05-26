@@ -10,8 +10,8 @@ document.addEventListener('DOMContentLoaded', async function () {
     if (user && user.picture) {
       // Login selectors
       const loginSelectors = [
-        'nav a[href="/components/login"]',           // Desktop nav
-        '#mobileMenu a[href="/components/login"]',   // Mobile menu
+        'nav a[href*="/components/login"]',           // Desktop nav
+        '#mobileMenu a[href*="/components/login"]',   // Mobile menu
         '.auth-link'                                  // Fallback for mobile
       ];
       

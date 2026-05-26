@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
    <link rel="stylesheet" href="/stylesheet/stores.css">
     <script src="/javascript/feather.min.js"></script>
+    <script src="/javascript/verification.js"></script>
     <script src="/javascript/nav.js"></script>
     <link rel="stylesheet" href="/stylesheet/home.css">
 </head>
@@ -170,7 +171,7 @@
             });
         });
         
-        async function fetchShops() {
+                async function fetchShops() {
           try {
             const res = await fetch("https://uni-verse-api.vercel.app/api/stores");
             if (!res.ok) throw new Error("Failed to fetch stores");
@@ -192,7 +193,10 @@
         }
 
         
-      function renderShops(shops) {
+            let renderToken = 0;
+
+            async function renderShops(shops) {
+                const currentToken = ++renderToken;
         const container = document.getElementById('shops');
         const noResults = document.getElementById('noResults');
 
@@ -204,7 +208,12 @@
 
         noResults.classList.add("hidden");
 
-        container.innerHTML = shops.map(shop => `
+                const cards = await Promise.all(shops.map(async shop => {
+                    const verification = window.uniVerseVerification && shop.owner
+                        ? await window.uniVerseVerification.fetchVerificationStatus(shop.owner)
+                        : { isVerified: false };
+
+                    return `
           <article class="store-card">
             <img src="${shop.storeLogo || '/images/placeholder.png'}"
                 alt="${escapeHtml(shop.storeName)}"
@@ -212,7 +221,7 @@
 
             <div class="store-card-content">
               <h3 class="store-card-title">${escapeHtml(shop.storeName)}</h3>
-              <p class="store-card-seller">by ${escapeHtml(shop.sellerName || "Unknown")}</p>
+                            <p class="store-card-seller flex items-center gap-2 flex-wrap">by ${escapeHtml(shop.sellerName || "Unknown")}${verification.isVerified ? window.uniVerseVerification.getVerifiedBadgeHtml() : ''}</p>
               <p class="store-card-description">
                 ${escapeHtml(shop.storeDescription || "No description available")}
               </p>
@@ -230,7 +239,17 @@
               </div>
             </div>
           </article>
-        `).join("");
+                    `;
+                }));
+
+                if (currentToken !== renderToken) {
+                    return;
+                }
+
+                container.innerHTML = cards.join("");
+                if (typeof feather !== 'undefined') {
+                    feather.replace();
+                }
       }
 
         // Search functionality

@@ -37,21 +37,26 @@ document.addEventListener('DOMContentLoaded', () => {
       // Save storeId for product fetching
       resolvedStoreId = store._id;
 
+      const verification = window.uniVerseVerification
+        ? await window.uniVerseVerification.fetchVerificationStatus(store.owner)
+        : { isVerified: false };
+      storeData = { ...store, ownerVerified: verification.isVerified };
+
       // Save to localStorage
       try {
-        localStorage.setItem("currentViewedStore", JSON.stringify(store));
+        localStorage.setItem("currentViewedStore", JSON.stringify(storeData));
       } catch (err) {
         console.error("Failed to save store to localStorage:", err);
       }
 
       // Update all store information sections
-      updateStoreHeader(store);
-      updateSellerContact(store);
-      updateStoreStats(store);
-      updateStoreCategories(store);
+      updateStoreHeader(storeData);
+      updateSellerContact(storeData);
+      updateStoreStats(storeData);
+      updateStoreCategories(storeData);
       updateProductCount(0); // Will be updated after products load
 
-      return store;
+      return storeData;
     } catch (error) {
       console.error("Error fetching store details:", error);
       throw error;
@@ -71,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <p class="text-gray-600 mb-1">
             <i data-feather="user" class="w-4 h-4 inline mr-1"></i>
             <span class="font-medium">Seller:</span> 
-            <span id="sellerName">${escapeHtml(store.sellerName || 'Not specified')}</span>
+            <span id="sellerName" class="inline-flex items-center gap-2 flex-wrap">${escapeHtml(store.sellerName || 'Not specified')}${store.ownerVerified ? window.uniVerseVerification.getVerifiedBadgeHtml() : ''}</span>
           </p>
           <p class="text-gray-600">
             <i data-feather="phone" class="w-4 h-4 inline mr-1"></i>
@@ -104,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
                alt="${store.sellerName}" 
                class="w-12 h-12 rounded-full object-cover border-2 border-white shadow mr-3">
           <div>
-            <h4 class="font-semibold text-gray-800">${escapeHtml(store.sellerName || 'Seller')}</h4>
+            <h4 class="font-semibold text-gray-800 flex items-center gap-2 flex-wrap">${escapeHtml(store.sellerName || 'Seller')}${store.ownerVerified ? window.uniVerseVerification.getVerifiedBadgeHtml() : ''}</h4>
             <p class="text-sm text-gray-500">Store Owner</p>
           </div>
         </div>

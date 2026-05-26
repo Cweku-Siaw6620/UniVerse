@@ -49,7 +49,11 @@ async function fetchProductDetails(productId) {
 async function fetchStoreDetails(storeId) {
 const res = await fetch(`https://uni-verse-api.vercel.app/api/stores/storeID/${storeId}`);
   if (!res.ok) throw new Error("Failed to fetch store");
-  return await res.json();
+  const store = await res.json();
+  const verification = window.uniVerseVerification
+    ? await window.uniVerseVerification.fetchVerificationStatus(store.owner)
+    : { isVerified: false };
+  return { ...store, ownerVerified: verification.isVerified };
 }
 
 // Update all product information on the page
@@ -129,7 +133,7 @@ function updateStoreInfo(store) {
            class="w-16 h-16 rounded-full object-cover border-2 border-primary">
       <div>
         <h4 class="font-semibold text-lg">${escapeHtml(store.storeName || 'Unknown Store')}</h4>
-        <p class="text-gray-600">Student Seller • ${escapeHtml(store.sellerName || 'Unknown')}</p>
+        <p class="text-gray-600 flex items-center gap-2 flex-wrap">Student Seller • ${escapeHtml(store.sellerName || 'Unknown')}${store.ownerVerified ? window.uniVerseVerification.getVerifiedBadgeHtml() : ''}</p>
         <div class="flex items-center mt-2">
           <i class="ri-phone-line text-sm text-gray-500 mr-2"></i>
           <span class="text-gray-700">${escapeHtml(store.sellerNumber || 'Contact via WhatsApp')}</span>
