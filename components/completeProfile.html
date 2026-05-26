@@ -1,441 +1,510 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <title>UniVerse | Complete Profile</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        /* Smooth transitions */
-        .transition-all {
-            transition: all 0.3s ease;
-        }
-        
-        /* OTP input styling */
-        .otp-input {
-            width: 60px;
-            height: 70px;
-            text-align: center;
-            font-size: 24px;
-            font-weight: bold;
-            border: 2px solid #e5e7eb;
-            border-radius: 12px;
-            margin: 0 5px;
-        }
-        
-        .otp-input:focus {
-            border-color: #22c55e;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
-        }
-        
-        /* Countdown timer */
-        .countdown {
-            font-family: monospace;
-            font-size: 14px;
-            color: #6b7280;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <title>UniVerse | Complete Profile</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .upload-area {
+      border: 2px dashed #cbd5e1;
+      transition: all 0.3s ease;
+    }
+    .upload-area:hover {
+      border-color: #22c55e;
+      background-color: #f0fdf4;
+    }
+    .preview-image {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+    .remove-btn {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      background: red;
+      color: white;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 14px;
+    }
+  </style>
 </head>
 <body class="bg-gray-50 min-h-screen flex items-center justify-center p-4">
 
-<!-- Main Form Container -->
-<div id="formContainer" class="bg-white w-full max-w-lg rounded-2xl shadow-xl p-8 border border-gray-100">
-    <div class="text-center mb-8">
-        <h2 class="text-3xl font-extrabold text-gray-900">Complete Your Profile</h2>
-        <p class="text-gray-500 mt-2">Tell us a bit about yourself</p>
+<div id="formContainer" class="bg-white w-full max-w-2xl rounded-2xl shadow-xl p-8 border border-gray-100">
+  <div class="text-center mb-8">
+    <h2 class="text-3xl font-extrabold text-gray-900">Complete Your Profile</h2>
+    <p class="text-gray-500 mt-2">Tell us a bit about yourself</p>
+  </div>
+
+  <form id="profileForm" class="space-y-6">
+    <!-- Affiliation Selection -->
+    <div>
+      <label class="block text-sm font-semibold text-gray-700 mb-2">
+        I am a:
+      </label>
+      <select id="affiliation" class="w-full border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-green-500 outline-none transition" required>
+        <option value="external">💼 External Affiliate (No verification needed)</option>
+        <option value="student">🎓 University Student (Verify with Student ID)</option>
+      </select>
+      <p id="affiliationHint" class="text-xs text-gray-500 mt-2"></p>
     </div>
 
-    <form id="profileForm" class="space-y-6">
-        <!-- Affiliation Selection -->
-        <div>
-            <label class="block text-sm font-semibold text-gray-700 mb-2">
-                I am a:
-            </label>
-            <select id="affiliation" class="w-full border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-green-500 outline-none transition" required>
-                <option value="external">💼 External Affiliate (No verification needed)</option>
-                <option value="student">🎓 University Student (Verify to unlock perks)</option>
-            </select>
-        </div>
+    <!-- Student Fields - ID Card Upload -->
+    <div id="studentFields" class="hidden space-y-5 bg-green-50 p-5 rounded-xl border border-green-100">
+      
+      <!-- University Selection -->
+      <div>
+        <label class="block text-sm font-semibold text-gray-800 mb-1">
+          University <span class="text-red-500">*</span>
+        </label>
+        <select id="university" class="w-full border-gray-200 rounded-lg p-2.5 focus:ring-2 focus:ring-green-500" required>
+          <option value="">Select University</option>
+          <option value="University of Ghana">University of Ghana</option>
+          <option value="KNUST">KNUST</option>
+          <option value="UCC">UCC</option>
+          <option value="UEW">UEW</option>
+          <option value="UDS">UDS</option>
+          <option value="Ashesi University">Ashesi University</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
 
-        <!-- Student Fields (Hidden by default) -->
-        <div id="studentFields" class="hidden space-y-5 bg-green-50 p-5 rounded-xl border border-green-100">
-            <div>
-                <label class="block text-sm font-semibold text-gray-800 mb-1">
-                    Institutional Email <span class="text-red-500">*</span>
-                </label>
-                <input type="email" id="studentEmail" 
-                       placeholder="e.g., your.name@st.ug.edu.gh" 
-                       class="w-full border-gray-200 rounded-lg p-2.5 focus:ring-2 focus:ring-green-500">
-                <p class="text-xs text-gray-500 mt-1">Use your school email address for verification</p>
-            </div>
+      <!-- Student ID Number -->
+      <div>
+        <label class="block text-sm font-semibold text-gray-800 mb-1">
+          Student ID Number <span class="text-red-500">*</span>
+        </label>
+        <div class="relative">
+          <input
+            type="text"
+            id="studentIdNumber"
+            placeholder="e.g. 10XXXXXXX"
+            autocomplete="off"
+            class="w-full border-gray-200 rounded-lg p-2.5 pr-10 focus:ring-2 focus:ring-green-500 uppercase tracking-widest"
+          />
+          <!-- Status icon (spinner / tick / cross) -->
+          <span id="idCheckIcon" class="absolute right-3 top-1/2 -translate-y-1/2 text-base pointer-events-none"></span>
+        </div>
+        <!-- Feedback line below input -->
+        <p id="idCheckMsg" class="text-xs mt-1 hidden"></p>
+      </div>
 
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm font-semibold text-gray-800">University</label>
-                    <select id="university" class="w-full border-gray-200 rounded-lg p-2.5 mt-1">
-                        <option value="">Select University</option>
-                        <option value="University of Ghana">University of Ghana</option>
-                        <option value="KNUST">KNUST</option>
-                        <option value="UCC">UCC</option>
-                        <option value="UEW">UEW</option>
-                        <option value="UDS">UDS</option>
-                        <option value="Ashesi University">Ashesi University</option>
-                        <option value="Other">Other</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-sm font-semibold text-gray-800">Expected Graduation</label>
-                    <input type="number" id="graduationYear" placeholder="2025" 
-                           class="w-full border-gray-200 rounded-lg p-2.5 mt-1">
-                </div>
-            </div>
-            
-            <!-- Send Code Button (appears after email is entered) -->
-            <div id="sendCodeSection" class="hidden">
-                <button type="button" id="sendCodeBtn" 
-                        class="w-full bg-blue-600 text-white font-medium py-2.5 rounded-lg hover:bg-blue-700 transition">
-                    📧 Send Verification Code
-                </button>
-            </div>
-        </div>
+      <!-- ID Card Expiry Date -->
+      <div>
+        <label class="block text-sm font-semibold text-gray-800 mb-1">
+          Student ID Expiry Date <span class="text-red-500">*</span>
+        </label>
+        <input type="date" id="expiryDate" 
+               class="w-full border-gray-200 rounded-lg p-2.5 focus:ring-2 focus:ring-green-500">
+        <p class="text-xs text-gray-500 mt-1">Your student perks will expire on this date</p>
+      </div>
 
-        <button type="submit" id="submitBtn" class="w-full bg-gray-600 text-white font-bold py-3 rounded-xl hover:bg-gray-700 transition shadow-lg">
-            Save Profile
-        </button>
-    </form>
-</div>
+      <!-- Front of ID Card Upload -->
+      <div>
+        <label class="block text-sm font-semibold text-gray-800 mb-2">
+          Front of Student ID Card <span class="text-red-500">*</span>
+        </label>
+        <div id="frontUploadArea" class="upload-area relative rounded-lg p-6 text-center cursor-pointer">
+          <input type="file" id="frontImage" accept="image/*" class="hidden" />
+          <div id="frontPreview" class="hidden">
+            <img id="frontPreviewImg" class="preview-image" />
+            <div class="remove-btn" onclick="removeImage('front')">×</div>
+          </div>
+          <div id="frontPlaceholder">
+            <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+              <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m-4-4v8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <p class="mt-2 text-sm text-gray-600">Click to upload front of ID card</p>
+            <p class="text-xs text-gray-400">PNG, JPG up to 5MB</p>
+          </div>
+        </div>
+      </div>
 
-<!-- OTP Verification Modal (Popup) -->
-<div id="otpModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
-    <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4">
-        <div class="text-center mb-6">
-            <div class="text-5xl mb-3">📧</div>
-            <h3 class="text-2xl font-bold text-gray-800">Verify Your Email</h3>
-            <p class="text-gray-600 mt-2">We've sent a 6-digit code to</p>
-            <p id="displayEmail" class="font-semibold text-green-600 mt-1"></p>
+      <!-- Back of ID Card Upload (Optional) -->
+      <div>
+        <label class="block text-sm font-semibold text-gray-800 mb-2">
+          Back of Student ID Card <span class="text-gray-400 text-xs">(Optional)</span>
+        </label>
+        <div id="backUploadArea" class="upload-area relative rounded-lg p-6 text-center cursor-pointer">
+          <input type="file" id="backImage" accept="image/*" class="hidden" />
+          <div id="backPreview" class="hidden">
+            <img id="backPreviewImg" class="preview-image" />
+            <div class="remove-btn" onclick="removeImage('back')">×</div>
+          </div>
+          <div id="backPlaceholder">
+            <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+              <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m-4-4v8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <p class="mt-2 text-sm text-gray-600">Click to upload back of ID card</p>
+            <p class="text-xs text-gray-400">Optional but recommended</p>
+          </div>
         </div>
-        
-        <!-- 6-digit OTP Inputs -->
-        <div class="flex justify-center gap-2 mb-6">
-            <input type="text" maxlength="1" class="otp-input" id="otp1" autofocus>
-            <input type="text" maxlength="1" class="otp-input" id="otp2">
-            <input type="text" maxlength="1" class="otp-input" id="otp3">
-            <input type="text" maxlength="1" class="otp-input" id="otp4">
-            <input type="text" maxlength="1" class="otp-input" id="otp5">
-            <input type="text" maxlength="1" class="otp-input" id="otp6">
-        </div>
-        
-        <button id="verifyCodeBtn" class="w-full bg-green-600 text-white font-bold py-3 rounded-xl hover:bg-green-700 transition">
-            Verify Code
-        </button>
-        
-        <div class="text-center mt-4">
-            <span class="text-sm text-gray-500">Didn't receive code? </span>
-            <button id="resendCodeBtn" class="text-blue-600 text-sm font-medium hover:underline">
-                Resend
-            </button>
-            <span id="countdownText" class="text-sm text-gray-400 ml-2 countdown"></span>
-        </div>
-        
-        <button id="closeModalBtn" class="w-full mt-3 text-gray-500 text-sm hover:text-gray-700">
-            Cancel
-        </button>
+      </div>
+
+      <!-- Warning Message -->
+      <div class="bg-yellow-50 p-3 rounded-lg border border-yellow-200">
+        <p class="text-xs text-yellow-700">
+          ⚠️ Your ID card will be reviewed by our team. This typically takes 24-48 hours.
+          Once approved, you'll get access to student perks and discounts!
+        </p>
+      </div>
     </div>
-</div>
 
-<!-- Success State -->
-<div id="successState" class="hidden text-center p-10 bg-white rounded-2xl shadow-xl max-w-lg">
-    <div class="text-6xl mb-4">🎓</div>
-    <h2 class="text-2xl font-bold text-gray-800">Student Verified!</h2>
-    <p class="text-gray-600 mt-2">Your student status has been confirmed.</p>
-    <button onclick="window.location.href='profile.html'" class="mt-6 bg-green-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-green-700 transition">
-        Continue to Profile →
+    <!-- Submit Button -->
+    <button type="submit" id="submitBtn" 
+            class="w-full bg-gray-600 text-white font-bold py-3 rounded-xl hover:bg-gray-700 transition shadow-lg">
+      Save Profile
     </button>
+  </form>
+</div>
+
+<!-- Success Modal -->
+<div id="successModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+  <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4 text-center">
+    <div class="text-6xl mb-4">📤</div>
+    <h3 class="text-2xl font-bold text-gray-800 mb-2">ID Card Submitted!</h3>
+    <p class="text-gray-600 mb-4">Your student ID card has been submitted for review.</p>
+    <p class="text-sm text-gray-500 mb-6">We'll notify you once your verification is complete (24-48 hours).</p>
+    <button onclick="window.location.href='profile.html'" 
+            class="w-full bg-green-600 text-white font-bold py-3 rounded-xl hover:bg-green-700 transition">
+      Go to Profile
+    </button>
+  </div>
 </div>
 
 <script>
-// Get user from localStorage
-const user = JSON.parse(localStorage.getItem("user"));
+  (() => {
+    const API = "https://uni-verse-api.vercel.app";
 
-// Check if user is logged in
-if (!user || !user.id) {
-    alert("Please log in first");
-    window.location.href = "login.html";
-}
-
-// DOM Elements
-const affiliationSelect = document.getElementById("affiliation");
-const studentFields = document.getElementById("studentFields");
-const sendCodeSection = document.getElementById("sendCodeSection");
-const studentEmailInput = document.getElementById("studentEmail");
-const sendCodeBtn = document.getElementById("sendCodeBtn");
-const profileForm = document.getElementById("profileForm");
-const submitBtn = document.getElementById("submitBtn");
-const otpModal = document.getElementById("otpModal");
-const verifyCodeBtn = document.getElementById("verifyCodeBtn");
-const resendCodeBtn = document.getElementById("resendCodeBtn");
-const closeModalBtn = document.getElementById("closeModalBtn");
-
-let storedStudentEmail = "";
-let countdownInterval = null;
-
-// Show/Hide student fields based on affiliation
-affiliationSelect.addEventListener("change", () => {
-    const isStudent = affiliationSelect.value === "student";
-    studentFields.classList.toggle("hidden", !isStudent);
-    
-    // Show send code section only if email is entered
-    if (isStudent && studentEmailInput.value.trim()) {
-        sendCodeSection.classList.remove("hidden");
-    } else {
-        sendCodeSection.classList.add("hidden");
+    // ── Auth guard ──────────────────────────────────────────
+    let user = null;
+    try { user = JSON.parse(localStorage.getItem("user")); } catch {}
+    if (!user || !user.id) {
+      window.location.href = "login.html";
+      return;
     }
-});
 
-// Show send code button when email is entered
-studentEmailInput.addEventListener("input", () => {
-    if (affiliationSelect.value === "student" && studentEmailInput.value.trim()) {
-        sendCodeSection.classList.remove("hidden");
-    } else {
-        sendCodeSection.classList.add("hidden");
+    // ── DOM refs ────────────────────────────────────────────
+    const affiliationSelect = document.getElementById("affiliation");
+    const studentFields     = document.getElementById("studentFields");
+    const profileForm       = document.getElementById("profileForm");
+    const submitBtn         = document.getElementById("submitBtn");
+    const affiliationHint   = document.getElementById("affiliationHint");
+    const studentIdInput    = document.getElementById("studentIdNumber");
+    const idCheckIcon       = document.getElementById("idCheckIcon");
+    const idCheckMsg        = document.getElementById("idCheckMsg");
+
+    // ── File state ──────────────────────────────────────────
+    let frontImageFile = null;
+    let backImageFile  = null;
+
+    // ── Notification helpers (replace all alert() calls) ────
+    function showNotification(type, message) {
+      // Remove any existing notification
+      const existing = document.getElementById("inlineNotif");
+      if (existing) existing.remove();
+
+      const colors = {
+        error:   "bg-red-50 border-red-200 text-red-700",
+        success: "bg-green-50 border-green-200 text-green-700",
+        warning: "bg-yellow-50 border-yellow-200 text-yellow-700"
+      };
+      const icons = {
+        error:   "⚠️",
+        success: "✅",
+        warning: "⚠️"
+      };
+
+      const notif = document.createElement("div");
+      notif.id = "inlineNotif";
+      notif.className = `flex items-start gap-2 p-3 rounded-lg border text-sm font-medium mb-4 ${colors[type]}`;
+      notif.innerHTML = `<span>${icons[type]}</span><span>${message}</span>`;
+
+      profileForm.insertAdjacentElement("beforebegin", notif);
+
+      if (type !== "error") {
+        setTimeout(() => notif.remove(), 4000);
+      }
     }
-});
 
-// Function to move to next OTP input automatically
-function setupOtpInputs() {
-    const inputs = document.querySelectorAll('.otp-input');
-    inputs.forEach((input, index) => {
-        input.addEventListener('input', (e) => {
-            if (e.target.value.length === 1 && index < 5) {
-                inputs[index + 1].focus();
-            }
-        });
-        
-        input.addEventListener('keydown', (e) => {
-            if (e.key === 'Backspace' && !e.target.value && index > 0) {
-                inputs[index - 1].focus();
-            }
-        });
+    function clearNotification() {
+      const existing = document.getElementById("inlineNotif");
+      if (existing) existing.remove();
+    }
+
+    // ── Affiliation toggle ──────────────────────────────────
+    affiliationSelect.addEventListener("change", () => {
+      const isStudent = affiliationSelect.value === "student";
+      studentFields.classList.toggle("hidden", !isStudent);
+
+      if (isStudent) {
+        submitBtn.textContent = "Submit ID Card for Verification";
+        affiliationHint.textContent = "Upload your student ID card to get verified.";
+        affiliationHint.className = "text-xs text-blue-600 mt-2";
+      } else {
+        submitBtn.textContent = "Save as External Affiliate";
+        affiliationHint.textContent = "External affiliates can browse and purchase, but won't have student perks.";
+        affiliationHint.className = "text-xs text-gray-500 mt-2";
+      }
     });
-}
 
-// Function to get full OTP code
-function getOtpCode() {
-    const inputs = document.querySelectorAll('.otp-input');
-    let code = '';
-    inputs.forEach(input => {
-        code += input.value;
-    });
-    return code;
-}
+    // ── Student ID number — real-time duplicate check ───────
+    let idCheckTimer = null;
+    let idCheckState = "idle"; // idle | checking | taken | available | error
 
-// Function to clear OTP inputs
-function clearOtpInputs() {
-    const inputs = document.querySelectorAll('.otp-input');
-    inputs.forEach(input => {
-        input.value = '';
-    });
-    if (inputs[0]) inputs[0].focus();
-}
+    function setIdCheckUI(state, message) {
+      idCheckState = state;
+      idCheckMsg.classList.remove("hidden", "text-red-600", "text-green-600", "text-gray-400");
 
-// Start countdown timer for resend
-function startCountdown(seconds = 60) {
-    let timeLeft = seconds;
-    const countdownText = document.getElementById('countdownText');
-    const resendBtn = document.getElementById('resendCodeBtn');
-    
-    if (countdownInterval) clearInterval(countdownInterval);
-    
-    resendBtn.disabled = true;
-    resendBtn.classList.add('opacity-50', 'cursor-not-allowed');
-    
-    countdownInterval = setInterval(() => {
-        if (timeLeft <= 0) {
-            clearInterval(countdownInterval);
-            resendBtn.disabled = false;
-            resendBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-            countdownText.textContent = '';
-        } else {
-            countdownText.textContent = `(${timeLeft}s)`;
-            timeLeft--;
-        }
-    }, 1000);
-}
+      const stateMap = {
+        checking:  { icon: "⏳", msgClass: "text-gray-400",   msg: "Checking..." },
+        taken:     { icon: "❌", msgClass: "text-red-600",    msg: message },
+        available: { icon: "✅", msgClass: "text-green-600",  msg: "ID number is available" },
+        error:     { icon: "⚠️", msgClass: "text-yellow-600", msg: "Could not verify — will check on submit" },
+        idle:      { icon: "",   msgClass: "text-gray-400",   msg: "" }
+      };
 
-// Send verification code to backend
-sendCodeBtn.addEventListener("click", async () => {
-    const studentEmail = studentEmailInput.value.trim();
-    const university = document.getElementById("university").value;
-    const graduationYear = document.getElementById("graduationYear").value;
-    
-    if (!studentEmail) {
-        alert("Please enter your student email address");
+      const s = stateMap[state];
+      idCheckIcon.textContent = s.icon;
+
+      if (s.msg) {
+        idCheckMsg.classList.remove("hidden");
+        idCheckMsg.classList.add(s.msgClass);
+        idCheckMsg.textContent = s.msg;
+      } else {
+        idCheckMsg.classList.add("hidden");
+      }
+    }
+
+    async function checkStudentIdNumber(value) {
+      if (!value || value.trim().length < 3) {
+        setIdCheckUI("idle");
         return;
-    }
-    
-    // Disable button while sending
-    sendCodeBtn.disabled = true;
-    sendCodeBtn.textContent = "Sending...";
-    
-    try {
-        const response = await fetch("https://universe-api-u0rj.onrender.com/api/verification/send-code", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                userId: user.id,
-                studentEmail: studentEmail,
-                university: university,
-                graduationYear: graduationYear ? parseInt(graduationYear) : null
-            })
-        });
-        
-        const data = await response.json();
-        
-        if (data.success) {
-            // Show OTP modal
-            storedStudentEmail = studentEmail;
-            document.getElementById("displayEmail").textContent = studentEmail;
-            otpModal.classList.remove("hidden");
-            otpModal.classList.add("flex");
-            clearOtpInputs();
-            setupOtpInputs();
-            startCountdown(60); // 60 seconds countdown
-            
-            alert("Verification code sent! Please check your student email inbox.");
-        } else {
-            alert(data.message || "Failed to send verification code");
+      }
+
+      setIdCheckUI("checking");
+
+      try {
+        const res = await fetch(`${API}/api/verification/check-student-id/${encodeURIComponent(value.trim().toUpperCase())}`);
+        const data = await res.json();
+
+        if (!res.ok) {
+          setIdCheckUI("error");
+          return;
         }
-    } catch (error) {
-        console.error("Error sending code:", error);
-        alert("Something went wrong. Please try again.");
-    } finally {
-        sendCodeBtn.disabled = false;
-        sendCodeBtn.textContent = "📧 Send Verification Code";
-    }
-});
 
-// Verify the code user entered
-verifyCodeBtn.addEventListener("click", async () => {
-    const otpCode = getOtpCode();
-    
-    if (otpCode.length !== 6) {
-        alert("Please enter the 6-digit verification code");
-        return;
-    }
-    
-    verifyCodeBtn.disabled = true;
-    verifyCodeBtn.textContent = "Verifying...";
-    
-    try {
-        const response = await fetch("https://universe-api-u0rj.onrender.com/api/verification/verify-code", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                userId: user.id,
-                code: otpCode
-            })
-        });
-        
-        const data = await response.json();
-        
-        if (data.success) {
-            // Update local storage with updated user info
-            localStorage.setItem("user", JSON.stringify(data.user));
-            
-            // Close modal
-            otpModal.classList.remove("flex");
-            otpModal.classList.add("hidden");
-            
-            // Show success state
-            document.getElementById("formContainer").classList.add("hidden");
-            document.getElementById("successState").classList.remove("hidden");
+        if (data.taken) {
+          setIdCheckUI("taken", "This student ID is already registered on UniVerse.");
         } else {
-            alert(data.message || "Invalid verification code");
+          setIdCheckUI("available");
         }
-    } catch (error) {
-        console.error("Error verifying code:", error);
-        alert("Something went wrong. Please try again.");
-    } finally {
-        verifyCodeBtn.disabled = false;
-        verifyCodeBtn.textContent = "Verify Code";
+      } catch {
+        setIdCheckUI("error");
+      }
     }
-});
 
-// Resend code
-resendCodeBtn.addEventListener("click", async () => {
-    try {
-        resendCodeBtn.disabled = true;
-        resendCodeBtn.textContent = "Sending...";
-        
-        const response = await fetch("https://universe-api-u0rj.onrender.com/api/verification/resend-code", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ userId: user.id })
-        });
-        
-        const data = await response.json();
-        
-        if (data.success) {
-            alert("New verification code sent!");
-            clearOtpInputs();
-            startCountdown(60);
-        } else {
-            alert(data.message || "Failed to resend code");
+    studentIdInput.addEventListener("input", () => {
+      // Force uppercase visually
+      const pos = studentIdInput.selectionStart;
+      studentIdInput.value = studentIdInput.value.toUpperCase();
+      studentIdInput.setSelectionRange(pos, pos);
+
+      clearTimeout(idCheckTimer);
+      setIdCheckUI("idle");
+
+      const val = studentIdInput.value.trim();
+      if (val.length >= 3) {
+        idCheckTimer = setTimeout(() => checkStudentIdNumber(val), 600);
+      }
+    });
+
+    studentIdInput.addEventListener("blur", () => {
+      clearTimeout(idCheckTimer);
+      const val = studentIdInput.value.trim();
+      if (val.length >= 3 && idCheckState === "idle") {
+        checkStudentIdNumber(val);
+      }
+    });
+
+    // ── File upload setup ───────────────────────────────────
+    function setupFileUpload(inputId, previewId, previewImgId, type) {
+      const uploadArea = document.getElementById(`${type}UploadArea`);
+      const input = document.getElementById(inputId);
+
+      uploadArea.addEventListener("click", () => input.click());
+
+      input.addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        if (file.size > 5 * 1024 * 1024) {
+          showNotification("error", "File is too large. Maximum size is 5MB.");
+          input.value = "";
+          return;
         }
-    } catch (error) {
-        console.error("Error resending code:", error);
-        alert("Failed to resend code. Please try again.");
-    } finally {
-        resendCodeBtn.disabled = false;
-        resendCodeBtn.textContent = "Resend";
+
+        if (type === "front") frontImageFile = file;
+        else backImageFile = file;
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          document.getElementById(previewImgId).src = event.target.result;
+          document.getElementById(previewId).classList.remove("hidden");
+          document.getElementById(`${type}Placeholder`).classList.add("hidden");
+        };
+        reader.readAsDataURL(file);
+      });
     }
-});
 
-// Close modal
-closeModalBtn.addEventListener("click", () => {
-    otpModal.classList.remove("flex");
-    otpModal.classList.add("hidden");
-    if (countdownInterval) clearInterval(countdownInterval);
-});
+    window.removeImage = function (type) {
+      if (type === "front") {
+        frontImageFile = null;
+        document.getElementById("frontImage").value = "";
+        document.getElementById("frontPreview").classList.add("hidden");
+        document.getElementById("frontPlaceholder").classList.remove("hidden");
+      } else {
+        backImageFile = null;
+        document.getElementById("backImage").value = "";
+        document.getElementById("backPreview").classList.add("hidden");
+        document.getElementById("backPlaceholder").classList.remove("hidden");
+      }
+    };
 
-// Handle form submission for external affiliates
-profileForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    
-    const affiliation = affiliationSelect.value;
-    
-    if (affiliation === "external") {
-        // External affiliate - just save profile without verification
+    setupFileUpload("frontImage", "frontPreview", "frontPreviewImg", "front");
+    setupFileUpload("backImage",  "backPreview",  "backPreviewImg",  "back");
+
+    // ── Submit ──────────────────────────────────────────────
+    profileForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      clearNotification();
+
+      const affiliation = affiliationSelect.value;
+
+      // ── External affiliate ──────────────────────────────
+      if (affiliation === "external") {
         submitBtn.disabled = true;
         submitBtn.textContent = "Saving...";
-        
+
         try {
-            const response = await fetch("https://universe-api-u0rj.onrender.com/api/auth/google/user/completeProfile", {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    userId: user.id,
-                    affiliation: "external"
-                })
-            });
-            
-            const data = await response.json();
-            
-            if (response.ok) {
-                localStorage.setItem("user", JSON.stringify(data.user));
-                window.location.href = "profile.html";
-            } else {
-                alert(data.message || "Failed to save profile");
-            }
-        } catch (error) {
-            console.error("Error:", error);
-            alert("Something went wrong");
+          const res = await fetch(`${API}/api/auth/google/user/completeProfile`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ userId: user.id, affiliation: "external" })
+          });
+
+          const data = await res.json();
+
+          if (res.ok) {
+            localStorage.setItem("user", JSON.stringify(data.user));
+            window.location.href = "profile.html";
+          } else {
+            showNotification("error", data.message || "Failed to save profile. Please try again.");
+          }
+        } catch {
+          showNotification("error", "Network error. Please check your connection and try again.");
         } finally {
-            submitBtn.disabled = false;
-            submitBtn.textContent = "Save Profile";
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Save as External Affiliate";
         }
-    }
-});
+
+        return;
+      }
+
+      // ── Student ─────────────────────────────────────────
+      if (affiliation === "student") {
+        const university      = document.getElementById("university").value;
+        const expiryDate      = document.getElementById("expiryDate").value;
+        const studentIdNumber = studentIdInput.value.trim().toUpperCase();
+
+        // Inline validation
+        if (!university) {
+          showNotification("error", "Please select your university.");
+          return;
+        }
+        if (!studentIdNumber || studentIdNumber.length < 3) {
+          showNotification("error", "Please enter your student ID number.");
+          studentIdInput.focus();
+          return;
+        }
+        if (idCheckState === "taken") {
+          showNotification("error", "This student ID number is already registered. Please check and try again.");
+          studentIdInput.focus();
+          return;
+        }
+        if (!expiryDate) {
+          showNotification("error", "Please enter your ID card expiry date.");
+          return;
+        }
+        if (!frontImageFile) {
+          showNotification("error", "Please upload the front of your student ID card.");
+          return;
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Submitting...";
+
+        // If check is still in progress, wait briefly
+        if (idCheckState === "checking") {
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          if (idCheckState === "taken") {
+            showNotification("error", "This student ID number is already registered.");
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Submit ID Card for Verification";
+            return;
+          }
+        }
+
+        const formData = new FormData();
+        formData.append("userId",          user.id);
+        formData.append("university",      university);
+        formData.append("expiryDate",      expiryDate);
+        formData.append("studentIdNumber", studentIdNumber);
+        formData.append("frontImage",      frontImageFile);
+        if (backImageFile) formData.append("backImage", backImageFile);
+
+        try {
+          const res = await fetch(`${API}/api/verification/submit-id-card`, {
+            method: "POST",
+            body: formData
+          });
+
+          const data = await res.json();
+
+          if (data.success) {
+            const updatedUser = { ...user, affiliation: "student_pending", isVerified: false };
+            localStorage.setItem("user", JSON.stringify(updatedUser));
+
+            document.getElementById("formContainer").classList.add("hidden");
+            const modal = document.getElementById("successModal");
+            modal.classList.remove("hidden");
+            modal.classList.add("flex");
+          } else {
+            // Handle duplicate ID caught server-side
+            if (res.status === 409) {
+              setIdCheckUI("taken", data.message);
+              showNotification("error", data.message);
+              studentIdInput.focus();
+            } else {
+              showNotification("error", data.message || "Failed to submit ID card. Please try again.");
+            }
+          }
+        } catch {
+          showNotification("error", "Network error. Please check your connection and try again.");
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Submit ID Card for Verification";
+        }
+      }
+    });
+  })();
 </script>
 </body>
 </html>

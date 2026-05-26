@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         profileWrapper.appendChild(dropdown);
 
         // Fetch store status and update link
-        fetch(`https://universe-api-u0rj.onrender.com/api/stores/${encodeURIComponent(user.id)}/exists`)
+        fetch(`https://uni-verse-api.vercel.app/api/stores/${encodeURIComponent(user.id)}/exists`)
           .then(res => res.json())
           .then(result => {
             const storeLink = dropdown.querySelector('#storeLink');
@@ -159,7 +159,7 @@ async function fetchAllProducts() {
     grid.innerHTML = ''; // Clear skeletons
 
     try {
-        const res = await fetch("https://universe-api-u0rj.onrender.com/api/products/all");
+        const res = await fetch("https://uni-verse-api.vercel.app/api/products/all");
         if (!res.ok) throw new Error("Failed to fetch products");
         const products = await res.json();
 
@@ -280,7 +280,7 @@ async function getWhatsAppLink(product) {
     
     try {
         // Fetch store info to get phone number
-        const sellerRes = await fetch(`https://universe-api-u0rj.onrender.com/api/stores/${encodeURIComponent(product.sellerId)}`);
+        const sellerRes = await fetch(`https://uni-verse-api.vercel.app/api/stores/${encodeURIComponent(product.sellerId)}`);
         
         if (!sellerRes.ok) {
             throw new Error(`Failed to fetch store info: ${sellerRes.status}`);
