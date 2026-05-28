@@ -10,10 +10,10 @@ document.addEventListener('DOMContentLoaded', async function () {
     if (user && user.picture) {
       // Login selectors
       const loginSelectors = [
-        'nav a[href*="/components/login"]',          // Desktop nav
-        'nav a[href$="/login.html"]',                // Local component navs
-        '#mobileMenu a[href*="/components/login"]',  // Mobile menu
-        '#mobileMenu a[href$="/login.html"]',        // Local component mobile navs
+        'nav a[href="/components/login"]',          // Desktop nav
+        'nav a[href="/login.html"]',                // Local component navs
+        '#mobileMenu a[href="/components/login"]',  // Mobile menu
+        '#mobileMenu a[href="/login.html"]',        // Local component mobile navs
         '.auth-link'                                  // Fallback for mobile
       ];
       
@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', async function () {
       // Replace mobile menu login link
       const mobileMenu = document.getElementById('mobileMenu');
       if (mobileMenu) {
-        const mobileLogin = mobileMenu.querySelector('a[href*="/components/login"]') || 
+        const mobileLogin = mobileMenu.querySelector('a[href="/components/login"]') || 
                            mobileMenu.querySelector('.auth-link');
         if (mobileLogin) {
           const mobileProfile = createProfileComponent(true);
