@@ -2,9 +2,28 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>UniVerse | Profile</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="../javascript/feather.min.js"></script>
+  <script src="../javascript/nav.js"></script>
   <style>
+    .mobile-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background-color: white;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      z-index: 100;
+    }
+
+    .mobile-menu.active {
+      display: block;
+    }
+
     .verified-badge {
       background: linear-gradient(135deg, #22c55e, #16a34a);
       color: white;
@@ -62,8 +81,45 @@
     }
   </style>
 </head>
-<body class="bg-gray-50 min-h-screen flex items-center justify-center p-4">
+<body class="bg-gray-50 min-h-screen">
 
+<header class="sticky top-0 z-50 bg-white shadow-sm">
+  <div class="container mx-auto px-6 py-4">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center">
+        <a href="../index.html">
+          <img src="/images/logo.png" alt="UniVerse Logo" class="h-14 w-14 md:h-16 md:w-16 object-contain rounded-full"/>
+        </a>
+      </div>
+
+      <nav class="hidden md:flex items-center gap-2 text-sm font-semibold text-gray-800">
+        <a href="../index.html" class="px-4 py-2 rounded hover:bg-gray-100 transition">Home</a>
+        <a href="../stores.html" class="px-4 py-2 rounded hover:bg-gray-100 transition">Stores</a>
+        <a href="../blog.html" class="px-4 py-2 rounded hover:bg-gray-100 transition">Blog</a>
+        <a href="/components/login.html" class="ml-6 px-5 py-2 bg-gray-900 text-white rounded hover:bg-gray-700 transition">
+          Sign In
+        </a>
+      </nav>
+
+      <button id="mobileMenuButton" class="md:hidden text-gray-700 focus:outline-none">
+        <i class="fas fa-bars text-2xl"></i>
+      </button>
+    </div>
+
+    <div id="mobileMenu" class="mobile-menu">
+      <div class="flex flex-col p-6 space-y-4">
+        <a href="../index.html" class="text-gray-800 font-medium py-2 hover:text-gray-900">Home</a>
+        <a href="../stores.html" class="text-gray-800 font-medium py-2 hover:text-gray-900">Stores</a>
+        <a href="../blog.html" class="text-gray-800 font-medium py-2 hover:text-gray-900">Blog</a>
+        <a href="/components/login.html" class="auth-link block mt-4 px-5 py-2 bg-gray-900 text-white rounded text-center hover:bg-gray-700 transition">
+          Sign In
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="flex items-center justify-center p-4 py-8">
 <div class="bg-white w-full max-w-md rounded-xl shadow p-6">
   <!-- Profile Header -->
   <div class="text-center mb-6">
@@ -108,6 +164,7 @@
     <a href="../index.html" class="text-green-600 text-sm hover:underline">← Back to Home</a>
   </div>
 </div>
+</main>
 
 <!-- ID Card Preview Modal (for admin to view uploaded ID cards) -->
 <div id="idCardModal" class="fixed inset-0 bg-black bg-opacity-75 hidden items-center justify-center z-50 p-4">
@@ -138,6 +195,8 @@
 </div>
 
 <script>
+feather.replace();
+
 // Get user from localStorage
 let user = null;
 try {
@@ -146,6 +205,25 @@ try {
 } catch (err) {
   console.error("Failed to parse user:", err);
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+  const mobileMenuButton = document.getElementById('mobileMenuButton');
+  const mobileMenu = document.getElementById('mobileMenu');
+
+  if (mobileMenuButton && mobileMenu) {
+    mobileMenuButton.addEventListener('click', function() {
+      mobileMenu.classList.toggle('active');
+      const icon = mobileMenuButton.querySelector('i');
+      if (mobileMenu.classList.contains('active')) {
+        icon.classList.remove('fa-bars');
+        icon.classList.add('fa-times');
+      } else {
+        icon.classList.remove('fa-times');
+        icon.classList.add('fa-bars');
+      }
+    });
+  }
+});
 
 if (!user || !user.id) {
   alert("Please log in first");
