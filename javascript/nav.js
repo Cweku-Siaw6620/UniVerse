@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', async function () {
       // Replace desktop nav login link
       const desktopNav = document.querySelector('nav');
       if (desktopNav) {
-        const desktopLogin = desktopNav.querySelector('a[href*="/components/login"]');
+        const desktopLogin = desktopNav.querySelector('a[href="/components/login"]');
         if (desktopLogin) {
           const desktopProfile = createProfileComponent(false);
           desktopLogin.replaceWith(desktopProfile);

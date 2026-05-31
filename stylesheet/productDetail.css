@@ -102,6 +102,191 @@
       background: var(--primary-light);
       border-left: 3px solid var(--primary);
     }
+
+    .store-card-shell {
+      position: relative;
+      overflow: hidden;
+      padding: 1.5rem;
+      border-radius: 18px;
+      background:
+        radial-gradient(circle at top right, rgba(212, 175, 55, 0.14), transparent 30%),
+        linear-gradient(180deg, #ffffff 0%, #fbfaf6 100%);
+      border: 1px solid rgba(26, 71, 42, 0.12);
+      box-shadow: 0 18px 40px rgba(26, 31, 20, 0.08);
+    }
+
+    .store-card-shell::before {
+      content: '';
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 6px;
+      background: linear-gradient(90deg, var(--primary-dark), var(--primary), var(--accent));
+    }
+
+    .store-card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .store-card-brand {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      min-width: 0;
+    }
+
+    .store-card-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 18px;
+      object-fit: cover;
+      border: 1px solid rgba(26, 71, 42, 0.15);
+      box-shadow: 0 10px 24px rgba(26, 31, 20, 0.12);
+      flex-shrink: 0;
+    }
+
+    .store-card-kicker {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--primary);
+      margin-bottom: 0.35rem;
+    }
+
+    .store-card-name {
+      font-family: 'Georgia', serif;
+      font-size: 1.4rem;
+      line-height: 1.1;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin: 0;
+    }
+
+    .store-card-subtitle {
+      margin-top: 0.4rem;
+      color: var(--text-light);
+      font-size: 0.95rem;
+    }
+
+    .store-card-badge-wrap {
+      flex-shrink: 0;
+    }
+
+    .store-verify-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.45rem 0.8rem;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+    }
+
+    .store-verify-chip--unverified {
+      background: #f5f7f6;
+      color: #5b6660;
+      border: 1px solid rgba(91, 102, 96, 0.18);
+    }
+
+    .store-card-description {
+      color: #39423c;
+      font-size: 0.98rem;
+      line-height: 1.7;
+      margin-bottom: 1rem;
+    }
+
+    .store-card-stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .store-stat {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.9rem 1rem;
+      border-radius: 14px;
+      background: rgba(232, 245, 233, 0.72);
+      border: 1px solid rgba(46, 139, 87, 0.1);
+      color: var(--primary-dark);
+      font-size: 0.88rem;
+      font-weight: 600;
+    }
+
+    .store-stat i,
+    .store-card-contact i,
+    .store-card-action i {
+      font-size: 1rem;
+    }
+
+    .store-card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(26, 71, 42, 0.1);
+    }
+
+    .store-card-contact {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      min-width: 0;
+      color: #44504a;
+      font-weight: 600;
+    }
+
+    .store-card-contact span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .store-card-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      padding: 0.8rem 1.1rem;
+      border-radius: 999px;
+      border: 1px solid rgba(37, 211, 102, 0.2);
+      background: linear-gradient(135deg, #25d366, #128c7e);
+      color: white;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      box-shadow: 0 14px 28px rgba(18, 140, 126, 0.18);
+      transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+    }
+
+    .store-card-action:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.02);
+      box-shadow: 0 18px 32px rgba(18, 140, 126, 0.24);
+    }
+
+    @media (max-width: 768px) {
+      .store-card-header,
+      .store-card-footer {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .store-card-stats {
+        grid-template-columns: 1fr;
+      }
+
+      .store-card-contact span {
+        white-space: normal;
+      }
+    }
     
     .spec-table {
       width: 100%;

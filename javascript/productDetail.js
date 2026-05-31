@@ -127,18 +127,49 @@ function updateProductDisplay(product, store) {
 function updateStoreInfo(store) {
   const storeInfo = document.getElementById('storeInfo');
   if (storeInfo) {
+    const verificationBadge = store.ownerVerified
+      ? window.uniVerseVerification.getVerifiedBadgeHtml()
+      : '<span class="store-verify-chip store-verify-chip--unverified"><i class="ri-shield-line mr-1"></i>Pending verification</span>';
+
     storeInfo.innerHTML = `
-      <img src="${store.storeLogo || 'https://images.unsplash.com/photo-1563013544-824ae1b704d3?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80'}" 
-           alt="${escapeHtml(store.storeName || 'Store')}" 
-           class="w-16 h-16 rounded-full object-cover border-2 border-primary">
-      <div>
-        <h4 class="font-semibold text-lg">${escapeHtml(store.storeName || 'Unknown Store')}</h4>
-        <p class="text-gray-600 flex items-center gap-2 flex-wrap">Student Seller • ${escapeHtml(store.sellerName || 'Unknown')}${store.ownerVerified ? window.uniVerseVerification.getVerifiedBadgeHtml() : ''}</p>
-        <div class="flex items-center mt-2">
-          <i class="ri-phone-line text-sm text-gray-500 mr-2"></i>
-          <span class="text-gray-700">${escapeHtml(store.sellerNumber || 'Contact via WhatsApp')}</span>
+      <div class="store-card-shell">
+        <div class="store-card-header">
+          <div class="store-card-brand">
+            <img src="${store.storeLogo || 'https://images.unsplash.com/photo-1563013544-824ae1b704d3?ixlib=rb-1.2.1&auto=format&fit=crop&w=120&q=80'}"
+                 alt="${escapeHtml(store.storeName || 'Store')}"
+                 class="store-card-avatar">
+            <div>
+              <div class="store-card-kicker">Verified seller profile</div>
+              <h4 class="store-card-name">${escapeHtml(store.storeName || 'Unknown Store')}</h4>
+              <div class="store-card-subtitle">${escapeHtml(store.sellerName || 'Unknown seller')} · Student seller</div>
+            </div>
+          </div>
+          <div class="store-card-badge-wrap">
+            ${verificationBadge}
+          </div>
         </div>
-        <p class="text-gray-600"> ${escapeHtml(store.storeDescription || 'Unknown')}</p>
+
+        <div class="store-card-description">
+          ${escapeHtml(store.storeDescription || 'No store description available.')}
+        </div>
+
+        <div class="store-card-stats">
+          <div class="store-stat">
+            <i class="ri-shield-check-line"></i>
+            <span>${store.ownerVerified ? 'Verified seller' : 'Verification pending'}</span>
+          </div>
+          <div class="store-stat">
+            <i class="ri-smartphone-line"></i>
+            <span>${escapeHtml(store.sellerNumber || 'Contact via WhatsApp')}</span>
+          </div>
+        </div>
+
+        <div class="store-card-footer">
+          <button type="button" class="store-card-action" onclick="document.getElementById('contactSellerBtn')?.click()">
+            <i class="ri-whatsapp-line"></i>
+            Contact seller
+          </button>
+        </div>
       </div>
     `;
   }
