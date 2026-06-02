@@ -84,8 +84,8 @@ document.addEventListener('DOMContentLoaded', function () {
             let currentPlan = 'free';
             const planLimits = {
                 'free': 20,
-                'standard': 45,
-                'premium': 90
+                'premium': 45,
+                'organizational': 90
             };
             
             // Update product limit based on current plan
@@ -319,123 +319,273 @@ document.addEventListener('DOMContentLoaded', function () {
            fetchProducts();
            updateProductLimit();
            //updateProductCount()
+
+           // ============================================================
+// PLAN STATUS + PAYSTACK PAYMENT FLOW
+// ============================================================
+(() => {
+  const API = 'https://uni-verse-api.vercel.app';
+
+  const PLANS = {
+    premium:        { amount: 50, limit: 45,  label: 'Premium'       },
+    organizational: { amount: 80, limit: 90,  label: 'Organizational' }
+  };
+
+  let currentPlanData = null;
+
+  // ── Get store from localStorage ──────────────────────
+  let store = null;
+  try { store = JSON.parse(localStorage.getItem('store')); } catch {}
+  if (!store || !store._id) return;
+
+  // ── Inject plan status bar above pricing section ─────
+  const pricingSection = document.querySelector('#free-plan')?.closest('.bg-white.rounded-lg.shadow-sm.p-6.mb-6');
+  if (pricingSection) {
+    const bar = document.createElement('div');
+    bar.id = 'plan-status-bar';
+    bar.className = 'bg-white rounded-lg shadow-sm p-5 mb-6';
+    bar.innerHTML = `
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <div id="plan-badge" class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide"></div>
+          <div>
+            <p id="plan-label" class="text-sm font-semibold text-gray-900"></p>
+            <p id="plan-sublabel" class="text-xs text-gray-500 mt-0.5"></p>
+          </div>
+        </div>
+        <div id="plan-countdown" class="hidden sm:w-52">
+          <div class="flex justify-between text-xs text-gray-500 mb-1">
+            <span>Days remaining</span>
+            <span id="plan-days-text" class="font-semibold text-gray-700"></span>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-1.5">
+            <div id="plan-days-bar" class="h-1.5 rounded-full transition-all duration-500"></div>
+          </div>
+        </div>
+      </div>
+    `;
+    pricingSection.parentNode.insertBefore(bar, pricingSection);
+  }
+
+  // ── Render plan status bar ────────────────────────────
+  function renderPlanStatus(data) {
+    currentPlanData = data;
+
+    const badge    = document.getElementById('plan-badge');
+    const label    = document.getElementById('plan-label');
+    const sublabel = document.getElementById('plan-sublabel');
+    const countdown = document.getElementById('plan-countdown');
+    const daysText = document.getElementById('plan-days-text');
+    const daysBar  = document.getElementById('plan-days-bar');
+
+    const styles = {
+      free:           'bg-gray-100 text-gray-600',
+      premium:        'bg-purple-100 text-purple-700',
+      organizational: 'bg-amber-100 text-amber-700'
+    };
+
+    badge.className   = `px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide ${styles[data.plan]}`;
+    badge.textContent = data.plan === 'organizational' ? 'Organizational' : data.plan;
+
+    if (data.plan === 'free') {
+      label.textContent    = 'Free Plan';
+      sublabel.textContent = 'Up to 20 products · Basic analytics';
+      countdown.classList.add('hidden');
+    } else {
+      label.textContent = `${PLANS[data.plan].label} Plan — ${data.productLimit} products`;
+      countdown.classList.remove('hidden');
+
+      const days = data.daysLeft;
+      daysText.textContent  = `${days} day${days !== 1 ? 's' : ''}`;
+      const pct = Math.round((days / 31) * 100);
+      daysBar.style.width   = `${pct}%`;
+      daysBar.style.background =
+        days <= 5  ? '#ef4444' :
+        days <= 10 ? '#f59e0b' : '#16a34a';
+
+      if (days <= 5) {
+        sublabel.className   = 'text-xs text-red-500 mt-0.5 font-semibold';
+        sublabel.textContent = `⚠️ Expires in ${days} day${days !== 1 ? 's' : ''} — renew now`;
+      } else {
+        sublabel.className   = 'text-xs text-gray-500 mt-0.5';
+        sublabel.textContent = `Expires ${new Date(data.planExpiresAt)
+          .toLocaleDateString('en-GH', {
+            day: 'numeric', month: 'short', year: 'numeric'
+          })}`;
+      }
+    }
+
+    updatePlanCards(data.plan);
+  }
+
+  // ── Update plan card UI ───────────────────────────────
+  function updatePlanCards(activePlan) {
+    // Reset all cards
+    ['free-plan', 'premium-plan', 'organizational-plan'].forEach(id => {
+      const card = document.getElementById(id);
+      if (!card) return;
+      card.querySelectorAll('.current-plan-badge').forEach(b => b.remove());
+    });
+
+    // Mark active card
+    const activeCard = document.getElementById(`${activePlan}-plan`);
+    if (activeCard) {
+      const badge = document.createElement('div');
+      badge.className = 'current-plan-badge absolute top-4 right-4 bg-primary text-white text-xs font-medium px-2 py-1 rounded-full';
+      badge.textContent = 'Current Plan';
+      activeCard.style.position = 'relative';
+      activeCard.appendChild(badge);
+    }
+
+    // Premium button
+    const premBtn = document.getElementById('upgrade-premium');
+    if (premBtn) {
+      if (activePlan === 'premium') {
+        premBtn.textContent = 'Current Plan';
+        premBtn.disabled    = true;
+        premBtn.className   = 'w-full px-4 py-2 bg-gray-100 text-gray-500 font-medium rounded-button cursor-not-allowed whitespace-nowrap';
+      } else {
+        premBtn.textContent = 'Upgrade Plan';
+        premBtn.disabled    = false;
+        premBtn.className   = 'w-full px-4 py-2 bg-primary text-white font-medium rounded-button hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 whitespace-nowrap';
+      }
+    }
+
+    // Organizational button
+    const orgBtn = document.getElementById('upgrade-organizational');
+    if (orgBtn) {
+      if (activePlan === 'organizational') {
+        orgBtn.textContent = 'Current Plan';
+        orgBtn.disabled    = true;
+        orgBtn.className   = 'w-full px-4 py-2 bg-gray-100 text-gray-500 font-medium rounded-button cursor-not-allowed whitespace-nowrap';
+      } else {
+        orgBtn.textContent = 'Upgrade Plan';
+        orgBtn.disabled    = false;
+        orgBtn.className   = 'w-full px-4 py-2 border border-primary bg-white text-primary font-medium rounded-button hover:bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 whitespace-nowrap';
+      }
+    }
+
+    // Product limit display
+    const limitEl = document.getElementById('product-limit');
+    if (limitEl) {
+      limitEl.textContent =
+        activePlan === 'free'           ? '20' :
+        activePlan === 'premium'        ? '45' : '90';
+    }
+  }
+
+  // ── Fetch live plan status ────────────────────────────
+  async function fetchPlanStatus() {
+    try {
+      const res  = await fetch(`${API}/api/plans/status/${store._id}`);
+      const data = await res.json();
+      if (data.success) renderPlanStatus(data);
+    } catch {
+      // silently fail
+    }
+  }
+
+  fetchPlanStatus();
+
+  // ── Show notification ─────────────────────────────────
+  function showNotification(title, message) {
+    const notification = document.getElementById('notification');
+    const titleEl      = document.getElementById('notification-title');
+    const messageEl    = document.getElementById('notification-message');
+    if (!notification || !titleEl || !messageEl) return;
+    titleEl.textContent   = title;
+    messageEl.textContent = message;
+    notification.classList.remove('translate-x-full');
+    setTimeout(() => notification.classList.add('translate-x-full'), 5000);
+  }
+
+  // ── Initiate Paystack payment ─────────────────────────
+  async function initiatePayment(plan) {
+    const btn = document.getElementById(
+      plan === 'premium' ? 'upgrade-premium' : 'upgrade-organizational'
+    );
+
+    const originalText = btn.textContent;
+    btn.disabled    = true;
+    btn.textContent = 'Loading...';
+
+    try {
+      const res = await fetch(`${API}/api/plans/initiate`, {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ storeId: store._id, plan })
+      });
+
+      const data = await res.json();
+
+      if (!data.success) {
+        showNotification('Error', data.message || 'Failed to initiate payment.');
+        btn.disabled    = false;
+        btn.textContent = originalText;
+        return;
+      }
+
+      // Open Paystack popup
+      const handler = PaystackPop.setup({
+        key:         'pk_test_06a5336a803a441f45b7989742954a4a76e30c2f',
+        email:       JSON.parse(localStorage.getItem('user'))?.email || '',
+        amount:      plan === 'premium' ? 5000 * 100 : 8000 * 100,
+        currency:    'GHS',
+        access_code: data.access_code,
+        ref:         data.reference,
+        onClose: function() {
+          btn.disabled    = false;
+          btn.textContent = originalText;
+        },
+        callback: function(response) {
+          // Payment successful on Paystack's end
+          // Webhook handles backend activation automatically
+          showNotification(
+            'Payment Successful!',
+            'Your plan is being activated. This usually takes a few seconds.'
+          );
+          btn.disabled    = false;
+          btn.textContent = originalText;
+
+          // Poll for plan update (webhook may take a few seconds)
+          let attempts = 0;
+          const poll = setInterval(async () => {
+            attempts++;
+            await fetchPlanStatus();
+            if (
+              currentPlanData?.plan === plan ||
+              attempts >= 10
+            ) {
+              clearInterval(poll);
+            }
+          }, 3000);
+        }
+      });
+
+      handler.openIframe();
+
+    } catch {
+      showNotification('Error', 'Network error. Please try again.');
+      btn.disabled    = false;
+      btn.textContent = originalText;
+    }
+  }
+
+  // ── Button listeners ──────────────────────────────────
+  document.getElementById('upgrade-premium')?.addEventListener('click', () => {
+    initiatePayment('premium');
+  });
+
+  document.getElementById('upgrade-organizational')?.addEventListener('click', () => {
+    initiatePayment('organizational');
+  });
+
+  // ── Close notification ────────────────────────────────
+  document.getElementById('close-notification')?.addEventListener('click', () => {
+    document.getElementById('notification')?.classList.add('translate-x-full');
+  });
+
+})();
         });
 
-//pricing
- document.addEventListener('DOMContentLoaded', function() {
-            const freePlan = document.getElementById('free-plan');
-            const standardPlan = document.getElementById('standard-plan');
-            const premiumPlan = document.getElementById('premium-plan');
-            const upgradeStandard = document.getElementById('upgrade-standard');
-            const upgradePremium = document.getElementById('upgrade-premium');
-            
-            let currentPlan = 'free';
-            
-            function updateActivePlan() {
-                // Remove active class from all plans
-                [freePlan, standardPlan, premiumPlan].forEach(plan => {
-                    plan.classList.remove('active');
-                    plan.querySelector('button').classList.remove('bg-gray-100', 'text-gray-700', 'bg-primary', 'text-white', 'border-primary', 'bg-white', 'text-primary');
-                    
-                    // Remove current plan badge if exists
-                    const badge = plan.querySelector('.absolute');
-                    if (badge) {
-                        badge.remove();
-                    }
-                });
-                
-                // Add active class to current plan
-                let activePlan;
-                if (currentPlan === 'free') {
-                    activePlan = freePlan;
-                    freePlan.querySelector('button').className = 'w-full px-4 py-2 bg-gray-100 text-gray-700 font-medium rounded-button hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2 whitespace-nowrap';
-                    freePlan.querySelector('button').textContent = 'Current Plan';
-                } else if (currentPlan === 'standard') {
-                    activePlan = standardPlan;
-                    standardPlan.querySelector('button').className = 'w-full px-4 py-2 bg-gray-100 text-gray-700 font-medium rounded-button hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2 whitespace-nowrap';
-                    standardPlan.querySelector('button').textContent = 'Current Plan';
-                } else {
-                    activePlan = premiumPlan;
-                    premiumPlan.querySelector('button').className = 'w-full px-4 py-2 bg-gray-100 text-gray-700 font-medium rounded-button hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2 whitespace-nowrap';
-                    premiumPlan.querySelector('button').textContent = 'Current Plan';
-                }
-                
-                activePlan.classList.add('active');
-                
-                // Add current plan badge
-                const badge = document.createElement('div');
-                badge.className = 'absolute top-4 right-4 bg-primary text-white text-xs font-medium px-2 py-1 rounded-full';
-                badge.textContent = 'Current Plan';
-                activePlan.appendChild(badge);
-                
-                // Update product limit
-                const productLimit = document.getElementById('product-limit');
-                if (currentPlan === 'free') {
-                    productLimit.textContent = '20';
-                } else if (currentPlan === 'standard') {
-                    productLimit.textContent = '45';
-                } else {
-                    productLimit.textContent = '90';
-                }
-                
-                // Reset other plan buttons
-                if (currentPlan !== 'standard') {
-                    upgradeStandard.className = 'w-full px-4 py-2 bg-primary text-white font-medium rounded-button hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 whitespace-nowrap';
-                    upgradeStandard.textContent = 'Upgrade Plan';
-                }
-                
-                if (currentPlan !== 'premium') {
-                    upgradePremium.className = 'w-full px-4 py-2 border border-primary bg-white text-primary font-medium rounded-button hover:bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 whitespace-nowrap';
-                    upgradePremium.textContent = 'Upgrade Plan';
-                }
-            }
-            
-            // Upgrade to Standard plan
-            upgradeStandard.addEventListener('click', function() {
-                // Simulate payment process
-                setTimeout(() => {
-                    currentPlan = 'standard';
-                    updateActivePlan();
-                    
-                    // Show success notification
-                    const notification = document.getElementById('notification');
-                    const notificationTitle = document.getElementById('notification-title');
-                    const notificationMessage = document.getElementById('notification-message');
-                    
-                    notificationTitle.textContent = 'Plan Upgraded';
-                    notificationMessage.textContent = 'You have successfully upgraded to the Standard plan';
-                    
-                    notification.classList.remove('translate-x-full');
-                    
-                    setTimeout(() => {
-                        notification.classList.add('translate-x-full');
-                    }, 5000);
-                }, 1000);
-            });
-            
-            // Upgrade to Premium plan
-            upgradePremium.addEventListener('click', function() {
-                // Simulate payment process
-                setTimeout(() => {
-                    currentPlan = 'premium';
-                    updateActivePlan();
-                    
-                    // Show success notification
-                    const notification = document.getElementById('notification');
-                    const notificationTitle = document.getElementById('notification-title');
-                    const notificationMessage = document.getElementById('notification-message');
-                    
-                    notificationTitle.textContent = 'Plan Upgraded';
-                    notificationMessage.textContent = 'You have successfully upgraded to the Premium plan';
-                    
-                    notification.classList.remove('translate-x-full');
-                    
-                    setTimeout(() => {
-                        notification.classList.add('translate-x-full');
-                    }, 5000);
-                }, 1000);
-            });
-            
-            // Initialize
-            updateActivePlan();
-        });
+ 

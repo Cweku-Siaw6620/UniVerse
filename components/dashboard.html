@@ -213,7 +213,7 @@
 
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                             <!-- Free Plan -->
-                            <div id="free-plan" class="plan-card active border-2 border-gray-200 rounded-lg p-6 relative">
+                            <div id="free-plan" class="plan-card active border-2 border-gray-200 rounded-lg p-6 relative hover:shadow-lg transform hover:-translate-y-1 transition">
                                 <div class="absolute top-4 right-4 bg-primary text-white text-xs font-medium px-2 py-1 rounded-full">
                                     Current Plan
                                 </div>
@@ -268,9 +268,12 @@
                                 </button>
                             </div>
 
-                            <!-- Standard Plan -->
-                            <div id="standard-plan" class="plan-card border-2 border-gray-200 rounded-lg p-6">
-                                <h3 class="text-xl font-bold text-gray-900 mb-2">Standard</h3>
+                            <!-- Premium Plan -->
+                            <div id="premium-plan" class="plan-card border-2 border-gray-200 rounded-lg p-6 overflow-hidden hover:shadow-lg transform hover:-translate-y-1 transition bg-gradient-to-r from-primary/5 to-white">
+                                <div class="absolute top-0 right-0 bg-primary text-white text-xs font-medium px-6 py-1 rotate-45 translate-y-2 translate-x-6">
+                                    Popular
+                                </div>
+                                <h3 class="text-xl font-bold text-purple-600 mb-2">Premium</h3>
                                 <div class="flex items-end mb-4">
                                     <span class="text-3xl font-bold">GHC 50</span>
                                     <span class="text-gray-500 ml-1">/month</span>
@@ -316,17 +319,14 @@
                                         <span>Custom branding</span>
                                     </li>
                                 </ul>
-                                <button id="upgrade-standard" class="w-full px-4 py-2 bg-primary text-white font-medium rounded-button hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 whitespace-nowrap">
+                                <button id="upgrade-premium" class="w-full px-4 py-2 bg-purple-600 text-white font-medium rounded-button hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 whitespace-nowrap">
                                     Upgrade Plan
                                 </button>
                             </div>
 
-                            <!-- Premium Plan -->
-                            <div id="premium-plan" class="plan-card border-2 border-gray-200 rounded-lg p-6 relative overflow-hidden">
-                                <div class="absolute top-0 right-0 bg-primary text-white text-xs font-medium px-6 py-1 rotate-45 translate-y-2 translate-x-6">
-                                    Popular
-                                </div>
-                                <h3 class="text-xl font-bold text-gray-900 mb-2">Premium</h3>
+                            <!-- Organizational Plan -->
+                            <div id="organizational-plan" class="plan-card border-2 border-amber-500 rounded-lg p-6 relative overflow-hidden hover:shadow-2xl transform hover:-translate-y-1 transition bg-gradient-to-r from-amber-50 to-white">
+                                <h3 class="text-xl font-bold text-amber-600 mb-2">Organizational</h3>
                                 <div class="flex items-end mb-4">
                                     <span class="text-3xl font-bold">GHC 80</span>
                                     <span class="text-gray-500 ml-1">/month</span>
@@ -372,7 +372,7 @@
                                         <span class="text-gray-600">Product Advertising</span>
                                     </li>
                                 </ul>
-                                <button id="upgrade-premium" class="w-full px-4 py-2 border border-primary bg-white text-primary font-medium rounded-button hover:bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 whitespace-nowrap" disabled>
+                                <button id="upgrade-organizational" class="w-full px-4 py-2 bg-amber-500 text-white font-medium rounded-button hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 whitespace-nowrap">
                                     Upgrade Plan
                                 </button>
                             </div>
@@ -426,5 +426,6 @@
             });
         });
     </script>
+    <script src="https://js.paystack.co/v1/inline.js"></script>
 </body>
 </html>
