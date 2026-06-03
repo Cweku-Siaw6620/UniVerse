@@ -320,7 +320,7 @@ document.addEventListener('DOMContentLoaded', function () {
            updateProductLimit();
            //updateProductCount()
 
-           // ============================================================
+// ============================================================
 // PLAN STATUS + PAYSTACK PAYMENT FLOW
 // ============================================================
 (() => {
@@ -461,7 +461,7 @@ document.addEventListener('DOMContentLoaded', function () {
       } else {
         orgBtn.textContent = 'Upgrade Plan';
         orgBtn.disabled    = false;
-        orgBtn.className   = 'w-full px-4 py-2 border border-primary bg-white text-primary font-medium rounded-button hover:bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 whitespace-nowrap';
+        orgBtn.className   = 'w-full px-4 py-2 bg-amber-500 text-white font-medium rounded-button hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 whitespace-nowrap';
       }
     }
 
