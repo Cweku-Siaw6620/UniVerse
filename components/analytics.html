@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>UniVerse | Analytics</title>
+	<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+	<script>tailwind.config={theme:{extend:{colors:{primary:'#4f46e5',secondary:'#6366f1'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
+	<script src="../javascript/verification.js"></script>
+	<link rel="stylesheet" href="../stylesheet/dashboard.css">
+</head>
+<body>
+	<!-- Sidebar Overlay (Mobile) -->
+	<div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+	<div class="flex h-screen">
+		<!-- Sidebar -->
+		<div class="sidebar w-64 bg-white shadow-lg fixed h-full transition-transform duration-300 ease-in-out" id="sidebar">
+			<div class="p-6">
+				<a href="../index.html">
+					<img src="/images/logo.png" alt="UniVerse Logo" class="h-14 w-14 md:h-20 md:w-20 object-contain rounded-full"/>
+				</a>
+			</div>
+
+			<nav class="mt-6">
+				<div class="px-4 space-y-2">
+					<a href="./dashboard.html" class="flex items-center px-6 py-3 text-gray-900 hover:bg-gray-100 transition-colors">
+						<div class="w-5 h-5 flex items-center justify-center mr-3">
+							<i class="ri-dashboard-line"></i>
+						</div>
+						Dashboard
+					</a>
+
+					<a href="./product.html" class="flex items-center px-6 py-3 text-gray-900 hover:bg-gray-100 transition-colors">
+						<div class="w-6 h-6 flex items-center justify-center mr-3">
+							<i class="ri-shopping-bag-line"></i>
+						</div>
+						<span class="font-medium">Products</span>
+					</a>
+
+					<a href="./analytics.html" class="flex items-center px-6 py-3 text-gray-900 bg-gray-100 border-l-4 border-primary">
+						<div class="w-5 h-5 flex items-center justify-center mr-3">
+							<i class="ri-bar-chart-line text-primary"></i>
+						</div>
+						<span class="font-medium">Analytics</span>
+					</a>
+
+					<a href="#" class="flex items-center px-6 py-3 text-gray-900 hover:bg-gray-100 transition-colors">
+						<div class="w-5 h-5 flex items-center justify-center mr-3">
+							<i class="ri-user-line"></i>
+						</div>
+						Customers
+					</a>
+				</div>
+			</nav>
+		</div>
+
+		<!-- Main Content -->
+		<div class="flex-1 main-content lg:ml-64">
+			<!-- Header -->
+			<header class="bg-white border-b border-gray-200 flex items-center justify-between px-6 py-4">
+				<button class="lg:hidden mr-4" id="mobile-menu-toggle">
+					<div class="w-6 h-6 flex items-center justify-center">
+						<i class="ri-menu-line text-xl"></i>
+					</div>
+				</button>
+
+				<div class="flex items-center space-x-4" id="store-info">
+					<div class="flex items-center">
+						<div class="w-10 h-10 flex items-center justify-center bg-gray-200 rounded-full overflow-hidden mr-3">
+							<i class="ri-store-2-line text-gray-500 text-xl"></i>
+						</div>
+						<div class="hidden md:block">
+							<div class="text-sm font-medium text-gray-900">Loading store...</div>
+							<div class="text-xs text-gray-500">Loading seller...</div>
+						</div>
+					</div>
+					<div class="relative">
+						<button class="w-10 h-10 flex items-center justify-center bg-gray-100 rounded-full focus:outline-none">
+							<div class="w-10 h-10 flex items-center justify-center">
+								<i class="ri-notification-3-line"></i>
+							</div>
+						</button>
+						<div class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></div>
+					</div>
+					<div class="w-10 h-10 flex items-center justify-center bg-gray-100 rounded-full">
+						<i class="ri-user-line"></i>
+					</div>
+				</div>
+			</header>
+
+			<!-- Page Content -->
+			<main class="flex-1 overflow-y-auto bg-gray-50 p-6">
+				<div class="max-w-7xl mx-auto">
+					<div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
+						<div>
+							<h1 class="text-2xl font-bold text-gray-900">Analytics</h1>
+							<p class="text-sm text-gray-500">A quick snapshot of your store performance</p>
+						</div>
+					</div>
+
+					<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
+						<div class="bg-white rounded-lg shadow-sm p-5">
+							<p class="text-sm text-gray-500 mb-1">Total Sales</p>
+							<div class="flex items-end justify-between">
+								<h3 class="text-2xl font-bold text-gray-900">GHC 12,480</h3>
+								<span class="text-xs font-medium text-green-600 bg-green-50 px-2 py-1 rounded-full">+18%</span>
+							</div>
+						</div>
+						<div class="bg-white rounded-lg shadow-sm p-5">
+							<p class="text-sm text-gray-500 mb-1">Orders</p>
+							<div class="flex items-end justify-between">
+								<h3 class="text-2xl font-bold text-gray-900">324</h3>
+								<span class="text-xs font-medium text-green-600 bg-green-50 px-2 py-1 rounded-full">+12%</span>
+							</div>
+						</div>
+						<div class="bg-white rounded-lg shadow-sm p-5">
+							<p class="text-sm text-gray-500 mb-1">Conversion Rate</p>
+							<div class="flex items-end justify-between">
+								<h3 class="text-2xl font-bold text-gray-900">4.8%</h3>
+								<span class="text-xs font-medium text-amber-700 bg-amber-50 px-2 py-1 rounded-full">+0.7%</span>
+							</div>
+						</div>
+						<div class="bg-white rounded-lg shadow-sm p-5">
+							<p class="text-sm text-gray-500 mb-1">Active Products</p>
+							<div class="flex items-end justify-between">
+								<h3 class="text-2xl font-bold text-gray-900">87</h3>
+								<span class="text-xs font-medium text-blue-700 bg-blue-50 px-2 py-1 rounded-full">+5</span>
+							</div>
+						</div>
+					</div>
+
+					<div class="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-6">
+						<div class="xl:col-span-2 bg-white rounded-lg shadow-sm p-6">
+							<div class="flex items-center justify-between mb-4">
+								<div>
+									<h2 class="text-lg font-bold text-gray-900">Revenue Trend</h2>
+									<p class="text-sm text-gray-500">Last 7 days performance</p>
+								</div>
+							</div>
+							<div id="revenue-chart" class="w-full h-80"></div>
+						</div>
+
+						<div class="bg-white rounded-lg shadow-sm p-6">
+							<div class="flex items-center justify-between mb-4">
+								<div>
+									<h2 class="text-lg font-bold text-gray-900">Top Categories</h2>
+									<p class="text-sm text-gray-500">Share of sales</p>
+								</div>
+							</div>
+							<div id="category-chart" class="w-full h-80"></div>
+						</div>
+					</div>
+
+					<div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+						<div class="bg-white rounded-lg shadow-sm p-6">
+							<h2 class="text-lg font-bold text-gray-900 mb-1">Order Status</h2>
+							<p class="text-sm text-gray-500 mb-4">Current fulfillment breakdown</p>
+							<div id="status-chart" class="w-full h-72"></div>
+						</div>
+
+						<div class="bg-white rounded-lg shadow-sm p-6">
+							<h2 class="text-lg font-bold text-gray-900 mb-1">Insights</h2>
+							<p class="text-sm text-gray-500 mb-4">Simple action items for today</p>
+							<div class="space-y-4">
+								<div class="p-4 rounded-lg bg-purple-50 border border-purple-100">
+									<div class="flex items-start justify-between gap-4">
+										<div>
+											<h3 class="font-semibold text-gray-900">Best seller momentum</h3>
+											<p class="text-sm text-gray-600 mt-1">Electronics is leading revenue this week. Keep it featured on the dashboard.</p>
+										</div>
+										<i class="ri-trending-up-line text-purple-600 text-xl"></i>
+									</div>
+								</div>
+								<div class="p-4 rounded-lg bg-amber-50 border border-amber-100">
+									<div class="flex items-start justify-between gap-4">
+										<div>
+											<h3 class="font-semibold text-gray-900">Stock attention</h3>
+											<p class="text-sm text-gray-600 mt-1">3 products are low on stock. Consider restocking before the weekend.</p>
+										</div>
+										<i class="ri-alert-line text-amber-600 text-xl"></i>
+									</div>
+								</div>
+								<div class="p-4 rounded-lg bg-green-50 border border-green-100">
+									<div class="flex items-start justify-between gap-4">
+										<div>
+											<h3 class="font-semibold text-gray-900">Traffic quality</h3>
+											<p class="text-sm text-gray-600 mt-1">Mobile visitors are converting well. Keep product images optimized for small screens.</p>
+										</div>
+										<i class="ri-smartphone-line text-green-600 text-xl"></i>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</main>
+		</div>
+	</div>
+
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			let user = null;
+			try {
+				const userData = localStorage.getItem('user');
+				user = userData ? JSON.parse(userData) : null;
+			} catch (err) {
+				console.error('Failed to parse user from localStorage:', err);
+			}
+
+			if (!user || !user.id) {
+				window.location.href = '/components/login.html';
+				return;
+			}
+
+			const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+			const sidebar = document.getElementById('sidebar');
+			const sidebarOverlay = document.getElementById('sidebar-overlay');
+
+			mobileMenuToggle?.addEventListener('click', function () {
+				sidebar.classList.toggle('active');
+				sidebarOverlay.classList.toggle('active');
+			});
+
+			sidebarOverlay?.addEventListener('click', function () {
+				sidebar.classList.remove('active');
+				sidebarOverlay.classList.remove('active');
+			});
+
+			async function fetchStoreData() {
+				try {
+					const res = await fetch(`https://uni-verse-api.vercel.app/api/stores/${encodeURIComponent(user.id)}`);
+					if (!res.ok) throw new Error('Failed to fetch store');
+
+					const store = await res.json();
+					const storeInfoContainer = document.getElementById('store-info');
+					if (!storeInfoContainer) return;
+
+					storeInfoContainer.innerHTML = `
+						<div class="flex items-center">
+							<div class="w-10 h-10 flex items-center justify-center bg-gray-200 rounded-full overflow-hidden mr-3">
+								<img src="${store.storeLogo}" alt="${store.storeName}" class="w-full h-full object-cover">
+							</div>
+							<div class="hidden md:block">
+								<div class="text-sm font-medium text-gray-900">${store.storeName}</div>
+								<div class="text-xs text-gray-500">${store.sellerName}</div>
+							</div>
+						</div>
+					`;
+				} catch (error) {
+					console.error('Failed to get store:', error);
+				}
+			}
+
+			fetchStoreData();
+
+			const revenueChart = echarts.init(document.getElementById('revenue-chart'));
+			revenueChart.setOption({
+				grid: { left: 10, right: 10, top: 20, bottom: 30, containLabel: true },
+				tooltip: { trigger: 'axis' },
+				xAxis: { type: 'category', data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], axisLine: { lineStyle: { color: '#d1d5db' } } },
+				yAxis: { type: 'value', axisLine: { show: false }, splitLine: { lineStyle: { color: '#e5e7eb' } } },
+				series: [{
+					data: [1200, 1800, 1500, 2400, 2000, 2800, 3200],
+					type: 'line',
+					smooth: true,
+					symbolSize: 10,
+					lineStyle: { width: 4, color: '#4f46e5' },
+					itemStyle: { color: '#4f46e5' },
+					areaStyle: { color: 'rgba(79, 70, 229, 0.12)' }
+				}]
+			});
+
+			const categoryChart = echarts.init(document.getElementById('category-chart'));
+			categoryChart.setOption({
+				tooltip: { trigger: 'item' },
+				legend: { bottom: 0, left: 'center' },
+				series: [{
+					type: 'pie',
+					radius: ['45%', '70%'],
+					avoidLabelOverlap: false,
+					itemStyle: { borderRadius: 10, borderColor: '#fff', borderWidth: 2 },
+					label: { show: false },
+					emphasis: { label: { show: true, fontSize: 14, fontWeight: 'bold' } },
+					data: [
+						{ value: 38, name: 'Electronics', itemStyle: { color: '#4f46e5' } },
+						{ value: 24, name: 'Fashion', itemStyle: { color: '#f59e0b' } },
+						{ value: 18, name: 'Home', itemStyle: { color: '#10b981' } },
+						{ value: 20, name: 'Other', itemStyle: { color: '#94a3b8' } }
+					]
+				}]
+			});
+
+			const statusChart = echarts.init(document.getElementById('status-chart'));
+			statusChart.setOption({
+				tooltip: { trigger: 'item' },
+				series: [{
+					type: 'pie',
+					radius: ['40%', '70%'],
+					label: { show: true, formatter: '{b}: {d}%' },
+					data: [
+						{ value: 56, name: 'Completed', itemStyle: { color: '#10b981' } },
+						{ value: 22, name: 'Processing', itemStyle: { color: '#4f46e5' } },
+						{ value: 12, name: 'Pending', itemStyle: { color: '#f59e0b' } },
+						{ value: 10, name: 'Cancelled', itemStyle: { color: '#ef4444' } }
+					]
+				}]
+			});
+
+			window.addEventListener('resize', function () {
+				revenueChart.resize();
+				categoryChart.resize();
+				statusChart.resize();
+			});
+		});
+	</script>
+</body>
+</html>

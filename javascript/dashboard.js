@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', function () {
             let product = [];
             let currentPlan = 'free';
             const planLimits = {
-                'free': 20,
+                'free': 15,
                 'premium': 45,
                 'organizational': 90
             };
@@ -389,7 +389,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (data.plan === 'free') {
       label.textContent    = 'Free Plan';
-      sublabel.textContent = 'Up to 20 products · Basic analytics';
+      sublabel.textContent = 'Up to 15 products · Basic analytics';
       countdown.classList.add('hidden');
     } else {
       label.textContent = `${PLANS[data.plan].label} Plan — ${data.productLimit} products`;
@@ -427,11 +427,16 @@ document.addEventListener('DOMContentLoaded', function () {
       card.querySelectorAll('.current-plan-badge').forEach(b => b.remove());
     });
 
-    // Mark active card
+    // Mark active card with a colored badge that matches the card style
     const activeCard = document.getElementById(`${activePlan}-plan`);
     if (activeCard) {
       const badge = document.createElement('div');
-      badge.className = 'current-plan-badge absolute top-4 right-4 bg-primary text-white text-xs font-medium px-2 py-1 rounded-full';
+      const badgeStyles = {
+        free: 'bg-gray-100 text-gray-700',
+        premium: 'bg-purple-600 text-white',
+        organizational: 'bg-amber-500 text-white'
+      };
+      badge.className = `current-plan-badge absolute top-4 right-4 text-xs font-medium px-2 py-1 rounded-full ${badgeStyles[activePlan] || 'bg-primary text-white'}`;
       badge.textContent = 'Current Plan';
       activeCard.style.position = 'relative';
       activeCard.appendChild(badge);
@@ -447,7 +452,7 @@ document.addEventListener('DOMContentLoaded', function () {
       } else {
         premBtn.textContent = 'Upgrade Plan';
         premBtn.disabled    = false;
-        premBtn.className   = 'w-full px-4 py-2 bg-primary text-white font-medium rounded-button hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 whitespace-nowrap';
+        premBtn.className   = 'w-full px-4 py-2 bg-purple-600 text-white font-medium rounded-button hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 whitespace-nowrap';
       }
     }
 
@@ -469,7 +474,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const limitEl = document.getElementById('product-limit');
     if (limitEl) {
       limitEl.textContent =
-        activePlan === 'free'           ? '20' :
+        activePlan === 'free'           ? '15' :
         activePlan === 'premium'        ? '45' : '90';
     }
   }
@@ -486,6 +491,9 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   fetchPlanStatus();
+
+  // Ensure default UI shows Free as the active plan until server responds
+  updatePlanCards('free');
 
   // ── Show notification ─────────────────────────────────
   function showNotification(title, message) {
