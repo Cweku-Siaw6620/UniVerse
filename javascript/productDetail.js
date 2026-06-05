@@ -259,9 +259,10 @@ function setupShareFunctionality(product) {
 async function fetchRelatedProducts(category, currentProductId) {
   try {
     const res = await fetch(`https://uni-verse-api.vercel.app/api/products/category/${encodeURIComponent(category)}`);
+    if (!res.ok) throw new Error('Failed to fetch related products');
     const related = await res.json();
     const relatedContainer = document.getElementById('relatedProducts');
-    
+
     // Update "View all" link
     const viewAllLink = document.getElementById('viewAllCategory');
     if (viewAllLink) {
@@ -283,33 +284,68 @@ async function fetchRelatedProducts(category, currentProductId) {
       .filter(p => p._id !== currentProductId)
       .slice(0, 4);
 
-    relatedContainer.innerHTML = filteredRelated.map(p => `
-      <div class="related-product classic-card cursor-pointer" onclick="window.location.href='productDetail.html?id=${p._id}'">
-        <div class="relative overflow-hidden">
-          <img src="${p.productImage || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80'}" 
-               alt="${escapeHtml(p.productName)}" 
-               class="w-full h-48 object-contain transition-transform duration-300 hover:scale-105">
-          <span class="vintage-tag absolute top-3 right-3">${escapeHtml(p.productCategory || 'General')}</span>
-        </div>
-        <div class="p-4">
-          <h3 class="font-semibold text-gray-900 mb-2 truncate">${escapeHtml(p.productName)}</h3>
-          <p class="text-gray-600 text-sm mb-3 line-clamp-2">${escapeHtml(p.productDescription || 'No description available.')}</p>
-          <div class="flex items-center justify-between mb-3">
-            <span class="text-lg font-semibold text-gray-900">₵${(p.productPrice || 0).toFixed(2)}</span>
-            <span class="text-sm ${p.productStock > 10 ? 'text-green-600' : 'text-yellow-600'}">
-              ${p.productStock || 0} in stock
+    // Build cards asynchronously so we can fetch WhatsApp links like on the homepage
+    const productPromises = filteredRelated.map(async (p, index) => {
+      const card = document.createElement('div');
+      card.className = 'premium-product-card fade-up cursor-pointer';
+      card.style.animationDelay = `${index * 0.05}s`;
+      card.addEventListener('click', () => window.location.href = `productDetail.html?id=${p._id}`);
+
+      // Get whatsapp link (nav.js exposes getWhatsAppLink)
+      let whatsappLink = '#';
+      if (typeof getWhatsAppLink === 'function') {
+        try { whatsappLink = await getWhatsAppLink(p); } catch (e) { /* ignore */ }
+      }
+
+      const stockStatus = p.productStock > 10 ? 'In Stock' : p.productStock > 0 ? 'Low Stock' : 'Sold Out';
+      const stockClass = p.productStock > 10 ? 'text-green-600' : p.productStock > 0 ? 'text-gold' : 'text-red-500';
+
+      card.innerHTML = `
+        <div class="image-container relative group">
+          <img src="${p.productImage || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'}" 
+               alt="${escapeHtml(p.productName)}"
+               loading="lazy"
+               class="w-full h-80 object-cover transform group-hover:scale-105 transition-transform duration-300 cursor-pointer"
+               onclick="window.location.href='./productDetail.html?id=${p._id}'">
+          <div class="absolute top-4 right-4">
+            <span class="bg-white px-3 py-1 text-xs font-medium shadow-md rounded-full ${stockClass}">
+              ${stockStatus}
             </span>
           </div>
-          <button class="w-full classic-btn py-2 text-sm">
-            View Details
-          </button>
         </div>
-      </div>
-    `).join('');
-    
+        <div class="pt-6 pb-2">
+          <div class="flex justify-between items-start mb-2">
+            <h3 class="product-name text-lg font-medium">${escapeHtml(p.productName)}</h3>
+            <span class="product-price text-gold font-semibold">₵${(p.productPrice || 0).toFixed(2)}</span>
+          </div>
+          <div class="flex justify-between items-center mb-4">
+            <span class="product-category text-xs uppercase tracking-wider text-gray-500">
+              ${escapeHtml(p.productCategory || 'Uncategorized')}
+            </span>
+            <span class="text-xs text-gray-400">
+              ${p.productStock || 0} available
+            </span>
+          </div>
+          <a href="${whatsappLink}" target="_blank" onclick="event.stopPropagation();">
+            <button class="w-full mt-6 py-3 border border-charcoal text-charcoal hover:bg-green-500 hover:text-white 
+                  text-xs uppercase tracking-[0.2em] font-medium transition-all duration-300">
+              BUY NOW
+            </button>
+          </a>
+        </div>
+      `;
+
+      return card;
+    });
+
+    const cards = await Promise.all(productPromises);
+    relatedContainer.innerHTML = '';
+    cards.forEach(card => relatedContainer.appendChild(card));
+
   } catch (err) {
     console.error("Error loading related products:", err);
-    document.getElementById('relatedProducts').innerHTML = `
+    const relatedContainer = document.getElementById('relatedProducts');
+    if (relatedContainer) relatedContainer.innerHTML = `
       <div class="col-span-full text-center py-12">
         <p class="text-gray-500">Unable to load related products.</p>
       </div>

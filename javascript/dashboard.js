@@ -533,51 +533,46 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
       }
 
-      // Open Paystack popup
-      const handler = PaystackPop.setup({
-        key:         'pk_test_06a5336a803a441f45b7989742954a4a76e30c2f',
-        email:       JSON.parse(localStorage.getItem('user'))?.email || '',
-        amount:      plan === 'premium' ? 5000 * 100 : 8000 * 100,
-        currency:    'GHS',
-        access_code: data.access_code,
-        ref:         data.reference,
-        onClose: function() {
-          btn.disabled    = false;
-          btn.textContent = originalText;
-        },
-        callback: function(response) {
-          // Payment successful on Paystack's end
-          // Webhook handles backend activation automatically
-          showNotification(
-            'Payment Successful!',
-            'Your plan is being activated. This usually takes a few seconds.'
-          );
-          btn.disabled    = false;
-          btn.textContent = originalText;
+// open Paystack payment model
+  const handler = PaystackPop.setup({
+  key:         'pk_test_06a5336a803a441f45b7989742954a4a76e30c2f',
+  email:       user?.email || '',
+  amount:      plan === 'premium' ? 3500 : 8000,
+  currency:    'GHS',
+  access_code: data.access_code,
+  ref:         data.reference,
+  onClose: function() {
+    btn.disabled    = false;
+    btn.textContent = originalText;
+  },
+  callback: function(response) {
+    showNotification(
+      'Payment Successful!',
+      'Your plan is being activated. This usually takes a few seconds.'
+    );
+    btn.disabled    = false;
+    btn.textContent = originalText;
 
-          // Poll for plan update (webhook may take a few seconds)
-          let attempts = 0;
-          const poll = setInterval(async () => {
-            attempts++;
-            await fetchPlanStatus();
-            if (
-              currentPlanData?.plan === plan ||
-              attempts >= 10
-            ) {
-              clearInterval(poll);
-            }
-          }, 3000);
-        }
-      });
+    let attempts = 0;
+    const poll = setInterval(async () => {
+      attempts++;
+      await fetchPlanStatus();
+      if (currentPlanData?.plan === plan || attempts >= 10) {
+        clearInterval(poll);
+      }
+    }, 3000);
+  }
+});
 
-      handler.openIframe();
+handler.openIframe();
 
-    } catch {
+ } catch {
       showNotification('Error', 'Network error. Please try again.');
       btn.disabled    = false;
       btn.textContent = originalText;
     }
   }
+
 
   // ── Button listeners ──────────────────────────────────
   document.getElementById('upgrade-premium')?.addEventListener('click', () => {
