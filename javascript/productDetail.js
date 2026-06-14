@@ -290,6 +290,7 @@ async function fetchRelatedProducts(category, currentProductId) {
       card.className = 'premium-product-card fade-up cursor-pointer';
       card.style.animationDelay = `${index * 0.05}s`;
       card.addEventListener('click', () => window.location.href = `productDetail.html?id=${p._id}`);
+      const isFeatured = Boolean(p.featured);
 
       // Get whatsapp link (nav.js exposes getWhatsAppLink)
       let whatsappLink = '#';
@@ -312,6 +313,14 @@ async function fetchRelatedProducts(category, currentProductId) {
               ${stockStatus}
             </span>
           </div>
+          ${isFeatured ? `
+          <div class="absolute top-4 left-4">
+            <span style="display:inline-flex;align-items:center;gap:3px;padding:2px 8px;
+              background:rgba(124,58,237,0.9);border-radius:999px;
+              font-size:10px;font-weight:600;color:white;">
+              ⭐ Featured
+            </span>
+          </div>` : ''}
         </div>
         <div class="pt-6 pb-2">
           <div class="flex justify-between items-start mb-2">

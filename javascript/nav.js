@@ -159,6 +159,7 @@ if (urlParams.get('verified') === 'true') {
  */
 function createProductCard(prod, index, options = {}) {
   const { featured = false } = options;
+  const isFeatured = featured || Boolean(prod.featured);
 
   return (async () => {
     const card = document.createElement("div");
@@ -187,7 +188,7 @@ function createProductCard(prod, index, options = {}) {
             ${stockStatus}
           </span>
         </div>
-        ${featured ? `
+        ${isFeatured ? `
         <div class="absolute top-4 left-4">
           <span style="display:inline-flex;align-items:center;gap:3px;padding:2px 8px;
             background:rgba(124,58,237,0.9);border-radius:999px;

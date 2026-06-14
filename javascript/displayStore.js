@@ -302,6 +302,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Determine stock status
             const stockStatus = product.productStock > 10 ? 'In Stock' : product.productStock > 0 ? 'Low Stock' : 'Sold Out';
             const stockClass = product.productStock > 10 ? 'text-green-600' : product.productStock > 0 ? 'text-gold' : 'text-red-500';
+        const isFeatured = Boolean(product.featured);
         
         card.innerHTML = `
           <div class="image-container relative group">
@@ -315,6 +316,14 @@ document.addEventListener('DOMContentLoaded', () => {
                             ${stockStatus}
                         </span>
                     </div>
+              ${isFeatured ? `
+              <div class="absolute top-4 left-4">
+                <span style="display:inline-flex;align-items:center;gap:3px;padding:2px 8px;
+                  background:rgba(124,58,237,0.9);border-radius:999px;
+                  font-size:10px;font-weight:600;color:white;">
+                  ⭐ Featured
+                </span>
+              </div>` : ''}
                 </div>
 
           <div class="pt-6 pb-2">
