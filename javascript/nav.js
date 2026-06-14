@@ -209,14 +209,24 @@ function createProductCard(prod, index, options = {}) {
             ${prod.productStock || 0} available
           </span>
         </div>
-        <a href="${whatsappLink}" target="_blank">
-          <button class="w-full mt-6 py-3 border border-charcoal text-charcoal hover:bg-green-500 hover:text-white 
-            text-xs uppercase tracking-[0.2em] font-medium transition-all duration-300">
+        <button type="button" class="w-full mt-6 py-3 border border-charcoal text-charcoal hover:bg-green-500 hover:text-white 
+          text-xs uppercase tracking-[0.2em] font-medium transition-all duration-300 ${whatsappLink === '#' ? 'opacity-50 cursor-not-allowed' : ''}"
+          ${whatsappLink === '#' ? 'disabled' : ''}>
           BUY NOW
-          </button>
-        </a>
+        </button>
       </div>
     `;
+
+    const buyButton = card.querySelector('button');
+    buyButton?.addEventListener('click', (event) => {
+      event.stopPropagation();
+
+      if (whatsappLink === '#') {
+        return;
+      }
+
+      window.open(whatsappLink, '_blank', 'noopener,noreferrer');
+    });
 
     return card;
   })();
@@ -349,8 +359,12 @@ async function getWhatsAppLink(product) {
     }
     
     try {
-        const sellerRes = await fetch(`https://uni-verse-api.vercel.app/api/stores/${encodeURIComponent(sellerId)}`);
-        
+        let sellerRes = await fetch(`https://uni-verse-api.vercel.app/api/stores/storeID/${encodeURIComponent(sellerId)}`);
+
+        if (!sellerRes.ok) {
+          sellerRes = await fetch(`https://uni-verse-api.vercel.app/api/stores/${encodeURIComponent(sellerId)}`);
+        }
+
         if (!sellerRes.ok) throw new Error(`Failed to fetch store info: ${sellerRes.status}`);
         
         const sellerData = await sellerRes.json();
