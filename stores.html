@@ -171,7 +171,7 @@
             });
         });
         
-                async function fetchShops() {
+        async function fetchShops() {
           try {
             const res = await fetch("https://uni-verse-api.vercel.app/api/stores");
             if (!res.ok) throw new Error("Failed to fetch stores");

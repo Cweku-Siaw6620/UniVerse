@@ -10,10 +10,10 @@ document.addEventListener('DOMContentLoaded', async function () {
     if (user && user.picture) {
       // Login selectors
       const loginSelectors = [
-        'nav a[href="/components/login"]',          // Desktop nav
-        'nav a[href="/login.html"]',                // Local component navs
-        '#mobileMenu a[href="/components/login"]',  // Mobile menu
-        '#mobileMenu a[href="/login.html"]',        // Local component mobile navs
+        'nav a[href*="/components/login"]',          // Desktop nav
+        'nav a[href$="/login.html"]',                // Local component navs
+        '#mobileMenu a[href*="/components/login"]',  // Mobile menu
+        '#mobileMenu a[href$="/login.html"]',        // Local component mobile navs
         '.auth-link'                                  // Fallback for mobile
       ];
       
@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', async function () {
       // Replace desktop nav login link
       const desktopNav = document.querySelector('nav');
       if (desktopNav) {
-        const desktopLogin = desktopNav.querySelector('a[href="/components/login"]');
+        const desktopLogin = desktopNav.querySelector('a[href*="/components/login"]');
         if (desktopLogin) {
           const desktopProfile = createProfileComponent(false);
           desktopLogin.replaceWith(desktopProfile);
@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', async function () {
       // Replace mobile menu login link
       const mobileMenu = document.getElementById('mobileMenu');
       if (mobileMenu) {
-        const mobileLogin = mobileMenu.querySelector('a[href="/components/login"]') || 
+        const mobileLogin = mobileMenu.querySelector('a[href*="/components/login"]') || 
                            mobileMenu.querySelector('.auth-link');
         if (mobileLogin) {
           const mobileProfile = createProfileComponent(true);
@@ -132,17 +132,18 @@ document.addEventListener('DOMContentLoaded', async function () {
       }
     }
     
-    // Call fetchAllProducts on page load
-   // Use featured products on homepage, all products elsewhere
-if (
-  window.location.pathname === '/' ||
-  window.location.pathname.endsWith('index.html') ||
-  window.location.pathname === '/index.html'
-) {
-  loadFeaturedProducts();
-} else {
-  fetchAllProducts();
-}
+    // Load featured and all products on the homepage; only all products elsewhere.
+    const isHomepage =
+      window.location.pathname === '/' ||
+      window.location.pathname.endsWith('index.html') ||
+      window.location.pathname === '/index.html';
+
+    if (isHomepage) {
+      loadFeaturedProducts();
+      fetchAllProducts();
+    } else {
+      fetchAllProducts();
+    }
 });
 
 // Add this to your profile page script
@@ -156,9 +157,74 @@ if (urlParams.get('verified') === 'true') {
 /**
  * Fetch all products from API - With WhatsApp Buy Now functionality
  */
-async function fetchAllProducts() {
-    const grid = document.getElementById("productGrid");
-    const loading = document.getElementById("loading");
+function createProductCard(prod, index, options = {}) {
+  const { featured = false } = options;
+
+  return (async () => {
+    const card = document.createElement("div");
+    card.className = "premium-product-card fade-up";
+    card.style.animationDelay = `${index * 0.05}s`;
+
+    const whatsappLink = await getWhatsAppLink({
+      ...prod,
+      sellerId: prod.storeId?._id || prod.storeId
+    });
+
+    const stockStatus = prod.productStock > 10 ? 'In Stock' :
+               prod.productStock > 0 ? 'Low Stock' : 'Sold Out';
+    const stockClass = prod.productStock > 10 ? 'text-green-600' :
+              prod.productStock > 0 ? 'text-gold' : 'text-red-500';
+
+    card.innerHTML = `
+      <div class="image-container relative group">
+        <img src="${prod.productImage || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'}" 
+           alt="${escapeHtml(prod.productName)}"
+           loading="lazy"
+           class="w-full h-80 object-cover transform group-hover:scale-105 transition-transform duration-300 cursor-pointer"
+           onclick="window.location.href='./components/productDetail.html?id=${prod._id}'">
+        <div class="absolute top-4 right-4">
+          <span class="bg-white px-3 py-1 text-xs font-medium shadow-md rounded-full ${stockClass}">
+            ${stockStatus}
+          </span>
+        </div>
+        ${featured ? `
+        <div class="absolute top-4 left-4">
+          <span style="display:inline-flex;align-items:center;gap:3px;padding:2px 8px;
+            background:rgba(124,58,237,0.9);border-radius:999px;
+            font-size:10px;font-weight:600;color:white;">
+            ⭐ Featured
+          </span>
+        </div>` : ''}
+      </div>
+      <div class="pt-6 pb-2">
+        <div class="flex justify-between items-start mb-2">
+          <h3 class="product-name text-lg font-medium">${escapeHtml(prod.productName)}</h3>
+          <span class="product-price text-gold font-semibold">₵${(prod.productPrice || 0).toFixed(2)}</span>
+        </div>
+        <div class="flex justify-between items-center mb-4">
+          <span class="product-category text-xs uppercase tracking-wider text-gray-500">
+            ${escapeHtml(prod.productCategory || 'Uncategorized')}
+          </span>
+          <span class="text-xs text-gray-400">
+            ${prod.productStock || 0} available
+          </span>
+        </div>
+        <a href="${whatsappLink}" target="_blank">
+          <button class="w-full mt-6 py-3 border border-charcoal text-charcoal hover:bg-green-500 hover:text-white 
+            text-xs uppercase tracking-[0.2em] font-medium transition-all duration-300">
+          BUY NOW
+          </button>
+        </a>
+      </div>
+    `;
+
+    return card;
+  })();
+}
+
+async function fetchAllProducts(gridId = "productGrid", loadingId = "loading") {
+  const grid = document.getElementById(gridId);
+  const loading = document.getElementById(loadingId);
 
     // Exit if not on homepage
     if (!grid || !loading) {
@@ -189,62 +255,7 @@ async function fetchAllProducts() {
         }
 
         // Create an array of promises for fetching seller info
-        const productPromises = products.map(async (prod, index) => {
-            const card = document.createElement("div");
-            card.className = "premium-product-card fade-up";
-            card.style.animationDelay = `${index * 0.05}s`;
-
-            // Get WhatsApp link for this product
-            const whatsappLink = await getWhatsAppLink(prod);
-            
-            // Determine stock status
-            const stockStatus = prod.productStock > 10 ? 'In Stock' : 
-                               prod.productStock > 0 ? 'Low Stock' : 'Sold Out';
-            const stockClass = prod.productStock > 10 ? 'text-green-600' : 
-                              prod.productStock > 0 ? 'text-gold' : 'text-red-500';
-            
-            card.innerHTML = `
-                <div class="image-container relative group">
-                    <img src="${prod.productImage || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'}" 
-                         alt="${escapeHtml(prod.productName)}"
-                         loading="lazy"
-                         class="w-full h-80 object-cover transform group-hover:scale-105 transition-transform duration-300 cursor-pointer"
-                         onclick="window.location.href='./components/productDetail.html?id=${prod._id}'">
-                    <div class="absolute top-4 right-4">
-                        <span class="bg-white px-3 py-1 text-xs font-medium shadow-md rounded-full ${stockClass}">
-                            ${stockStatus}
-                        </span>
-                    </div>
-                </div>
-                <div class="pt-6 pb-2">
-                    <div class="flex justify-between items-start mb-2">
-                        <h3 class="product-name text-lg font-medium">${escapeHtml(prod.productName)}</h3>
-                        <span class="product-price text-gold font-semibold">₵${(prod.productPrice || 0).toFixed(2)}</span>
-                    </div>
-                    <div class="flex justify-between items-center mb-4">
-                        <span class="product-category text-xs uppercase tracking-wider text-gray-500">
-                            ${escapeHtml(prod.productCategory || 'Uncategorized')}
-                        </span>
-                        <span class="text-xs text-gray-400">
-                            ${prod.productStock || 0} available
-                        </span>
-                    </div>
-                    
-                    <!-- WhatsApp Buy Now Button -->
-                    <a href="${whatsappLink}" target="_blank">
-                      <button class="w-full mt-6 py-3 border border-charcoal text-charcoal hover:bg-green-500 hover:text-white 
-                            text-xs uppercase tracking-[0.2em] font-medium transition-all duration-300"
-                    >
-                        BUY NOW
-                    </button>
-                    </a>
-                    
-                    
-                </div>
-            `;
-            
-            return card;
-        });
+        const productPromises = products.map((prod, index) => createProductCard(prod, index));
 
         // Wait for all WhatsApp links to be generated
         const cards = await Promise.all(productPromises);
@@ -277,9 +288,9 @@ async function fetchAllProducts() {
 /**
  * Fetch featured products for homepage (Premium/Organizational stores only)
  */
-async function loadFeaturedProducts() {
-    const grid    = document.getElementById("productGrid");
-    const loading = document.getElementById("loading");
+async function loadFeaturedProducts(gridId = "featuredProductGrid", loadingId = "featuredLoading") {
+  const grid    = document.getElementById(gridId);
+  const loading = document.getElementById(loadingId);
 
     if (!grid || !loading) return;
 
@@ -293,68 +304,17 @@ async function loadFeaturedProducts() {
         loading.classList.add('hidden');
 
         if (!data.success || !data.products.length) {
-            // Fall back to all products if no featured ones exist yet
-            fetchAllProducts();
-            return;
+          grid.innerHTML = `
+            <div class="col-span-full text-center py-20">
+              <i data-feather="star" class="w-16 h-16 mx-auto text-gray-300 mb-6"></i>
+              <p class="text-graphite text-lg mb-2">No featured products yet</p>
+              <p class="text-sm text-gray-500">Featured items will appear here once they are marked.</p>
+            </div>`;
+          if (typeof feather !== 'undefined') feather.replace();
+          return;
         }
 
-        const productPromises = data.products.map(async (prod, index) => {
-            const card = document.createElement("div");
-            card.className = "premium-product-card fade-up";
-            card.style.animationDelay = `${index * 0.05}s`;
-
-            const whatsappLink = await getWhatsAppLink({
-                ...prod,
-                sellerId: prod.storeId?._id || prod.storeId
-            });
-
-            const stockStatus = prod.productStock > 10 ? 'In Stock' :
-                                prod.productStock > 0  ? 'Low Stock' : 'Sold Out';
-            const stockClass  = prod.productStock > 10 ? 'text-green-600' :
-                                prod.productStock > 0  ? 'text-gold'      : 'text-red-500';
-
-            card.innerHTML = `
-                <div class="image-container relative group">
-                    <img src="${prod.productImage || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'}"
-                         alt="${escapeHtml(prod.productName)}"
-                         loading="lazy"
-                         class="w-full h-80 object-cover transform group-hover:scale-105 transition-transform duration-300 cursor-pointer"
-                         onclick="window.location.href='./components/productDetail.html?id=${prod._id}'">
-                    <div class="absolute top-4 right-4">
-                        <span class="bg-white px-3 py-1 text-xs font-medium shadow-md rounded-full ${stockClass}">
-                            ${stockStatus}
-                        </span>
-                    </div>
-                    <div class="absolute top-4 left-4">
-                        <span style="display:inline-flex;align-items:center;gap:3px;padding:2px 8px;
-                            background:rgba(124,58,237,0.9);border-radius:999px;
-                            font-size:10px;font-weight:600;color:white;">
-                            ⭐ Featured
-                        </span>
-                    </div>
-                </div>
-                <div class="pt-6 pb-2">
-                    <div class="flex justify-between items-start mb-2">
-                        <h3 class="product-name text-lg font-medium">${escapeHtml(prod.productName)}</h3>
-                        <span class="product-price text-gold font-semibold">₵${(prod.productPrice || 0).toFixed(2)}</span>
-                    </div>
-                    <div class="flex justify-between items-center mb-4">
-                        <span class="product-category text-xs uppercase tracking-wider text-gray-500">
-                            ${escapeHtml(prod.productCategory || 'Uncategorized')}
-                        </span>
-                        <span class="text-xs text-gray-400">${prod.productStock || 0} available</span>
-                    </div>
-                    <a href="${whatsappLink}" target="_blank">
-                        <button class="w-full mt-6 py-3 border border-charcoal text-charcoal hover:bg-green-500
-                            hover:text-white text-xs uppercase tracking-[0.2em] font-medium transition-all duration-300">
-                            BUY NOW
-                        </button>
-                    </a>
-                </div>
-            `;
-
-            return card;
-        });
+        const productPromises = data.products.map((prod, index) => createProductCard(prod, index, { featured: true }));
 
         const cards = await Promise.all(productPromises);
         cards.forEach(card => grid.appendChild(card));
@@ -363,7 +323,13 @@ async function loadFeaturedProducts() {
     } catch (error) {
         console.error("Error fetching featured products:", error);
         loading.classList.add('hidden');
-        fetchAllProducts(); // fall back on error
+        grid.innerHTML = `
+          <div class="col-span-full text-center py-20">
+            <i data-feather="alert-circle" class="w-16 h-16 mx-auto text-gray-300 mb-6"></i>
+            <p class="text-graphite text-lg mb-2">Unable to load featured products</p>
+            <p class="text-sm text-gray-500">Please try again later.</p>
+          </div>`;
+        if (typeof feather !== 'undefined') feather.replace();
     }
 }
 

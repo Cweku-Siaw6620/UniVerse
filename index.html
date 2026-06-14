@@ -77,14 +77,37 @@
         </section>
     <!--Products View-->
 
-  <!-- Main content -->
-  <section class="py-20 bg-white">
+  <!-- Featured Products -->
+  <section class="py-20 bg-white border-b border-gray-100">
         <div class="premium-container mx-auto">
-            <!-- Section Header -->
             <div class="text-center mb-16 fade-up">
                 <span class="text-xs uppercase tracking-[0.2em] text-gold mb-3 block">Curated Selection</span>
                 <h2 class="section-header">Featured Products</h2>
-                <p class="section-subheader">Exceptional pieces from our student artisans</p>
+                <p class="section-subheader">Hand-picked highlights from our student artisans</p>
+                <div class="gold-divider-center mt-6"></div>
+            </div>
+
+            <div id="featuredProductGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12">
+                <div class="skeleton h-80 w-full"></div>
+                <div class="skeleton h-80 w-full"></div>
+                <div class="skeleton h-80 w-full"></div>
+                <div class="skeleton h-80 w-full"></div>
+            </div>
+
+            <div id="featuredLoading" class="hidden text-center py-16">
+                <div class="inline-block w-8 h-8 border-2 border-gold border-t-transparent rounded-full animate-spin"></div>
+                <p class="mt-4 text-sm text-graphite">Loading Featured Products...</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main content -->
+  <section class="py-20 bg-gray-50">
+        <div class="premium-container mx-auto">
+            <div class="text-center mb-16 fade-up">
+                <span class="text-xs uppercase tracking-[0.2em] text-gold mb-3 block">Full Catalog</span>
+                <h2 class="section-header">All Products</h2>
+                <p class="section-subheader">Everything available in the marketplace</p>
                 <div class="gold-divider-center mt-6"></div>
             </div>
 
