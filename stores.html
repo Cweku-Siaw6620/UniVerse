@@ -197,60 +197,66 @@
 
             async function renderShops(shops) {
                 const currentToken = ++renderToken;
-        const container = document.getElementById('shops');
-        const noResults = document.getElementById('noResults');
+                const container = document.getElementById('shops');
+                const noResults = document.getElementById('noResults');
 
-        if (!shops.length) {
-          container.innerHTML = "";
-          noResults.classList.remove("hidden");
-          return;
-        }
-
-        noResults.classList.add("hidden");
-
-                const cards = await Promise.all(shops.map(async shop => {
-                    const verification = window.uniVerseVerification && shop.owner
-                        ? await window.uniVerseVerification.fetchVerificationStatus(shop.owner)
-                        : { isVerified: false };
-
-                    return `
-          <article class="store-card">
-            <img src="${shop.storeLogo || '/images/placeholder.png'}"
-                alt="${escapeHtml(shop.storeName)}"
-                loading="lazy">
-
-            <div class="store-card-content">
-              <h3 class="store-card-title">${escapeHtml(shop.storeName)}</h3>
-                            <p class="store-card-seller flex items-center gap-2 flex-wrap">by ${escapeHtml(shop.sellerName || "Unknown")}${verification.isVerified ? window.uniVerseVerification.getVerifiedBadgeHtml() : ''}</p>
-              <p class="store-card-description">
-                ${escapeHtml(shop.storeDescription || "No description available")}
-              </p>
-
-              <div class="store-card-footer">
-                <div class="store-card-contact">
-                  <i class="fas fa-phone-alt mr-1"></i>
-                  ${escapeHtml(shop.sellerNumber || "N/A")}
-                </div>
-
-                <a href="./components/displayStore.html?slug=${shop.slug}"
-                  class="store-card-btn">
-                  Visit Store
-                </a>
-              </div>
-            </div>
-          </article>
-                    `;
-                }));
-
-                if (currentToken !== renderToken) {
-                    return;
+                if (!shops.length) {
+                container.innerHTML = "";
+                noResults.classList.remove("hidden");
+                return;
                 }
 
-                container.innerHTML = cards.join("");
-                if (typeof feather !== 'undefined') {
-                    feather.replace();
+                noResults.classList.add("hidden");
+
+                        const cards = await Promise.all(shops.map(async shop => {
+                           const ownerId = typeof shop.owner === 'object' ? shop.owner?._id : shop.owner;
+
+                            const verification = window.uniVerseVerification && ownerId
+                                ? await window.uniVerseVerification.fetchVerificationStatus(ownerId)
+                                : { isVerified: false };
+                            return `
+                <article class="store-card">
+                    <img src="${shop.storeLogo || '/images/placeholder.png'}"
+                        alt="${escapeHtml(shop.storeName)}"
+                        loading="lazy">
+
+                    <div class="store-card-content">
+                    <h3 class="store-card-title">${escapeHtml(shop.storeName)}</h3>
+                    <p class="store-card-seller flex items-center gap-2 flex-wrap"> 
+                    by ${escapeHtml(shop.sellerName || "Unknown")}
+                    ${verification.isVerified ? window.uniVerseVerification.getVerifiedBadgeHtml() : ''}
+                    ${shop.plan === 'premium' ? `<span style="display:inline-flex;align-items:center;gap:3px;padding:2px 8px;background:#f5f3ff;border:1px solid #ddd6fe;border-radius:999px;font-size:11px;font-weight:600;color:#7c3aed;">⭐ Premium</span>` : ''}
+                    ${shop.plan === 'organizational' ? `<span style="display:inline-flex;align-items:center;gap:3px;padding:2px 8px;background:#fffbeb;border:1px solid #fde68a;border-radius:999px;font-size:11px;font-weight:600;color:#d97706;">🏢 Organizational</span>` : ''}
+                    </p>
+                    <p class="store-card-description">
+                        ${escapeHtml(shop.storeDescription || "No description available")}
+                    </p>
+
+                    <div class="store-card-footer">
+                        <div class="store-card-contact">
+                        <i class="fas fa-phone-alt mr-1"></i>
+                        ${escapeHtml(shop.sellerNumber || "N/A")}
+                        </div>
+
+                        <a href="./components/displayStore.html?slug=${shop.slug}"
+                        class="store-card-btn">
+                        Visit Store
+                        </a>
+                    </div>
+                    </div>
+                </article>
+                            `;
+                        }));
+
+                        if (currentToken !== renderToken) {
+                            return;
+                        }
+
+                        container.innerHTML = cards.join("");
+                        if (typeof feather !== 'undefined') {
+                            feather.replace();
+                        }
                 }
-      }
 
         // Search functionality
         document.getElementById('searchInput').addEventListener('input', function(e) {

@@ -10,10 +10,10 @@ document.addEventListener('DOMContentLoaded', async function () {
     if (user && user.picture) {
       // Login selectors
       const loginSelectors = [
-        'nav a[href*="/components/login"]',          // Desktop nav
-        'nav a[href$="/login.html"]',                // Local component navs
-        '#mobileMenu a[href*="/components/login"]',  // Mobile menu
-        '#mobileMenu a[href$="/login.html"]',        // Local component mobile navs
+        'nav a[href="/components/login"]',          // Desktop nav
+        'nav a[href="/login.html"]',                // Local component navs
+        '#mobileMenu a[href="/components/login"]',  // Mobile menu
+        '#mobileMenu a[href="/login.html"]',        // Local component mobile navs
         '.auth-link'                                  // Fallback for mobile
       ];
       
@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', async function () {
       // Replace desktop nav login link
       const desktopNav = document.querySelector('nav');
       if (desktopNav) {
-        const desktopLogin = desktopNav.querySelector('a[href*="/components/login"]');
+        const desktopLogin = desktopNav.querySelector('a[href="/components/login"]');
         if (desktopLogin) {
           const desktopProfile = createProfileComponent(false);
           desktopLogin.replaceWith(desktopProfile);
@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', async function () {
       // Replace mobile menu login link
       const mobileMenu = document.getElementById('mobileMenu');
       if (mobileMenu) {
-        const mobileLogin = mobileMenu.querySelector('a[href*="/components/login"]') || 
+        const mobileLogin = mobileMenu.querySelector('a[href="/components/login"]') || 
                            mobileMenu.querySelector('.auth-link');
         if (mobileLogin) {
           const mobileProfile = createProfileComponent(true);
@@ -133,7 +133,16 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
     
     // Call fetchAllProducts on page load
-    fetchAllProducts();
+   // Use featured products on homepage, all products elsewhere
+if (
+  window.location.pathname === '/' ||
+  window.location.pathname.endsWith('index.html') ||
+  window.location.pathname === '/index.html'
+) {
+  loadFeaturedProducts();
+} else {
+  fetchAllProducts();
+}
 });
 
 // Add this to your profile page script
@@ -266,51 +275,137 @@ async function fetchAllProducts() {
 }
 
 /**
- * Get WhatsApp link for a product by fetching seller information
+ * Fetch featured products for homepage (Premium/Organizational stores only)
+ */
+async function loadFeaturedProducts() {
+    const grid    = document.getElementById("productGrid");
+    const loading = document.getElementById("loading");
+
+    if (!grid || !loading) return;
+
+    loading.classList.remove('hidden');
+    grid.innerHTML = '';
+
+    try {
+        const res  = await fetch("https://uni-verse-api.vercel.app/api/products/featured");
+        const data = await res.json();
+
+        loading.classList.add('hidden');
+
+        if (!data.success || !data.products.length) {
+            // Fall back to all products if no featured ones exist yet
+            fetchAllProducts();
+            return;
+        }
+
+        const productPromises = data.products.map(async (prod, index) => {
+            const card = document.createElement("div");
+            card.className = "premium-product-card fade-up";
+            card.style.animationDelay = `${index * 0.05}s`;
+
+            const whatsappLink = await getWhatsAppLink({
+                ...prod,
+                sellerId: prod.storeId?._id || prod.storeId
+            });
+
+            const stockStatus = prod.productStock > 10 ? 'In Stock' :
+                                prod.productStock > 0  ? 'Low Stock' : 'Sold Out';
+            const stockClass  = prod.productStock > 10 ? 'text-green-600' :
+                                prod.productStock > 0  ? 'text-gold'      : 'text-red-500';
+
+            card.innerHTML = `
+                <div class="image-container relative group">
+                    <img src="${prod.productImage || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'}"
+                         alt="${escapeHtml(prod.productName)}"
+                         loading="lazy"
+                         class="w-full h-80 object-cover transform group-hover:scale-105 transition-transform duration-300 cursor-pointer"
+                         onclick="window.location.href='./components/productDetail.html?id=${prod._id}'">
+                    <div class="absolute top-4 right-4">
+                        <span class="bg-white px-3 py-1 text-xs font-medium shadow-md rounded-full ${stockClass}">
+                            ${stockStatus}
+                        </span>
+                    </div>
+                    <div class="absolute top-4 left-4">
+                        <span style="display:inline-flex;align-items:center;gap:3px;padding:2px 8px;
+                            background:rgba(124,58,237,0.9);border-radius:999px;
+                            font-size:10px;font-weight:600;color:white;">
+                            ⭐ Featured
+                        </span>
+                    </div>
+                </div>
+                <div class="pt-6 pb-2">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="product-name text-lg font-medium">${escapeHtml(prod.productName)}</h3>
+                        <span class="product-price text-gold font-semibold">₵${(prod.productPrice || 0).toFixed(2)}</span>
+                    </div>
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="product-category text-xs uppercase tracking-wider text-gray-500">
+                            ${escapeHtml(prod.productCategory || 'Uncategorized')}
+                        </span>
+                        <span class="text-xs text-gray-400">${prod.productStock || 0} available</span>
+                    </div>
+                    <a href="${whatsappLink}" target="_blank">
+                        <button class="w-full mt-6 py-3 border border-charcoal text-charcoal hover:bg-green-500
+                            hover:text-white text-xs uppercase tracking-[0.2em] font-medium transition-all duration-300">
+                            BUY NOW
+                        </button>
+                    </a>
+                </div>
+            `;
+
+            return card;
+        });
+
+        const cards = await Promise.all(productPromises);
+        cards.forEach(card => grid.appendChild(card));
+        if (typeof feather !== 'undefined') feather.replace();
+
+    } catch (error) {
+        console.error("Error fetching featured products:", error);
+        loading.classList.add('hidden');
+        fetchAllProducts(); // fall back on error
+    }
+}
+
+/**
  * @param {Object} product - Product object
  * @returns {Promise<string>} - WhatsApp link
  */
+
 async function getWhatsAppLink(product) {
-    // Default link if we can't fetch seller info
     let whatsappLink = '#';
     
-    // Check if product has sellerId
-    if (!product.sellerId) {
+    const sellerId = product.sellerId || product.storeId?._id || product.storeId;
+    
+    if (!sellerId) {
         console.warn("No sellerId for product:", product._id);
         return whatsappLink;
     }
     
     try {
-        // Fetch store info to get phone number
-        const sellerRes = await fetch(`https://uni-verse-api.vercel.app/api/stores/${encodeURIComponent(product.sellerId)}`);
+        const sellerRes = await fetch(`https://uni-verse-api.vercel.app/api/stores/${encodeURIComponent(sellerId)}`);
         
-        if (!sellerRes.ok) {
-            throw new Error(`Failed to fetch store info: ${sellerRes.status}`);
-        }
+        if (!sellerRes.ok) throw new Error(`Failed to fetch store info: ${sellerRes.status}`);
         
         const sellerData = await sellerRes.json();
-        const sellerNumber = sellerData.sellerNumber || sellerData.phone || '';
+
+        // Guard against null or missing sellerNumber
+        if (!sellerData || !sellerData.sellerNumber) {
+            return whatsappLink;
+        }
         
-        if (sellerNumber) {
-            const countryCode = '233'; // Ghana country code
-            // Remove all non-digit characters
-            const cleanNumber = sellerNumber.replace(/\D/g, '');
-            
-            // Create WhatsApp message with product details
-            const message = `Hi, I'm interested in this product from your store:
+        const countryCode = '233';
+        const cleanNumber = sellerData.sellerNumber.replace(/\D/g, '');
+        
+        const message = `Hi, I'm interested in this product from your store:
             
 *${product.productName}*
 💰 Price: ₵${product.productPrice?.toFixed(2) || '0.00'}
-
 📦 Stock: ${product.productStock || 'Available'}
 
-${product.productImage ? '📸 View product: ' + product.productImage : ''}
-
 Can you provide more details about this item?`;
-            
-            const encodedMessage = encodeURIComponent(message);
-            whatsappLink = `https://api.whatsapp.com/send?phone=${countryCode}${cleanNumber}&text=${encodedMessage}`;
-        }
+        
+        whatsappLink = `https://api.whatsapp.com/send?phone=${countryCode}${cleanNumber}&text=${encodeURIComponent(message)}`;
         
     } catch (err) {
         console.error(`Failed to fetch seller info for product ${product._id}:`, err);

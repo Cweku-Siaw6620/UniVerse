@@ -15,12 +15,17 @@ document.addEventListener('DOMContentLoaded', function () {
          
         const userId = user.id;
 
+  let storePlan = 'free';
+  let featuredCount = 0;
+  const PLAN_FEATURED_LIMITS = { free: 0, premium: 3, organizational: 999 };
+
   async function fetchStoreData() {
     try {
       const res = await fetch(`https://uni-verse-api.vercel.app/api/stores/${encodeURIComponent(userId)}`);
       if (!res.ok) throw new Error("Failed to fetch store");
 
       const store = await res.json();
+      storePlan = store.plan || 'free';
       updateStoreInfo(store);
     } catch (error) {
       console.error('Failed to get store:', error);
@@ -43,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function () {
       </div>
     `;
   }
-  fetchStoreData();
+  fetchStoreData().then(fetchProducts);
 
    
             // DOM elements
@@ -61,8 +66,7 @@ document.addEventListener('DOMContentLoaded', function () {
             let currentPage = 1;
             const productsPerPage = 8;
             
-            // Initialize
-            fetchProducts();
+            // (fetchProducts called after fetchStoreData resolves)
         
             applyFiltersBtn.addEventListener('click', () => {
                 currentPage = 1;
@@ -102,8 +106,12 @@ document.addEventListener('DOMContentLoaded', function () {
             description: product.productDescription,
             category: product.productCategory || 'uncategorized',
             image: product.productImage,
-            stock: product.productStock
-        }));;
+            stock: product.productStock,
+            featured: product.featured || false,
+            storeId: storeId
+        }));
+
+        featuredCount = products.filter(p => p.featured).length;
                     
                     filterAndSortProducts();
                     renderProducts();
@@ -185,10 +193,27 @@ document.addEventListener('DOMContentLoaded', function () {
                     const statusClass = product.stock <= 0 ? 'bg-red-100 text-red-800' : 
                                       product.stock <= 10 ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800';
                     
+                    const featuredLimit = PLAN_FEATURED_LIMITS[storePlan] || 0;
+                    const canFeature    = featuredLimit > 0;
+                    const isFeatured    = product.featured;
+
+                    const starButton = canFeature ? `
+                        <button class="p-1.5 transition-colors toggle-featured ${isFeatured ? 'text-amber-500' : 'text-gray-400 hover:text-amber-500'}"
+                                data-id="${product.id}"
+                                title="${isFeatured ? 'Remove from featured' : 'Mark as featured'}">
+                            <i class="${isFeatured ? 'ri-star-fill' : 'ri-star-line'}"></i>
+                        </button>
+                    ` : '';
+
                     productsHTML += `
                         <div class="product-card bg-white rounded-lg border border-gray-200 overflow-hidden transition-all duration-300">
                             <div class="relative pb-[75%] bg-gray-100">
                                 <img src="${product.image}" alt="${product.title}" class="absolute h-full w-full object-cover">
+                                ${isFeatured ? `
+                                    <span class="absolute top-2 left-2 inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-700 border border-amber-200">
+                                        <i class="ri-star-fill text-xs"></i> Featured
+                                    </span>
+                                ` : ''}
                             </div>
                             <div class="p-4">
                                 <div class="flex justify-between items-start mb-2">
@@ -201,6 +226,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                         ${stockStatus}
                                     </span>
                                     <div class="flex space-x-2">
+                                        ${starButton}
                                         <button class="p-1.5 text-gray-600 hover:text-red-600 transition-colors delete-product" data-id="${product.id}">
                                             <i class="ri-delete-bin-line"></i>
                                         </button>
@@ -220,6 +246,14 @@ document.addEventListener('DOMContentLoaded', function () {
                     button.addEventListener('click', (e) => {
                     const productId = e.currentTarget.getAttribute('data-id');
                     deleteProduct(productId);
+                    });
+                });
+
+                // Attach featured-toggle event listeners
+                document.querySelectorAll('.toggle-featured').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const productId = e.currentTarget.getAttribute('data-id');
+                        toggleFeatured(productId);
                     });
                 });
                 }
@@ -343,11 +377,52 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             }
             
-            function showToast(message) {
+            // Toggle featured status (Premium/Organizational only)
+            async function toggleFeatured(productId) {
+                const product = products.find(p => p.id === productId);
+                if (!product) return;
+
+                const featuredLimit = PLAN_FEATURED_LIMITS[storePlan] || 0;
+
+                // Client-side guard for limit (server also enforces this)
+                if (!product.featured && featuredCount >= featuredLimit) {
+                    showToast(`You can only feature up to ${featuredLimit} product${featuredLimit !== 1 ? 's' : ''} on the ${storePlan === 'premium' ? 'Premium' : 'current'} plan.`, 'error');
+                    return;
+                }
+
+                try {
+                    const res = await fetch(`https://uni-verse-api.vercel.app/api/products/${productId}/featured`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ storeId: product.storeId })
+                    });
+
+                    const data = await res.json();
+
+                    if (!res.ok || !data.success) {
+                        showToast(data.message || 'Failed to update featured status.', 'error');
+                        return;
+                    }
+
+                    product.featured = data.featured;
+                    featuredCount = products.filter(p => p.featured).length;
+
+                    showToast(data.message || (data.featured ? 'Product is now featured' : 'Removed from featured'));
+                    renderProducts();
+
+                } catch (error) {
+                    console.error('Toggle featured error:', error);
+                    showToast('Network error. Please try again.', 'error');
+                }
+            }
+
+            function showToast(message, type = 'success') {
                 const toast = document.createElement('div');
-                toast.className = 'fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg flex items-center';
+                const bgClass = type === 'error' ? 'bg-red-500' : 'bg-green-500';
+                const iconClass = type === 'error' ? 'ri-error-warning-line' : 'ri-checkbox-circle-line';
+                toast.className = `fixed bottom-4 right-4 ${bgClass} text-white px-4 py-2 rounded-lg shadow-lg flex items-center`;
                 toast.innerHTML = `
-                    <i class="ri-checkbox-circle-line mr-2"></i>
+                    <i class="${iconClass} mr-2"></i>
                     <span>${message}</span>
                 `;
                 
