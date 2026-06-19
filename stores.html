@@ -223,6 +223,26 @@
             </div>
         </div>
 
+         <!-- Featured Stores Carousel -->
+        <section id="featuredStoresSection" class="mb-12 hidden">
+            <div class="featured-header">
+                <h2 class="featured-title">
+                    <i class="fas fa-star featured-title-icon"></i>
+                    Featured Stores
+                </h2>
+                <div class="featured-nav">
+                    <button id="featuredPrev" class="featured-nav-btn" aria-label="Previous">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button id="featuredNext" class="featured-nav-btn" aria-label="Next">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="featured-carousel-wrap">
+                <div id="featuredCarousel" class="featured-carousel"></div>
+            </div>
+        </section>
         
         <!-- Stores Grid -->
         <section id="shops" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -468,8 +488,118 @@
                 .replace(/>/g, '&gt;');
         }
         
+            // ── Featured Stores Carousel ──────────────────────
+ async function loadFeaturedStores() {
+    const section  = document.getElementById('featuredStoresSection');
+    const carousel = document.getElementById('featuredCarousel');
+
+    try {
+        const res  = await fetch('https://uni-verse-api.vercel.app/api/stores/featured');
+        const data = await res.json();
+
+        if (!data.success || !data.stores || !data.stores.length) {
+            return;
+        }
+
+        section.classList.remove('hidden');
+
+        // Fetch verification status for each featured store
+        const storesWithMeta = await Promise.all(
+            data.stores.map(async store => {
+                let isVerified = store.isVerified || false;
+                if (!isVerified && window.uniVerseVerification && store.owner) {
+                    const ownerId = typeof store.owner === 'object' ? store.owner?._id : store.owner;
+                    if (ownerId) {
+                        try {
+                            const v = await window.uniVerseVerification.fetchVerificationStatus(ownerId);
+                            isVerified = v.isVerified;
+                        } catch (e) {}
+                    }
+                }
+                return { ...store, isVerified };
+            })
+        );
+
+        carousel.innerHTML = storesWithMeta.map(store => {
+            const isPremium = store.plan === 'premium';
+            const isOrg     = store.plan === 'organizational';
+
+            let planBadge = '';
+            if (isOrg) {
+                planBadge = `<span class="featured-plan-badge organizational"><i class="fas fa-building"></i> Organizational Store</span>`;
+            } else if (isPremium) {
+                planBadge = `<span class="featured-plan-badge premium"><i class="fas fa-crown"></i> Premium Store</span>`;
+            } else {
+                planBadge = `<span class="featured-plan-badge free"><i class="fas fa-gem"></i> Free Store</span>`;
+            }
+
+            const verifiedHtml = store.isVerified 
+                ? `<span class="verified-badge"><i class="fas fa-check"></i></span>` 
+                : '';
+
+           return `
+            <div class="featured-card">
+                <div class="featured-card-image-wrap">
+                    <img src="${store.storeBanner || store.storeLogo || '/images/placeholder.png'}" alt="${escapeHtml(store.storeName)}" class="featured-card-cover">
+                    <span class="featured-card-badge">
+                        <i class="fas fa-star"></i> Featured
+                    </span>
+                </div>
+                
+                <!-- Logo is now a sibling of image-wrap, not a child -->
+                <div class="featured-card-logo-wrap">
+                    <img src="${store.storeLogo || '/images/placeholder.png'}" alt="" class="featured-card-logo">
+                    ${verifiedHtml}
+                </div>
+                
+                <div class="featured-card-body">
+                    <h3 class="featured-card-name">${escapeHtml(store.storeName)}</h3>
+                    <p class="featured-card-category">${escapeHtml(store.storeCategory || 'General')}</p>
+                    <p class="featured-card-seller">by ${escapeHtml(store.sellerName || 'Unknown')}</p>
+                    <div class="featured-card-plan">
+                        ${planBadge}
+                    </div>
+                    <a href="./components/displayStore.html?slug=${store.slug}">
+                    <button class="featured-card-btn">Visit Store</button>
+                    </a>
+                </div>
+            </div>
+        `;
+        }).join('');
+
+        setupFeaturedNav();
+
+    } catch (error) {
+        console.error('Failed to load featured stores:', error);
+    }
+}
+
+        function setupFeaturedNav() {
+            const carousel = document.getElementById('featuredCarousel');
+            const prevBtn  = document.getElementById('featuredPrev');
+            const nextBtn  = document.getElementById('featuredNext');
+            const scrollAmount = 288; // card width (270) + gap (18)
+
+            function updateNavState() {
+                prevBtn.disabled = carousel.scrollLeft <= 0;
+                nextBtn.disabled = carousel.scrollLeft >= (carousel.scrollWidth - carousel.clientWidth - 4);
+            }
+
+            prevBtn.addEventListener('click', () => {
+                carousel.scrollBy({ left: -scrollAmount * 2, behavior: 'smooth' });
+            });
+
+            nextBtn.addEventListener('click', () => {
+                carousel.scrollBy({ left: scrollAmount * 2, behavior: 'smooth' });
+            });
+
+            carousel.addEventListener('scroll', updateNavState);
+            updateNavState();
+        }
+
         // Initialize the page
         fetchShops();
+        loadFeaturedStores();
     </script>
 </body>
 </html>
