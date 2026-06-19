@@ -67,14 +67,65 @@
         </label>
         <select id="university" class="w-full border-gray-200 rounded-lg p-2.5 focus:ring-2 focus:ring-green-500" required>
           <option value="">Select University</option>
-          <option value="University of Ghana">University of Ghana</option>
-          <option value="KNUST">KNUST</option>
-          <option value="UCC">UCC</option>
-          <option value="UEW">UEW</option>
-          <option value="UDS">UDS</option>
-          <option value="Ashesi University">Ashesi University</option>
-          <option value="Other">Other</option>
+          <optgroup label="Public Universities">
+            <option value="University of Ghana">University of Ghana</option>
+            <option value="KNUST">KNUST</option>
+            <option value="University of Cape Coast">University of Cape Coast</option>
+            <option value="University of Education, Winneba">University of Education, Winneba</option>
+            <option value="University for Development Studies">University for Development Studies</option>
+            <option value="University of Professional Studies, Accra">University of Professional Studies, Accra</option>
+            <option value="University of Health and Allied Sciences">University of Health and Allied Sciences</option>
+            <option value="University of Environment and Sustainable Development">University of Environment and Sustainable Development</option>
+            <option value="C.K. Tedam University of Technology and Applied Sciences">C.K. Tedam University of Technology and Applied Sciences</option>
+            <option value="SD Dombo University of Business and Integrated Development Studies">SD Dombo University of Business and Integrated Development Studies</option>
+            <option value="Akenten Appiah-Menka University of Skills Training and Entrepreneurial Development">Akenten Appiah-Menka University (AAMUSTED)</option>
+            <option value="Ho Technical University">Ho Technical University</option>
+            <option value="Accra Technical University">Accra Technical University</option>
+            <option value="Kumasi Technical University">Kumasi Technical University</option>
+            <option value="Takoradi Technical University">Takoradi Technical University</option>
+            <option value="Cape Coast Technical University">Cape Coast Technical University</option>
+            <option value="Sunyani Technical University">Sunyani Technical University</option>
+            <option value="Wa Technical University">Wa Technical University</option>
+            <option value="Bolgatanga Technical University">Bolgatanga Technical University</option>
+            <option value="Hilla Limann Technical University">Hilla Limann Technical University</option>
+          </optgroup>
+          <optgroup label="Private Universities">
+            <option value="Ashesi University">Ashesi University</option>
+            <option value="Central University">Central University</option>
+            <option value="Valley View University">Valley View University</option>
+            <option value="Ghana Christian University College">Ghana Christian University College</option>
+            <option value="Trinity Theological Seminary">Trinity Theological Seminary</option>
+            <option value="Regent University College of Science and Technology">Regent University College</option>
+            <option value="Methodist University">Methodist University</option>
+            <option value="Catholic University College of Ghana">Catholic University College of Ghana</option>
+            <option value="Pentecost University">Pentecost University</option>
+            <option value="Wisconsin International University College">Wisconsin International University College</option>
+            <option value="Academic City University College">Academic City University College</option>
+            <option value="KAAF University College">KAAF University College</option>
+            <option value="Bluecrest University College">Bluecrest University College</option>
+            <option value="Lancaster University Ghana">Lancaster University Ghana</option>
+            <option value="Ghana Institute of Management and Public Administration">GIMPA</option>
+            <option value="Ghana Communication Technology University">Ghana Communication Technology University</option>
+            <option value="Zenith University College">Zenith University College</option>
+            <option value="Heritage Christian College">Heritage Christian College</option>
+          </optgroup>
+          <option value="Other">Other (not listed)</option>
         </select>
+
+        <!-- Conditional text input for "Other" -->
+        <div id="otherUniversityWrapper" class="hidden mt-3">
+          <label class="block text-sm font-semibold text-gray-800 mb-1">
+            Enter Your University Name <span class="text-red-500">*</span>
+          </label>
+          <input
+            type="text"
+            id="otherUniversity"
+            placeholder="e.g. Tamale Technical University"
+            autocomplete="off"
+            class="w-full border-gray-200 rounded-lg p-2.5 focus:ring-2 focus:ring-green-500"
+          />
+          <p class="text-xs text-gray-500 mt-1">Please type the full official name of your institution.</p>
+        </div>
       </div>
 
       <!-- Student ID Number -->
@@ -201,6 +252,17 @@
     const studentIdInput    = document.getElementById("studentIdNumber");
     const idCheckIcon       = document.getElementById("idCheckIcon");
     const idCheckMsg        = document.getElementById("idCheckMsg");
+    const universitySelect  = document.getElementById("university");
+    const otherUniversityWrapper = document.getElementById("otherUniversityWrapper");
+    const otherUniversityInput   = document.getElementById("otherUniversity");
+
+    // ── Show/hide "Other" university text field ──────────────
+    universitySelect.addEventListener("change", () => {
+      const isOther = universitySelect.value === "Other";
+      otherUniversityWrapper.classList.toggle("hidden", !isOther);
+      otherUniversityInput.required = isOther;
+      if (!isOther) otherUniversityInput.value = "";
+    });
 
     // ── File state ──────────────────────────────────────────
     let frontImageFile = null;
@@ -420,13 +482,21 @@
 
       // ── Student ─────────────────────────────────────────
       if (affiliation === "student") {
-        const university      = document.getElementById("university").value;
+        const universitySelected = universitySelect.value;
+        const university = universitySelected === "Other"
+          ? otherUniversityInput.value.trim()
+          : universitySelected;
         const expiryDate      = document.getElementById("expiryDate").value;
         const studentIdNumber = studentIdInput.value.trim().toUpperCase();
 
         // Inline validation
-        if (!university) {
+        if (!universitySelected) {
           showNotification("error", "Please select your university.");
+          return;
+        }
+        if (universitySelected === "Other" && !university) {
+          showNotification("error", "Please type your university name.");
+          otherUniversityInput.focus();
           return;
         }
         if (!studentIdNumber || studentIdNumber.length < 3) {

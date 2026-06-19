@@ -189,3 +189,153 @@
             letter-spacing: -0.02em;
         }
         
+        /* ── Search & Filter Bar ─────────────────────────── */
+        .store-filter-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            padding: 10px 12px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+            flex-wrap: wrap;
+        }
+
+        .store-search-wrap {
+            position: relative;
+            flex: 1 1 220px;
+            min-width: 180px;
+        }
+
+        .store-search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+            font-size: 14px;
+        }
+
+        .store-search-input {
+            width: 100%;
+            padding: 11px 14px 11px 38px;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 14px;
+            color: #111827;
+            background: #f9fafb;
+            outline: none;
+            transition: border-color 0.15s, background 0.15s;
+        }
+
+        .store-search-input:focus {
+            border-color: #7c3aed;
+            background: #ffffff;
+        }
+
+        .store-filter-select-wrap {
+            position: relative;
+            flex: 0 1 190px;
+            min-width: 150px;
+        }
+
+        .store-filter-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+            font-size: 13px;
+            pointer-events: none;
+        }
+
+        .store-filter-chevron {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+            font-size: 11px;
+            pointer-events: none;
+        }
+
+        .store-filter-select {
+            width: 100%;
+            padding: 11px 32px 11px 38px;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 14px;
+            color: #374151;
+            background: #f9fafb;
+            outline: none;
+            appearance: none;
+            -webkit-appearance: none;
+            cursor: pointer;
+            transition: border-color 0.15s, background 0.15s;
+        }
+
+        .store-filter-select:focus {
+            border-color: #7c3aed;
+            background: #ffffff;
+        }
+
+        .store-filter-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 11px 22px;
+            background: #6d28d9;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background 0.15s;
+            flex-shrink: 0;
+        }
+
+        .store-filter-btn:hover {
+            background: #5b21b6;
+        }
+
+        @media (max-width: 768px) {
+            .store-filter-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .store-search-wrap,
+            .store-filter-select-wrap,
+            .store-filter-btn {
+                flex: 1 1 auto;
+                width: 100%;
+            }
+        }
+        .store-category-badge{
+            display:inline-flex;
+            align-items:center;
+            padding:4px 10px;
+            border-radius:999px;
+            background:linear-gradient(
+                135deg,
+                rgba(99,102,241,.12),
+                rgba(168,85,247,.12)
+            );
+            border:1px solid rgba(99,102,241,.15);
+            color:#6366f1;
+            font-size:11px;
+            font-weight:600;
+            letter-spacing:.5px;
+            text-transform:uppercase;
+            white-space:nowrap;
+        }
+
+        .store-card-title{
+            font-size:1.1rem;
+            font-weight:700;
+            color:#0f172a;
+            margin:0;
+        }

@@ -57,22 +57,171 @@
         </div>
     </header>
 
+    <!-- Hero Section -->
+    <section class="relative isolate overflow-hidden pt-20 pb-24 sm:pb-28 margin-bottom-12">
+        <div class="absolute inset-0">
+            <img src="/images/storeCover.png" alt="UniVerse marketplace cover" class="h-full w-full object-cover object-right md:object-center">
+        </div>
+
+        <div class="premium-container mx-auto relative z-10 px-6">
+            <div class="grid grid-cols-1 lg:grid-cols-12 items-center gap-10">
+                <div class="lg:col-span-7 text-center lg:text-left">
+                    <span class="inline-flex items-center gap-2 rounded-full border border-purple-200 bg-white/80 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.22em] text-purple-700 shadow-sm backdrop-blur">
+                        DISCOVER AMAZING STORES
+                    </span>
+                    <h1 class="mt-5 text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.02] text-slate-900">
+                        Explore Student <br/> 
+                        Businesses <i class="italic font-normal text-purple-600" style="font-family: 'Brush Script MT', cursive ;">Redefined</i>
+                    </h1>
+
+                    <p class="mt-6 max-w-2xl text-base sm:text-lg leading-8 text-slate-700">
+                        ✨
+                        Curated creations from campus talent, showcased with a refined storefront vibe. Discover standout products, highlighted selections, and the unique stories behind each item
+                    </p>
+
+                    <div class="mt-8 flex flex-col sm:flex-row justify-center lg:justify-start gap-4">
+                        <a href="stores.html" class="inline-flex items-center justify-center rounded-xl bg-slate-900 px-6 py-3.5 text-white shadow-lg shadow-slate-900/10 transition-transform hover:-translate-y-0.5 hover:bg-slate-800">
+                            Explore Collections
+                        </a>
+                        <a href="#featuredProductGrid" class="inline-flex items-center justify-center rounded-xl border border-white/70 bg-white/80 px-6 py-3.5 text-slate-900 shadow-sm backdrop-blur transition hover:bg-white">
+                            See Featured
+                        </a>
+                    </div>
+
+                    <!-- Option 1: Stats Badges (Professional & Trust-Building) -->
+                <div class="mt-8 flex flex-wrap items-center justify-center lg:justify-start gap-6 text-sm">
+                    <div class="flex items-center gap-3">
+                        <div class="flex -space-x-2">
+                            <img src="https://i.pravatar.cc/40?img=1" class="h-8 w-8 rounded-full border-2 border-white">
+                            <img src="https://i.pravatar.cc/40?img=2" class="h-8 w-8 rounded-full border-2 border-white">
+                            <img src="https://i.pravatar.cc/40?img=3" class="h-8 w-8 rounded-full border-2 border-white">
+                            <img src="https://i.pravatar.cc/40?img=4" class="h-8 w-8 rounded-full border-2 border-white">
+                            <div class="h-8 w-8 rounded-full border-2 border-white bg-amber-500 flex items-center justify-center text-[10px] font-bold text-white">+2K</div>
+                        </div>
+                        <div>
+                            <span class="font-semibold text-slate-900">2,000+</span>
+                            <span class="text-slate-500">students trust us</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center gap-2">
+                        <div class="flex items-center gap-1">
+                            <i data-feather="star" class="h-4 w-4 fill-amber-400 text-amber-400"></i>
+                            <i data-feather="star" class="h-4 w-4 fill-amber-400 text-amber-400"></i>
+                            <i data-feather="star" class="h-4 w-4 fill-amber-400 text-amber-400"></i>
+                            <i data-feather="star" class="h-4 w-4 fill-amber-400 text-amber-400"></i>
+                            <i data-feather="star" class="h-4 w-4 fill-amber-400 text-amber-400"></i>
+                        </div>
+                        <span class="text-slate-500">4.9/5 from</span>
+                        <span class="font-semibold text-slate-900">1,200+</span>
+                        <span class="text-slate-500">reviews</span>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Main Content -->
     <main class="container mx-auto px-4 py-8">
-        <!-- Page Header -->
-        <div class="text-center mb-12">
-            <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Discover Student Businesses</h1>
-            <p class="text-lg text-gray-600 max-w-2xl mx-auto">Support your fellow students by exploring their products and services. Quality items, great prices.</p>
-        </div>
-        
         <!-- Search and Filters -->
         <div class="mb-10">
-            <div class="search-container">
-                <div class="search-icon">
-                    <i class="fas fa-search"></i>
+            <div class="store-filter-bar">
+                <div class="store-search-wrap">
+                    <i class="fas fa-search store-search-icon"></i>
+                    <input type="text" id="searchInput" class="store-search-input" placeholder="Search stores...">
                 </div>
-                <input type="text" id="searchInput" class="search-input" placeholder="Search shops by name, description, or seller...">
+
+                <div class="store-filter-select-wrap">
+                    <i class="fas fa-th-large store-filter-icon"></i>
+                    <select id="categoryFilter" class="store-filter-select">
+                        <option value="">All Categories</option>
+                        <option value="general">General</option>
+                        <option value="electronics">Electronics & Gadgets</option>
+                        <option value="fashion">Fashion & Apparel</option>
+                        <option value="health_beauty">Health & Beauty</option>
+                        <option value="home_living">Home & Living</option>
+                        <option value="groceries">Groceries & Essentials</option>
+                        <option value="appliances">Appliances</option>
+                        <option value="books">Books & Stationery</option>
+                        <option value="kids_baby">Kids, Toys & Baby Products</option>
+                        <option value="sports_outdoors">Sports & Outdoors</option>
+                        <option value="automotive">Automotive</option>
+                        <option value="jewelry">Jewelry & Accessories</option>
+                        <option value="pets">Pet Supplies</option>
+                        <option value="tools">Tools & Industrial</option>
+                        <option value="music_art">Music, Art & Entertainment</option>
+                        <option value="digital">Services & Digital Products</option>
+                    </select>
+                    <i class="fas fa-chevron-down store-filter-chevron"></i>
+                </div>
+
+                <div class="store-filter-select-wrap">
+                    <i class="fas fa-graduation-cap store-filter-icon"></i>
+                    <select id="universityFilter" class="store-filter-select">
+                        <option value="">All Universities</option>
+                        <optgroup label="Public Universities">
+                            <option value="University of Ghana">University of Ghana</option>
+                            <option value="KNUST">KNUST</option>
+                            <option value="University of Cape Coast">University of Cape Coast</option>
+                            <option value="University of Education, Winneba">University of Education, Winneba</option>
+                            <option value="University for Development Studies">University for Development Studies</option>
+                            <option value="University of Professional Studies, Accra">University of Professional Studies, Accra</option>
+                            <option value="University of Health and Allied Sciences">University of Health and Allied Sciences</option>
+                            <option value="University of Environment and Sustainable Development">University of Environment and Sustainable Development</option>
+                            <option value="C.K. Tedam University of Technology and Applied Sciences">C.K. Tedam University of Technology and Applied Sciences</option>
+                            <option value="SD Dombo University of Business and Integrated Development Studies">SD Dombo University of Business and Integrated Development Studies</option>
+                            <option value="Akenten Appiah-Menka University of Skills Training and Entrepreneurial Development">Akenten Appiah-Menka University (AAMUSTED)</option>
+                            <option value="Ho Technical University">Ho Technical University</option>
+                            <option value="Accra Technical University">Accra Technical University</option>
+                            <option value="Kumasi Technical University">Kumasi Technical University</option>
+                            <option value="Takoradi Technical University">Takoradi Technical University</option>
+                            <option value="Cape Coast Technical University">Cape Coast Technical University</option>
+                            <option value="Sunyani Technical University">Sunyani Technical University</option>
+                            <option value="Wa Technical University">Wa Technical University</option>
+                            <option value="Bolgatanga Technical University">Bolgatanga Technical University</option>
+                            <option value="Hilla Limann Technical University">Hilla Limann Technical University</option>
+                        </optgroup>
+                        <optgroup label="Private Universities">
+                            <option value="Ashesi University">Ashesi University</option>
+                            <option value="Central University">Central University</option>
+                            <option value="Valley View University">Valley View University</option>
+                            <option value="Ghana Christian University College">Ghana Christian University College</option>
+                            <option value="Trinity Theological Seminary">Trinity Theological Seminary</option>
+                            <option value="Regent University College of Science and Technology">Regent University College</option>
+                            <option value="Methodist University">Methodist University</option>
+                            <option value="Catholic University College of Ghana">Catholic University College of Ghana</option>
+                            <option value="Pentecost University">Pentecost University</option>
+                            <option value="Wisconsin International University College">Wisconsin International University College</option>
+                            <option value="Academic City University College">Academic City University College</option>
+                            <option value="KAAF University College">KAAF University College</option>
+                            <option value="Bluecrest University College">Bluecrest University College</option>
+                            <option value="Lancaster University Ghana">Lancaster University Ghana</option>
+                            <option value="Ghana Institute of Management and Public Administration">GIMPA</option>
+                            <option value="Ghana Communication Technology University">Ghana Communication Technology University</option>
+                            <option value="Zenith University College">Zenith University College</option>
+                            <option value="Heritage Christian College">Heritage Christian College</option>
+                        </optgroup>
+                    </select>
+                    <i class="fas fa-chevron-down store-filter-chevron"></i>
+                </div>
+
+                <div class="store-filter-select-wrap">
+                    <i class="fas fa-arrow-up-wide-short store-filter-icon"></i>
+                    <select id="sortBy" class="store-filter-select">
+                        <option value="newest">Newest</option>
+                        <option value="premium">Premium First</option>
+                        <option value="az">A-Z</option>
+                    </select>
+                    <i class="fas fa-chevron-down store-filter-chevron"></i>
+                </div>
+
+                <button id="applyFiltersBtn" class="store-filter-btn">
+                    <i class="fas fa-sliders-h"></i>
+                    Filter
+                </button>
             </div>
+        </div>
 
         
         <!-- Stores Grid -->
@@ -142,6 +291,8 @@
 
 
     <script>
+        let allShops = [];
+
         // Mobile menu toggle
         document.addEventListener('DOMContentLoaded', function() {
             const mobileMenuButton = document.getElementById('mobileMenuButton');
@@ -220,7 +371,15 @@
                         loading="lazy">
 
                     <div class="store-card-content">
-                    <h3 class="store-card-title">${escapeHtml(shop.storeName)}</h3>
+                    <div class="flex items-center justify-between gap-3 mb-2">
+                        <h3 class="store-card-title">
+                            ${escapeHtml(shop.storeName)}
+                        </h3>
+
+                        <span class="store-category-badge">
+                            ${escapeHtml(shop.storeCategory || "N/A")}
+                        </span>
+                    </div>
                     <p class="store-card-seller flex items-center gap-2 flex-wrap"> 
                     by ${escapeHtml(shop.sellerName || "Unknown")}
                     ${verification.isVerified ? window.uniVerseVerification.getVerifiedBadgeHtml() : ''}
@@ -234,7 +393,7 @@
                     <div class="store-card-footer">
                         <div class="store-card-contact">
                         <i class="fas fa-phone-alt mr-1"></i>
-                        ${escapeHtml(shop.sellerNumber || "N/A")}
+                        ${escapeHtml(shop.owner.university || shop.sellerNumber)}
                         </div>
 
                         <a href="./components/displayStore.html?slug=${shop.slug}"
@@ -257,29 +416,47 @@
                         }
                 }
 
-        // Search functionality
-        document.getElementById('searchInput').addEventListener('input', function(e) {
-            const searchTerm = e.target.value.toLowerCase().trim();
-            
-            if (!searchTerm) {
-                // Reset to show all shops if search is empty
-                const activeFilter = document.querySelector('.filter-btn.active').getAttribute('data-filter');
-                if (activeFilter === 'all') {
-                    renderShops(allShops);
-                } else {
-                    filterShops(activeFilter);
-                }
-                return;
+        // ── Combined search + filter logic ──────────────────
+        function applyFilters() {
+            const searchTerm   = document.getElementById('searchInput').value.toLowerCase().trim();
+            const category     = document.getElementById('categoryFilter').value;
+            const university   = document.getElementById('universityFilter').value;
+            const sortBy       = document.getElementById('sortBy').value;
+
+            let filtered = allShops.filter(shop => {
+                const matchesSearch = !searchTerm ||
+                    shop.storeName.toLowerCase().includes(searchTerm) ||
+                    (shop.storeDescription || '').toLowerCase().includes(searchTerm) ||
+                    (shop.sellerName || '').toLowerCase().includes(searchTerm);
+
+                const matchesCategory = !category || shop.storeCategory === category;
+
+                const matchesUniversity = !university ||
+                    (shop.owner && shop.owner.university === university);
+
+                return matchesSearch && matchesCategory && matchesUniversity;
+            });
+
+            // Sorting
+            if (sortBy === 'az') {
+                filtered.sort((a, b) => a.storeName.localeCompare(b.storeName));
+            } else if (sortBy === 'premium') {
+                const rank = { organizational: 0, premium: 1, free: 2 };
+                filtered.sort((a, b) => (rank[a.plan] ?? 2) - (rank[b.plan] ?? 2));
+            } else {
+                // newest (default) — relies on createdAt already sorted by backend,
+                // but re-sort defensively in case filtering changed order
+                filtered.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
             }
-            
-            const filtered = allShops.filter(shop => 
-                shop.storeName.toLowerCase().includes(searchTerm) ||
-                shop.storeDescription.toLowerCase().includes(searchTerm) ||
-                shop.sellerName.toLowerCase().includes(searchTerm)
-            );
-            
+
             renderShops(filtered);
-        });
+        }
+
+        document.getElementById('searchInput').addEventListener('input', applyFilters);
+        document.getElementById('categoryFilter').addEventListener('change', applyFilters);
+        document.getElementById('universityFilter').addEventListener('change', applyFilters);
+        document.getElementById('sortBy').addEventListener('change', applyFilters);
+        document.getElementById('applyFiltersBtn').addEventListener('click', applyFilters);
         
         // Utility function to escape HTML
         function escapeHtml(str) {
