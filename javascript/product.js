@@ -108,6 +108,7 @@ document.addEventListener('DOMContentLoaded', function () {
             image: product.productImage,
             stock: product.productStock,
             featured: product.featured || false,
+            hidden: product.hidden || false,
             storeId: storeId
         }));
 
@@ -188,14 +189,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 let productsHTML = '<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">';
                 
                 productsToDisplay.forEach(product => {
-                    const stockStatus = product.stock <= 0 ? 'Out of Stock' : 
-                                       product.stock <= 10 ? 'Low Stock' : 'In Stock';
+                    const stockStatus = product.stock <= 0 ? `${product.stock} - Out of Stock` : 
+                                       product.stock <= 10 ? `${product.stock} - Low Stock` : `${product.stock} - In Stock`;
                     const statusClass = product.stock <= 0 ? 'bg-red-100 text-red-800' : 
                                       product.stock <= 10 ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800';
                     
                     const featuredLimit = PLAN_FEATURED_LIMITS[storePlan] || 0;
                     const canFeature    = featuredLimit > 0;
                     const isFeatured    = product.featured;
+                    const isHidden      = product.hidden;
 
                     const starButton = canFeature ? `
                         <button class="p-1.5 transition-colors toggle-featured ${isFeatured ? 'text-amber-500' : 'text-gray-400 hover:text-amber-500'}"
@@ -206,14 +208,21 @@ document.addEventListener('DOMContentLoaded', function () {
                     ` : '';
 
                     productsHTML += `
-                        <div class="product-card bg-white rounded-lg border border-gray-200 overflow-hidden transition-all duration-300">
+                        <div class="product-card bg-white rounded-lg border border-gray-200 overflow-hidden transition-all duration-300 ${isHidden ? 'opacity-60' : ''}">
                             <div class="relative pb-[75%] bg-gray-100">
                                 <img src="${product.image}" alt="${product.title}" class="absolute h-full w-full object-cover">
-                                ${isFeatured ? `
-                                    <span class="absolute top-2 left-2 inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-700 border border-amber-200">
-                                        <i class="ri-star-fill text-xs"></i> Featured
-                                    </span>
-                                ` : ''}
+                                <div class="absolute top-2 left-2 flex flex-col gap-1 items-start">
+                                    ${isFeatured ? `
+                                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-700 border border-amber-200">
+                                            <i class="ri-star-fill text-xs"></i> Featured
+                                        </span>
+                                    ` : ''}
+                                    ${isHidden ? `
+                                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-gray-700 text-white border border-gray-600">
+                                            <i class="ri-eye-off-line text-xs"></i> Hidden
+                                        </span>
+                                    ` : ''}
+                                </div>
                             </div>
                             <div class="p-4">
                                 <div class="flex justify-between items-start mb-2">
