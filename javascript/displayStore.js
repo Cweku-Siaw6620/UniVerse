@@ -63,6 +63,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('#shareStoreBtn')) {
+      const store = JSON.parse(localStorage.getItem("currentViewedStore"));
+      if (store && store.slug) {
+        const link = `https://uni-verse-api.vercel.app/stores/${store.slug}`;
+        navigator.clipboard.writeText(link);
+        alert("Store link copied!");
+      }
+    }
+  });
+
   // Update store header with logo and basic info
   function updateStoreHeader(store) {
     const storeHeader = document.getElementById('storeHeader');
@@ -83,6 +94,9 @@ document.addEventListener('DOMContentLoaded', () => {
             <span class="font-medium">Contact:</span> 
             <span id="sellerNumber">${escapeHtml(store.sellerNumber || 'Not provided')}</span>
           </p>
+          <button id="shareStoreBtn" class="w-full flex items-center justify-center font-medium py-2.5 px-4 rounded-lg transition-all duration-300 bg-white-100 text-black hover:bg-green-600 mt-4">
+          Share link to store
+          </button>
           ${store.personalWebsite ? `
             <p class="text-gray-600 mt-1">
               <a href="${store.personalWebsite}" target="_blank" class="whatsapp-btn w-full flex items-center justify-center font-medium py-2.5 px-4 rounded-lg transition-all duration-300">
@@ -136,8 +150,6 @@ document.addEventListener('DOMContentLoaded', () => {
           ` : ''}
         </div>
         
-      
-        
         <!-- Action Buttons -->
         <div class="space-y-3 pt-6 mt-6 border-t border-gray-100">
           <button onclick="window.history.back()" 
@@ -145,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <i data-feather="arrow-left" class="w-4 h-4 mr-2"></i>
             Back to Stores
           </button>
-          
+        
           ${store.sellerNumber ? `
             <a href="#" id="whatsappAllBtn"
                class="whatsapp-btn w-full flex items-center justify-center font-medium py-2.5 px-4 rounded-lg transition-all duration-300">
