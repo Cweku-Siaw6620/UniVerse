@@ -435,6 +435,7 @@
 }
 
 .featured-card:hover {
+    transform: translateY(-5px);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
@@ -551,28 +552,7 @@
     margin-bottom: 10px;
 }
 
-/* Meta row: rating + reviews + product count */
-.featured-card-meta {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 12px;
-    color: #6b7280;
-    margin-bottom: 10px;
-}
 
-.featured-card-rating {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    color: #111827;
-    font-weight: 600;
-}
-
-.featured-card-rating i {
-    color: #f59e0b;
-    font-size: 11px;
-}
 
 /* Plan badge */
 .featured-card-plan {

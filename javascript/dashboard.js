@@ -93,24 +93,54 @@ document.addEventListener('DOMContentLoaded', function () {
                 productLimit.textContent = planLimits[currentPlan];
                 updateProgressBar();
             }
+
+            // Allow the plan-status fetch (later in this file) to update
+            // currentPlan once the real plan is known from the backend,
+            // instead of staying stuck on the 'free' default.
+            window.setCurrentPlan = function (plan) {
+                if (!planLimits.hasOwnProperty(plan)) return;
+                currentPlan = plan;
+                productLimit.textContent = planLimits[currentPlan];
+                updateProgressBar();
+            };
             
-            // Update progress bar
+            // Update progress bar — updates all three plan cards,
+            // since the seller's actual product count applies regardless of
+            // which plan they're currently on. Only the active plan's bar
+            // should visually represent "used vs limit" in full color.
             function updateProgressBar() {
-                const limit = planLimits[currentPlan];
                 const count = product.length;
-                const percentage = (count / limit) * 100;
-                
-                freeProgress.style.width = `${percentage}%`;
-                freeUsed.textContent = `${count} products`;
-                
-                // Warning color when approaching limit
-                if (percentage > 80) {
-                    freeProgress.classList.add('bg-yellow-500');
-                    freeProgress.classList.remove('bg-primary');
-                } else {
-                    freeProgress.classList.add('bg-primary');
-                    freeProgress.classList.remove('bg-yellow-500');
-                }
+
+                const bars = {
+                    free:           { bar: freeProgress,  used: freeUsed,  limit: planLimits.free },
+                    premium:        { bar: document.getElementById('premium-progress'),        used: document.getElementById('premium-used'),        limit: planLimits.premium },
+                    organizational: { bar: document.getElementById('organizational-progress'),  used: document.getElementById('organizational-used'),  limit: planLimits.organizational }
+                };
+
+                Object.entries(bars).forEach(([planKey, els]) => {
+                    if (!els.bar || !els.used) return;
+
+                    const percentage = Math.min((count / els.limit) * 100, 100);
+                    els.bar.style.width = `${percentage}%`;
+                    els.used.textContent = `${count} products`;
+
+                    if (planKey === currentPlan) {
+                        // Active plan — full color, with yellow warning near limit
+                        els.bar.classList.remove('bg-gray-300');
+                        if (percentage > 80) {
+                            els.bar.classList.add('bg-yellow-500');
+                            els.bar.classList.remove('bg-primary', 'bg-purple-600', 'bg-amber-500');
+                        } else {
+                            els.bar.classList.remove('bg-yellow-500');
+                            const activeColor = planKey === 'free' ? 'bg-primary' : planKey === 'premium' ? 'bg-purple-600' : 'bg-amber-500';
+                            els.bar.classList.add(activeColor);
+                        }
+                    } else {
+                        // Inactive plan card — muted, not the live indicator
+                        els.bar.classList.remove('bg-primary', 'bg-purple-600', 'bg-amber-500', 'bg-yellow-500');
+                        els.bar.classList.add('bg-gray-300');
+                    }
+                });
             }
             
             // Handle image upload preview
@@ -416,6 +446,11 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     updatePlanCards(data.plan);
+
+    // Keep the Add Product section's progress logic in sync with the live plan
+    if (typeof window.setCurrentPlan === 'function') {
+      window.setCurrentPlan(data.plan);
+    }
   }
 
   // ── Update plan card UI ───────────────────────────────
@@ -590,5 +625,3 @@ handler.openIframe();
 
 })();
         });
-
- 
