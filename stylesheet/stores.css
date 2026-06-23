@@ -1,88 +1,178 @@
 * {
             font-family: 'Poppins', sans-serif;
         }
-        
-        body {
-            background-color: #ffffff;
-            color: #333;
-        }
-        
-        /* Card styling */
-        .store-card {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
-            overflow: hidden;
-            border: 1px solid #f0f0f0;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .store-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-        }
-        
-        .store-card img {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-            background-color: #f8f9fa;
-        }
-        
-        .store-card-content {
-            padding: 20px;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .store-card-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 5px;
-            color: #1a1a1a;
-        }
-        
-        .store-card-seller {
-            color: #666;
-            font-size: 0.9rem;
-            margin-bottom: 12px;
-        }
-        
-        .store-card-description {
-            color: #555;
-            font-size: 0.95rem;
-            line-height: 1.5;
-            margin-bottom: 15px;
-            flex-grow: 1;
-        }
-        
-        .store-card-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: auto;
-        }
-        
-        .store-card-contact {
-            color: #666;
-            font-size: 0.9rem;
-        }
-        
-        .store-card-btn {
-            background-color: #1a1a1a;
-            color: white;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-weight: 500;
-            font-size: 0.9rem;
-            transition: background-color 0.3s;
-            text-decoration: none;
-        }
-        
+/* Grid container fixes */
+#shops {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 1.5rem;
+    align-items: start; /* Prevents uneven stretching */
+}
+
+@media (min-width: 640px) {
+    #shops {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    #shops {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (min-width: 1280px) {
+    #shops {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* Card consistency */
+.store-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #f3f4f6;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.store-card:hover {
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    transform: translateY(-2px);
+}
+
+/* Image container — fixed aspect ratio */
+.store-card > img:first-child,
+.store-card > a > img:first-child {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    display: block;
+}
+
+/* Content area grows to fill */
+.store-card-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 1rem;
+}
+
+/* Title clamping */
+.store-card-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #111827;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    min-height: 2.6em; /* Reserve space for 2 lines */
+}
+
+/* Description clamping */
+.store-card-description {
+    font-size: 0.875rem;
+    color: #6b7280;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-bottom: 1rem;
+    flex: 1; /* Pushes footer to bottom */
+}
+
+/* Footer always at bottom */
+.store-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-top: auto;
+    padding-top: 0.75rem;
+    border-top: 1px solid #f3f4f6;
+}
+
+.store-card-contact {
+    font-size: 0.75rem;
+    color: #9ca3af;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 50%;
+}
+
+.store-card-btn {
+    flex-shrink: 0;
+    padding: 0.5rem 1rem;
+    background: #6d28d9;
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background 0.15s;
+}
+
+.store-card-btn:hover {
+    background: #5b21b6;
+}
+
+/* Category badge sizing */
+.store-category-badge {
+    flex-shrink: 0;
+    font-size: 0.625rem;
+    font-weight: 600;
+    padding: 0.125rem 0.5rem;
+    background: #f3f4f6;
+    color: #6b7280;
+    border-radius: 999px;
+    white-space: nowrap;
+}
+
+/* Seller line */
+.store-card-seller {
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin-bottom: 0.5rem;
+}
+
+/* Mobile-specific tweaks */
+@media (max-width: 639px) {
+    .store-card-content {
+        padding: 0.875rem;
+    }
+    
+    .store-card-title {
+        font-size: 0.9375rem;
+    }
+    
+    .store-card-description {
+        -webkit-line-clamp: 2;
+    }
+    
+    .store-card-footer {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.5rem;
+    }
+    
+    .store-card-contact {
+        max-width: 100%;
+        text-align: center;
+    }
+    
+    .store-card-btn {
+        width: 100%;
+        text-align: center;
+    }
+}
         .store-card-btn:hover {
             background-color: #333;
         }

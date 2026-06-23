@@ -10,10 +10,10 @@ document.addEventListener('DOMContentLoaded', async function () {
     if (user && user.picture) {
       // Login selectors
       const loginSelectors = [
-        'nav a[href="/components/login"]',          // Desktop nav
-        'nav a[href="/login.html"]',                // Local component navs
-        '#mobileMenu a[href="/components/login"]',  // Mobile menu
-        '#mobileMenu a[href="/login.html"]',        // Local component mobile navs
+        'nav a[href*="/components/login"]',          // Desktop nav
+        'nav a[href$="/login.html"]',                // Local component navs
+        '#mobileMenu a[href*="/components/login"]',  // Mobile menu
+        '#mobileMenu a[href$="/login.html"]',        // Local component mobile navs
         '.auth-link'                                  // Fallback for mobile
       ];
       
@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', async function () {
       // Replace desktop nav login link
       const desktopNav = document.querySelector('nav');
       if (desktopNav) {
-        const desktopLogin = desktopNav.querySelector('a[href="/components/login"]');
+        const desktopLogin = desktopNav.querySelector('a[href*="/components/login"]');
         if (desktopLogin) {
           const desktopProfile = createProfileComponent(false);
           desktopLogin.replaceWith(desktopProfile);
@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', async function () {
       // Replace mobile menu login link
       const mobileMenu = document.getElementById('mobileMenu');
       if (mobileMenu) {
-        const mobileLogin = mobileMenu.querySelector('a[href="/components/login"]') || 
+        const mobileLogin = mobileMenu.querySelector('a[href*="/components/login"]') || 
                            mobileMenu.querySelector('.auth-link');
         if (mobileLogin) {
           const mobileProfile = createProfileComponent(true);
@@ -189,7 +189,7 @@ function createProductCard(prod, index, options = {}) {
           </span>
         </div>
         ${isFeatured ? `
-        <div class="absolute top-4 left-4">
+        <div class="absolute top-12 right-4 ">
           <span style="display:inline-flex;align-items:center;gap:3px;padding:2px 8px;
             background:rgba(124,58,237,0.9);border-radius:999px;
             font-size:10px;font-weight:600;color:white;">
@@ -207,7 +207,7 @@ function createProductCard(prod, index, options = {}) {
             ${escapeHtml(prod.productCategory || 'Uncategorized')}
           </span>
           <span class="text-xs text-gray-400">
-            ${prod.productStock || 0} available
+            ${prod.productStock || 0} pieces
           </span>
         </div>
         <button type="button" class="w-full mt-6 py-3 border border-charcoal text-charcoal hover:bg-green-500 hover:text-white 

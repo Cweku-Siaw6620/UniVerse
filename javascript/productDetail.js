@@ -327,14 +327,14 @@ async function fetchRelatedProducts(category, currentProductId) {
             <h3 class="product-name text-lg font-medium">${escapeHtml(p.productName)}</h3>
             <span class="product-price text-gold font-semibold">₵${(p.productPrice || 0).toFixed(2)}</span>
           </div>
-          <div class="flex justify-between items-center mb-4">
+          <div class="flex justify-between items-center">
             <span class="product-category text-xs uppercase tracking-wider text-gray-500">
               ${escapeHtml(p.productCategory || 'Uncategorized')}
             </span>
-            <span class="text-xs text-gray-400">
-              ${p.productStock || 0} available
-            </span>
           </div>
+                      <span class="text-xs text-gray-400">
+              ${p.productStock || 0} pieces
+            </span>
           <a href="${whatsappLink}" target="_blank" onclick="event.stopPropagation();">
             <button class="w-full mt-6 py-3 border border-charcoal text-charcoal hover:bg-green-500 hover:text-white 
                   text-xs uppercase tracking-[0.2em] font-medium transition-all duration-300">
