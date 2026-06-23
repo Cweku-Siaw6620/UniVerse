@@ -82,7 +82,7 @@
                         <a href="stores.html" class="inline-flex items-center justify-center rounded-xl bg-slate-900 px-6 py-3.5 text-white shadow-lg shadow-slate-900/10 transition-transform hover:-translate-y-0.5 hover:bg-slate-800">
                             Explore Collections
                         </a>
-                        <a href="#featuredProductGrid" class="inline-flex items-center justify-center rounded-xl border border-white/70 bg-white/80 px-6 py-3.5 text-slate-900 shadow-sm backdrop-blur transition hover:bg-white">
+                        <a href="./homeScreens/featured.html" class="inline-flex items-center justify-center rounded-xl border border-white/70 bg-white/80 px-6 py-3.5 text-slate-900 shadow-sm backdrop-blur transition hover:bg-white">
                             See Featured
                         </a>
                     </div>
@@ -125,64 +125,128 @@
     </section>
     <!--Products View-->
 
-  <!-- Featured Products -->
-  <section class="py-20 bg-white border-b border-gray-100">
-        <div class="premium-container mx-auto">
-            <div class="text-center mb-16 fade-up">
-                <span class="text-xs uppercase tracking-[0.2em] text-gold mb-3 block">Curated Selection</span>
-                <h2 class="section-header">Featured Products</h2>
-                <p class="section-subheader">Hand-picked highlights from our student artisans</p>
-                <div class="gold-divider-center mt-6"></div>
+  <!-- SECTION 1: FEATURED PRODUCTS -->
+<section class="py-16 sm:py-20 bg-white">
+    <div class="premium-container mx-auto">
+        <div class="flex items-center justify-between mb-8 sm:mb-12">
+            <div>
+                <span class="text-xs uppercase tracking-[0.2em] text-gold mb-2 block">Curated Selection</span>
+                <h2 class="text-2xl sm:text-3xl font-semibold text-charcoal">Featured Products</h2>
             </div>
+            <!-- Show All link  Replace this later -->
+            <a href="./homeScreens/featured.html" class="inline-flex items-center text-sm text-graphite hover:text-gold transition-colors group">
+                <span class="font-medium">Show All</span>
+                <i data-feather="arrow-right" class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform"></i>
+            </a>
+        </div>
 
-            <div id="featuredProductGrid" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
-                <div class="skeleton h-80 w-full"></div>
-                <div class="skeleton h-80 w-full"></div>
-                <div class="skeleton h-80 w-full"></div>
-                <div class="skeleton h-80 w-full"></div>
+        <div class="carousel-wrapper relative">
+            <button class="carousel-arrow carousel-arrow-left hidden lg:flex" id="featuredArrowLeft" aria-label="Scroll left">
+                <i data-feather="chevron-left" class="w-5 h-5"></i>
+            </button>
+            
+            <div id="featuredCarousel" class="carousel-scroll snap-x snap-mandatory">
+                <!-- Loading skeletons -->
+                <div class="carousel-item snap-start">
+                    <div class="skeleton aspect-[3/4] rounded-2xl"></div>
+                </div>
+                <div class="carousel-item snap-start">
+                    <div class="skeleton aspect-[3/4] rounded-2xl"></div>
+                </div>
+                <div class="carousel-item snap-start">
+                    <div class="skeleton aspect-[3/4] rounded-2xl"></div>
+                </div>
+                <div class="carousel-item snap-start">
+                    <div class="skeleton aspect-[3/4] rounded-2xl"></div>
+                </div>
             </div>
+            
+            <button class="carousel-arrow carousel-arrow-right hidden lg:flex" id="featuredArrowRight" aria-label="Scroll right">
+                <i data-feather="chevron-right" class="w-5 h-5"></i>
+            </button>
+        </div>
+    </div>
+</section>
 
-            <div id="featuredLoading" class="hidden text-center py-16">
-                <div class="inline-block w-8 h-8 border-2 border-gold border-t-transparent rounded-full animate-spin"></div>
-                <p class="mt-4 text-sm text-graphite">Loading Featured Products...</p>
+<!-- SECTION 2: SHOP BY CATEGORY -->
+<section class="py-16 sm:py-20 bg-gray-50">
+    <div class="premium-container mx-auto">
+        <div class="flex items-center justify-between mb-8 sm:mb-12">
+            <div>
+                <span class="text-xs uppercase tracking-[0.2em] text-gold mb-2 block">Browse</span>
+                <h2 class="text-2xl sm:text-3xl font-semibold text-charcoal">Shop By Category</h2>
             </div>
         </div>
-    </section>
 
-    <!-- Main content -->
-  <section class="py-20 bg-gray-50">
-        <div class="premium-container mx-auto">
-            <div class="text-center mb-16 fade-up">
-                <span class="text-xs uppercase tracking-[0.2em] text-gold mb-3 block">Full Catalog</span>
-                <h2 class="section-header">All Products</h2>
-                <p class="section-subheader">Everything available in the marketplace</p>
-                <div class="gold-divider-center mt-6"></div>
+        <div class="carousel-wrapper relative">
+            <button class="carousel-arrow carousel-arrow-left hidden lg:flex" id="categoryArrowLeft" aria-label="Scroll left">
+                <i data-feather="chevron-left" class="w-5 h-5"></i>
+            </button>
+            
+            <div id="categoryCarousel" class="carousel-scroll snap-x snap-mandatory">
+                <!-- Categories injected by JS -->
             </div>
-
-            <!-- Product Grid - Will be populated by nav.js -->
-            <div id="productGrid" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
-                <!-- Loading skeletons for premium feel -->
-                <div class="skeleton h-80 w-full"></div>
-                <div class="skeleton h-80 w-full"></div>
-                <div class="skeleton h-80 w-full"></div>
-                <div class="skeleton h-80 w-full"></div>
-            </div>
-
-            <!-- Loading indicator (hidden by default) -->
-            <div id="loading" class="hidden text-center py-16">
-                <div class="inline-block w-8 h-8 border-2 border-gold border-t-transparent rounded-full animate-spin"></div>
-                <p class="mt-4 text-sm text-graphite">Loading Products...</p>
-            </div>
-
-            <!-- View All Link -->
-            <div class="text-center mt-16">
-                <a href="stores.html" class="inline-flex items-center text-charcoal hover:text-gold transition-colors group">
-                    <span class="text-sm uppercase tracking-[0.2em] font-medium">View All Stores</span>
-                    <i data-feather="arrow-right" class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform"></i>
-                </a>
-            </div>
+            
+            <button class="carousel-arrow carousel-arrow-right hidden lg:flex" id="categoryArrowRight" aria-label="Scroll right">
+                <i data-feather="chevron-right" class="w-5 h-5"></i>
+            </button>
         </div>
-    </section>
+    </div>
+</section>
+
+<!-- SECTION 3: RECENTLY VIEWED (conditional) -->
+<section id="recentlyViewedSection" class="py-16 sm:py-20 bg-white hidden">
+    <div class="premium-container mx-auto">
+        <div class="mb-8 sm:mb-12">
+            <span class="text-xs uppercase tracking-[0.2em] text-gold mb-2 block">For You</span>
+            <h2 class="text-2xl sm:text-3xl font-semibold text-charcoal">Recently Viewed</h2>
+        </div>
+
+        <div class="carousel-wrapper relative">
+            <button class="carousel-arrow carousel-arrow-left hidden lg:flex" id="recentArrowLeft" aria-label="Scroll left">
+                <i data-feather="chevron-left" class="w-5 h-5"></i>
+            </button>
+            
+            <div id="recentCarousel" class="carousel-scroll snap-x snap-mandatory">
+                <!-- Injected by JS -->
+            </div>
+            
+            <button class="carousel-arrow carousel-arrow-right hidden lg:flex" id="recentArrowRight" aria-label="Scroll right">
+                <i data-feather="chevron-right" class="w-5 h-5"></i>
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 4: ALL PRODUCTS -->
+<section class="py-16 sm:py-20 bg-gray-50">
+    <div class="premium-container mx-auto">
+        <div class="flex items-center justify-between mb-8 sm:mb-12">
+            <div>
+                <span class="text-xs uppercase tracking-[0.2em] text-gold mb-2 block">Full Catalog</span>
+                <h2 class="text-2xl sm:text-3xl font-semibold text-charcoal">All Products</h2>
+            </div>
+            <a href="./homeScreens/allProducts.html" class="inline-flex items-center text-sm text-graphite hover:text-gold transition-colors group">
+                <span class="font-medium">Show All</span>
+                <i data-feather="arrow-right" class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform"></i>
+            </a>
+        </div>
+
+        <div class="multi-row-wrapper relative">
+            <button class="carousel-arrow carousel-arrow-left hidden lg:flex" id="allArrowLeft" aria-label="Scroll left">
+                <i data-feather="chevron-left" class="w-5 h-5"></i>
+            </button>
+            
+            <div id="allProductsScroll" class="multi-row-scroll">
+                <!-- 3 rows injected by JS -->
+            </div>
+            
+            <button class="carousel-arrow carousel-arrow-right hidden lg:flex" id="allArrowRight" aria-label="Scroll right">
+                <i data-feather="chevron-right" class="w-5 h-5"></i>
+            </button>
+        </div>
+    </div>
+</section>
 
     <!-- Footer - Premium Minimalist -->
     <footer class="premium-footer py-16">

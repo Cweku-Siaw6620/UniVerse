@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Products | UniVerse</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/javascript/feather.min.js"></script>
+    <script src="/javascript/nav.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/stylesheet/home.css">
+    <style>
+        /* ── Page-specific styles ─────────────────────── */
+        .page-hero {
+            background: linear-gradient(135deg, #faf7f2 0%, #f0ebe3 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(183,155,91,0.08) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        /* Filter bar */
+        .filter-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            padding: 10px 12px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+            flex-wrap: wrap;
+        }
+
+        .filter-search-wrap {
+            position: relative;
+            flex: 1 1 220px;
+            min-width: 180px;
+        }
+
+        .filter-search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+            font-size: 14px;
+        }
+
+        .filter-search-input {
+            width: 100%;
+            padding: 11px 14px 11px 38px;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 14px;
+            color: #111827;
+            background: #f9fafb;
+            outline: none;
+            transition: border-color 0.15s, background 0.15s;
+        }
+
+        .filter-search-input:focus {
+            border-color: var(--gold);
+            background: #ffffff;
+        }
+
+        .filter-select-wrap {
+            position: relative;
+            flex: 0 1 190px;
+            min-width: 150px;
+        }
+
+        .filter-select {
+            width: 100%;
+            padding: 11px 32px 11px 14px;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 14px;
+            color: #374151;
+            background: #f9fafb;
+            outline: none;
+            appearance: none;
+            -webkit-appearance: none;
+            cursor: pointer;
+            transition: border-color 0.15s, background 0.15s;
+        }
+
+        .filter-select:focus {
+            border-color: var(--gold);
+            background: #ffffff;
+        }
+
+        .filter-select-chevron {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+            font-size: 11px;
+            pointer-events: none;
+        }
+
+        /* Active filter chips */
+        .filter-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .filter-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: #f3f4f6;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #374151;
+            transition: background 0.15s;
+        }
+
+        .filter-chip:hover {
+            background: #e5e7eb;
+        }
+
+        .filter-chip button {
+            background: none;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            color: #9ca3af;
+            display: flex;
+            align-items: center;
+        }
+
+        .filter-chip button:hover {
+            color: #ef4444;
+        }
+
+        /* Product grid */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        @media (min-width: 640px) {
+            .products-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 1.25rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .products-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 1.5rem;
+            }
+        }
+
+        @media (min-width: 1280px) {
+            .products-grid {
+                grid-template-columns: repeat(5, 1fr);
+            }
+        }
+
+        /* Overlay card */
+        .overlay-card {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            background: var(--cream);
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .overlay-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.12);
+        }
+
+        .overlay-card-image {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 3/4;
+            overflow: hidden;
+        }
+
+        .overlay-card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .overlay-card:hover .overlay-card-image img {
+            transform: scale(1.05);
+        }
+
+        .overlay-card-gradient {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                to top,
+                rgba(0,0,0,0.65) 0%,
+                rgba(0,0,0,0.2) 40%,
+                transparent 70%
+            );
+            pointer-events: none;
+        }
+
+        .overlay-card-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 10px;
+            font-weight: 600;
+            background: rgba(124,58,237,0.92);
+            color: white;
+            backdrop-filter: blur(4px);
+            z-index: 2;
+        }
+
+        .overlay-card-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 16px;
+            z-index: 2;
+        }
+
+        .overlay-card-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.05rem;
+            font-weight: 500;
+            color: white;
+            line-height: 1.3;
+            margin-bottom: 4px;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .overlay-card-price {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--gold);
+            text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+
+        .overlay-card-store {
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.8);
+            margin-top: 2px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+
+        /* Loading skeletons */
+        .skeleton-card {
+            aspect-ratio: 3/4;
+            border-radius: 16px;
+            background: linear-gradient(90deg, #f0f0f0 25%, #f8f8f8 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite;
+        }
+
+        @keyframes skeleton-loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Empty / Error states */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .empty-state-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 1.5rem;
+            color: #d1d5db;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .breadcrumb a {
+            color: #6b7280;
+            transition: color 0.15s;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--charcoal);
+        }
+
+        .breadcrumb-separator {
+            color: #d1d5db;
+        }
+
+        .breadcrumb-current {
+            color: var(--charcoal);
+            font-weight: 500;
+        }
+
+        /* Category label map for display */
+        .category-display-name {
+            text-transform: capitalize;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header — Same as index.html -->
+    <header class="sticky top-0 z-50 bg-white shadow-sm">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <a href="../index.html">
+                        <img src="../images/logo.png" alt="UniVerse Logo" class="h-14 w-14 md:h-16 md:w-16 object-contain rounded-full"/>
+                    </a>
+                </div>
+
+                <nav class="hidden md:flex items-center gap-2 text-sm font-semibold text-gray-800">
+                    <a href="../index.html" class="px-4 py-2 rounded hover:bg-gray-100 transition">Home</a>
+                    <a href="../stores.html" class="px-4 py-2 rounded hover:bg-gray-100 transition">Stores</a>
+                    <a href="../blog.html" class="px-4 py-2 rounded hover:bg-gray-100 transition">Blog</a>
+                    <a href="../components/login.html" class="ml-6 px-5 py-2 bg-gray-900 text-white rounded hover:bg-gray-700 transition">
+                        Sign In
+                    </a>
+                </nav>
+
+                <button id="mobileMenuButton" class="md:hidden text-gray-700 focus:outline-none" aria-label="Open menu">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+
+            <div id="mobileMenu" class="mobile-menu">
+                <div class="flex flex-col p-6 space-y-4">
+                    <a href="../index.html" class="block rounded px-4 py-3 text-[15px] font-medium text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900">Home</a>
+                    <a href="../stores.html" class="block rounded px-4 py-3 text-[15px] font-medium text-gray-900 transition-colors hover:bg-gray-100 hover:text-gray-900">Stores</a>
+                    <a href="../blog.html" class="block rounded px-4 py-3 text-[15px] font-medium text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900">Blog</a>
+                    <a href="../components/login.html" class="auth-link mt-4 block rounded bg-gray-900 px-5 py-3 text-center text-[15px] font-medium text-white transition-colors hover:bg-gray-700">
+                        Sign In
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Hero -->
+    <section class="page-hero py-12 sm:py-16">
+        <div class="premium-container mx-auto px-6 relative z-10">
+            <nav class="breadcrumb mb-6" aria-label="Breadcrumb">
+                <a href="../index.html">Home</a>
+                <span class="breadcrumb-separator">/</span>
+                <span class="breadcrumb-current" aria-current="page">All Products</span>
+            </nav>
+
+            <div class="max-w-2xl">
+                <span class="text-xs uppercase tracking-[0.2em] text-gold mb-3 block">Marketplace</span>
+                <h1 class="text-3xl sm:text-4xl lg:text-5xl font-semibold text-charcoal mb-4" style="font-family: 'Playfair Display', serif;">
+                    All Products
+                </h1>
+                <p class="text-graphite text-base sm:text-lg leading-relaxed">
+                    Browse everything available from student creators across all universities.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="py-12 sm:py-16 bg-white">
+        <div class="premium-container mx-auto px-6">
+            <!-- Filter Bar -->
+            <div class="mb-6">
+                <div class="filter-bar">
+                    <div class="filter-search-wrap">
+                        <i class="fas fa-search filter-search-icon"></i>
+                        <input type="text" id="searchInput" class="filter-search-input" placeholder="Search products...">
+                    </div>
+
+                    <div class="filter-select-wrap">
+                        <select id="categoryFilter" class="filter-select">
+                            <option value="">All Categories</option>
+                            <option value="electronics">Electronics & Gadgets</option>
+                            <option value="fashion">Fashion & Apparel</option>
+                            <option value="health_beauty">Health & Beauty</option>
+                            <option value="home_living">Home & Living</option>
+                            <option value="groceries">Groceries & Essentials</option>
+                            <option value="appliances">Appliances</option>
+                            <option value="books">Books & Stationery</option>
+                            <option value="kids_baby">Kids, Toys & Baby</option>
+                            <option value="sports_outdoors">Sports & Outdoors</option>
+                            <option value="automotive">Automotive</option>
+                            <option value="jewelry">Jewelry & Accessories</option>
+                            <option value="pets">Pet Supplies</option>
+                            <option value="tools">Tools & Industrial</option>
+                            <option value="music_art">Music, Art & Entertainment</option>
+                            <option value="digital">Services & Digital Products</option>
+                        </select>
+                        <i class="fas fa-chevron-down filter-select-chevron"></i>
+                    </div>
+
+                    <div class="filter-select-wrap">
+                        <select id="sortFilter" class="filter-select">
+                            <option value="newest">Newest First</option>
+                            <option value="price-low">Price: Low to High</option>
+                            <option value="price-high">Price: High to Low</option>
+                        </select>
+                        <i class="fas fa-chevron-down filter-select-chevron"></i>
+                    </div>
+                </div>
+
+                <!-- Active filter chips -->
+                <div id="filterChips" class="filter-chips"></div>
+            </div>
+
+            <!-- Results count -->
+            <p class="text-sm text-graphite mb-6">
+                Showing <span id="productCount" class="font-medium text-charcoal">0</span> products
+            </p>
+
+            <!-- Product Grid -->
+            <div id="productsGrid" class="products-grid">
+                <!-- Loading skeletons -->
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card hidden sm:block"></div>
+                <div class="skeleton-card hidden sm:block"></div>
+                <div class="skeleton-card hidden lg:block"></div>
+                <div class="skeleton-card hidden lg:block"></div>
+                <div class="skeleton-card hidden xl:block"></div>
+                <div class="skeleton-card hidden xl:block"></div>
+            </div>
+
+            <!-- Empty State -->
+            <div id="emptyState" class="empty-state hidden">
+                <div class="empty-state-icon">
+                    <i data-feather="package" class="w-full h-full"></i>
+                </div>
+                <h3 class="text-xl font-medium text-charcoal mb-2">No products found</h3>
+                <p class="text-graphite text-sm">Try adjusting your search or filters to find what you are looking for.</p>
+            </div>
+
+            <!-- Error State -->
+            <div id="errorState" class="empty-state hidden">
+                <div class="empty-state-icon">
+                    <i data-feather="alert-circle" class="w-full h-full"></i>
+                </div>
+                <h3 class="text-xl font-medium text-charcoal mb-2">Unable to load products</h3>
+                <p class="text-graphite text-sm mb-6">Something went wrong while fetching products.</p>
+                <button onclick="loadProducts()" class="inline-flex items-center px-6 py-3 border border-charcoal text-charcoal text-sm font-medium rounded-lg hover:bg-charcoal hover:text-white transition-all duration-300">
+                    <i data-feather="refresh-cw" class="w-4 h-4 mr-2"></i>
+                    Try Again
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer — Same as index.html -->
+    <footer class="premium-footer py-16">
+        <div class="premium-container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+                <div class="col-span-1 md:col-span-2">
+                    <div class="flex items-center mb-6">
+                        <img src="./images/keltec.jpg" alt="Keltec" class="h-12 w-12 rounded-full border border-white border-opacity-20">
+                        <span class="ml-4 serif-font text-2xl font-medium text-white">Keltec</span>
+                    </div>
+                    <p class="text-white text-opacity-60 max-w-md text-sm leading-relaxed">
+                        A curation of exceptional student commerce. Where quality meets authenticity.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-white text-sm uppercase tracking-[0.2em] mb-6">Explore</h4>
+                    <ul class="space-y-4">
+                        <li><a href="stores.html" class="text-white text-opacity-60 hover:text-gold text-sm transition-colors">Collections</a></li>
+                        <li><a href="blog.html" class="text-white text-opacity-60 hover:text-gold text-sm transition-colors">Journal</a></li>
+                        <li><a href="aboutMe.html" class="text-white text-opacity-60 hover:text-gold text-sm transition-colors">The Curator</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white text-sm uppercase tracking-[0.2em] mb-6">Connect</h4>
+                    <ul class="space-y-4">
+                        <li><a href="#" class="text-white text-opacity-60 hover:text-gold text-sm transition-colors">Instagram</a></li>
+                        <li><a href="#" class="text-white text-opacity-60 hover:text-gold text-sm transition-colors">Twitter</a></li>
+                        <li><a href="#" class="text-white text-opacity-60 hover:text-gold text-sm transition-colors">LinkedIn</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-white border-opacity-10 mt-16 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-white text-opacity-40 text-xs mb-4 md:mb-0">
+                    © 2025 Keltec. All rights reserved.
+                </p>
+                <p class="text-white text-opacity-40 text-xs">
+                    Crafted by <a href="aboutMe.html" target="_blank" class="text-gold hover:text-gold-light transition-colors font-medium">Kelvin Ashong</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // ── STATE ───────────────────────────────────────
+        let allProducts = [];
+        let currentFilters = {
+            search: '',
+            category: '',
+            sort: 'newest'
+        };
+
+        // Category display names
+        const CATEGORY_LABELS = {
+            electronics: 'Electronics & Gadgets',
+            fashion: 'Fashion & Apparel',
+            health_beauty: 'Health & Beauty',
+            home_living: 'Home & Living',
+            groceries: 'Groceries & Essentials',
+            appliances: 'Appliances',
+            books: 'Books & Stationery',
+            kids_baby: 'Kids, Toys & Baby',
+            sports_outdoors: 'Sports & Outdoors',
+            automotive: 'Automotive',
+            jewelry: 'Jewelry & Accessories',
+            pets: 'Pet Supplies',
+            tools: 'Tools & Industrial',
+            music_art: 'Music, Art & Entertainment',
+            digital: 'Services & Digital Products'
+        };
+
+        // ── INIT ────────────────────────────────────────
+        document.addEventListener('DOMContentLoaded', () => {
+            // Mobile menu
+            const mobileMenuButton = document.getElementById('mobileMenuButton');
+            const mobileMenu = document.getElementById('mobileMenu');
+
+            mobileMenuButton.addEventListener('click', function() {
+                mobileMenu.classList.toggle('active');
+                const icon = mobileMenuButton.querySelector('i');
+                if (mobileMenu.classList.contains('active')) {
+                    icon.classList.remove('fa-bars');
+                    icon.classList.add('fa-times');
+                } else {
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
+            });
+
+            // Check URL for pre-selected category
+            const urlParams = new URLSearchParams(window.location.search);
+            const preCategory = urlParams.get('category');
+            if (preCategory) {
+                document.getElementById('categoryFilter').value = preCategory;
+                currentFilters.category = preCategory;
+            }
+
+            // Load products
+            loadProducts();
+
+            // Setup filter listeners
+            document.getElementById('searchInput').addEventListener('input', debounce(() => {
+                currentFilters.search = document.getElementById('searchInput').value.toLowerCase().trim();
+                applyFilters();
+            }, 300));
+
+            document.getElementById('categoryFilter').addEventListener('change', () => {
+                currentFilters.category = document.getElementById('categoryFilter').value;
+                applyFilters();
+            });
+
+            document.getElementById('sortFilter').addEventListener('change', () => {
+                currentFilters.sort = document.getElementById('sortFilter').value;
+                applyFilters();
+            });
+        });
+
+        // ── FETCH PRODUCTS ──────────────────────────────
+        async function loadProducts() {
+            const grid = document.getElementById('productsGrid');
+            const emptyState = document.getElementById('emptyState');
+            const errorState = document.getElementById('errorState');
+
+            // Show loading
+            grid.innerHTML = `
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card hidden sm:block"></div>
+                <div class="skeleton-card hidden sm:block"></div>
+                <div class="skeleton-card hidden lg:block"></div>
+                <div class="skeleton-card hidden lg:block"></div>
+                <div class="skeleton-card hidden xl:block"></div>
+                <div class="skeleton-card hidden xl:block"></div>
+            `;
+            emptyState.classList.add('hidden');
+            errorState.classList.add('hidden');
+
+            try {
+                const res = await fetch('https://uni-verse-api.vercel.app/api/products/all');
+                if (!res.ok) throw new Error('Failed to fetch');
+
+                const products = await res.json();
+                allProducts = products;
+
+                applyFilters();
+
+            } catch (err) {
+                console.error('Failed to load products:', err);
+                grid.innerHTML = '';
+                errorState.classList.remove('hidden');
+                document.getElementById('productCount').textContent = '0';
+                if (typeof feather !== 'undefined') feather.replace();
+            }
+        }
+
+        // ── APPLY FILTERS ───────────────────────────────
+        function applyFilters() {
+            let filtered = [...allProducts];
+
+            // Search filter
+            if (currentFilters.search) {
+                filtered = filtered.filter(p => 
+                    p.productName?.toLowerCase().includes(currentFilters.search) ||
+                    p.productDescription?.toLowerCase().includes(currentFilters.search) ||
+                    p.productCategory?.toLowerCase().includes(currentFilters.search)
+                );
+            }
+
+            // Category filter
+            if (currentFilters.category) {
+                filtered = filtered.filter(p => p.productCategory === currentFilters.category);
+            }
+
+            // Sort
+            if (currentFilters.sort === 'price-low') {
+                filtered.sort((a, b) => (a.productPrice || 0) - (b.productPrice || 0));
+            } else if (currentFilters.sort === 'price-high') {
+                filtered.sort((a, b) => (b.productPrice || 0) - (a.productPrice || 0));
+            } else {
+                filtered.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+            }
+
+            renderProducts(filtered);
+            updateFilterChips();
+        }
+
+        // ── RENDER PRODUCTS ─────────────────────────────
+        function renderProducts(products) {
+            const grid = document.getElementById('productsGrid');
+            const emptyState = document.getElementById('emptyState');
+            const countEl = document.getElementById('productCount');
+
+            countEl.textContent = products.length;
+
+            if (!products.length) {
+                grid.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                if (typeof feather !== 'undefined') feather.replace();
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            grid.innerHTML = '';
+
+            products.forEach((prod, i) => {
+                const card = document.createElement('div');
+                card.className = 'overlay-card fade-up';
+                card.style.animationDelay = `${i * 0.03}s`;
+                card.onclick = () => {
+                    window.location.href = `./components/productDetail.html?id=${prod._id}`;
+                };
+
+                const isFeatured = Boolean(prod.featured);
+
+                card.innerHTML = `
+                    <div class="overlay-card-image">
+                        <img src="${prod.productImage || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&h=800&fit=crop'}" 
+                             alt="${escapeHtml(prod.productName)}"
+                             loading="lazy">
+                        <div class="overlay-card-gradient"></div>
+                        ${isFeatured ? `
+                        <span class="overlay-card-badge">
+                            <i data-feather="star" class="w-3 h-3"></i> Featured
+                        </span>` : ''}
+                        <div class="overlay-card-info">
+                            <h3 class="overlay-card-name">${escapeHtml(prod.productName)}</h3>
+                            <p class="overlay-card-price">₵${(prod.productPrice || 0).toFixed(2)}</p>
+                            ${prod.storeName ? `<p class="overlay-card-store">${escapeHtml(prod.storeName)}</p>` : ''}
+                        </div>
+                    </div>
+                `;
+
+                grid.appendChild(card);
+            });
+
+            if (typeof feather !== 'undefined') feather.replace();
+        }
+
+        // ── FILTER CHIPS ────────────────────────────────
+        function updateFilterChips() {
+            const container = document.getElementById('filterChips');
+            const chips = [];
+
+            if (currentFilters.search) {
+                chips.push({
+                    label: `Search: "${currentFilters.search}"`,
+                    onRemove: () => {
+                        document.getElementById('searchInput').value = '';
+                        currentFilters.search = '';
+                        applyFilters();
+                    }
+                });
+            }
+
+            if (currentFilters.category) {
+                chips.push({
+                    label: CATEGORY_LABELS[currentFilters.category] || currentFilters.category,
+                    onRemove: () => {
+                        document.getElementById('categoryFilter').value = '';
+                        currentFilters.category = '';
+                        applyFilters();
+                    }
+                });
+            }
+
+            container.innerHTML = chips.map(chip => `
+                <span class="filter-chip">
+                    ${escapeHtml(chip.label)}
+                    <button onclick="removeFilterChip(this)" aria-label="Remove filter">
+                        <i data-feather="x" class="w-3 h-3"></i>
+                    </button>
+                </span>
+            `).join('');
+
+            // Store remove handlers on elements for access
+            chips.forEach((chip, i) => {
+                const btn = container.querySelectorAll('.filter-chip button')[i];
+                if (btn) btn.onclick = chip.onRemove;
+            });
+
+            if (typeof feather !== 'undefined') feather.replace();
+        }
+
+        function removeFilterChip(btn) {
+            // Handled by stored onclick
+        }
+
+        // ── UTILITIES ───────────────────────────────────
+        function debounce(fn, ms) {
+            let timeout;
+            return (...args) => {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => fn(...args), ms);
+            };
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+        }
+    </script>
+</body>
+</html>
