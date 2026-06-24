@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", async () => {
   const urlParams = new URLSearchParams(window.location.search);
   const productId = urlParams.get("id");
-  
 
   if (!productId) {
     showError("No product found!");
@@ -9,37 +8,35 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   try {
-    // Fetch product details
     const product = await fetchProductDetails(productId);
+    const store = await fetchStoreDetails(product.storeId);
 
-    const storeId = product.storeId;
-
-    //fetching store details
-    const store = await fetchStoreDetails(storeId);
-    
-    // Update all product information
     updateProductDisplay(product, store);
-    updateStoreInfo(store);
+    updateSellerCard(product, store);
+    updateSpecs(product);
     updateBreadcrumb(product);
-    
-    // Set up button actions
     setupButtonActions(product, store);
-    
-    // Fetch and display related products
     await fetchRelatedProducts(product.productCategory, productId);
-    
-
-    // Set up share functionality
-    //check later
     setupShareFunctionality(product);
-    
+
+    // Track for recently viewed (localStorage-based, not analytics)
+    trackProductView(product);
+
+    // Track product view for Tier 2 analytics
+    // Skip if the logged-in user is the store owner
+    UniTracker.productView(
+      typeof product.storeId === 'object' ? product.storeId._id || product.storeId : product.storeId,
+      product._id,
+      store.owner?._id || store.owner
+    );
+
   } catch (err) {
     console.error("Error loading product:", err);
     showError("Failed to load product details. Please try again.");
   }
 });
 
-// Fetch product details from API
+// ── FETCH ─────────────────────────────────────────
 async function fetchProductDetails(productId) {
   const res = await fetch(`https://uni-verse-api.vercel.app/api/products/id/${productId}`);
   if (!res.ok) throw new Error("Failed to fetch product");
@@ -47,350 +44,278 @@ async function fetchProductDetails(productId) {
 }
 
 async function fetchStoreDetails(storeId) {
-const res = await fetch(`https://uni-verse-api.vercel.app/api/stores/storeID/${storeId}`);
+  const res = await fetch(`https://uni-verse-api.vercel.app/api/stores/storeID/${storeId}`);
   if (!res.ok) throw new Error("Failed to fetch store");
   const store = await res.json();
-  const verification = window.uniVerseVerification
-    ? await window.uniVerseVerification.fetchVerificationStatus(store.owner)
+  const ownerId = store.owner?._id || store.owner;
+  const verification = window.uniVerseVerification && ownerId
+    ? await window.uniVerseVerification.fetchVerificationStatus(ownerId)
     : { isVerified: false };
   return { ...store, ownerVerified: verification.isVerified };
 }
 
-// Update all product information on the page
+// ── UPDATE PRODUCT DISPLAY ────────────────────────
 function updateProductDisplay(product, store) {
-  // Update main image
-  const mainImageContainer = document.getElementById('mainImageContainer');
-  if (mainImageContainer) {
-    mainImageContainer.innerHTML = `
-      <img src="${product.productImage || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'}" 
+  const container = document.getElementById('mainImageContainer');
+  if (container) {
+    container.innerHTML = `
+      <img src="${product.productImage || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&h=800&fit=crop'}" 
            alt="${escapeHtml(product.productName)}" 
-           class="w-full h-auto product-image rounded"
+           class="w-full h-full object-cover"
            id="mainProductImage">
-      ${product.productStock <= 5 ? `
-        <div class="stock-badge">Only ${product.productStock} left</div>
-      ` : ''}
     `;
   }
 
-  // Update product title and price
-  document.querySelector('#productDetail h1')?.remove();
-  document.querySelector('#productDetail h1')?.remove();
-  
-  const productHeader = document.getElementById('productHeader');
-  if (productHeader) {
-    productHeader.innerHTML = `
-      <h1 class="serif-heading text-3xl mb-3">${escapeHtml(product.productName)}</h1>
-      <div class="mb-2">
-        <span class="vintage-tag">${escapeHtml(product.productCategory || 'General')}</span>
-      </div>
-      <p class="text-2xl font-semibold text-gray-900 mb-4">₵${(product.productPrice || 0).toFixed(2)}</p>
+  const stockBadge = document.getElementById('stockBadge');
+  if (stockBadge) {
+    if (product.productStock <= 5 && product.productStock > 0) {
+      stockBadge.classList.remove('hidden');
+      stockBadge.querySelector('span').textContent = `Only ${product.productStock} left`;
+      stockBadge.querySelector('span').className = 'bg-amber-500 text-white px-3 py-1.5 rounded-full text-xs font-semibold shadow-sm';
+    } else if (product.productStock === 0) {
+      stockBadge.classList.remove('hidden');
+      stockBadge.querySelector('span').textContent = 'Sold Out';
+      stockBadge.querySelector('span').className = 'bg-red-500 text-white px-3 py-1.5 rounded-full text-xs font-semibold shadow-sm';
+    } else {
+      stockBadge.classList.add('hidden');
+    }
+  }
+
+  const featuredBadge = document.getElementById('featuredBadge');
+  if (featuredBadge) {
+    featuredBadge.classList.toggle('hidden', !product.featured);
+  }
+
+  const catTag = document.getElementById('productCategoryTag');
+  if (catTag) {
+    catTag.innerHTML = `
+      <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition cursor-pointer"
+            onclick="window.location.href='../homeScreens/allProducts.html?category=${encodeURIComponent(product.productCategory || '')}'">
+        ${escapeHtml(product.productCategory || 'General')}
+      </span>
     `;
   }
 
-  // Update product description
-  const descriptionContainer = document.getElementById('productDescription');
-  if (descriptionContainer) {
-    descriptionContainer.innerHTML = `
-      <p class="text-gray-700 leading-relaxed">${escapeHtml(product.productDescription || 'No description available.')}</p>
-    `;
+  const title = document.getElementById('productTitle');
+  if (title) title.textContent = escapeHtml(product.productName);
+
+  const price = document.getElementById('productPrice');
+  if (price) price.textContent = `GH₵ ${(product.productPrice || 0).toFixed(2)}`;
+
+  const stockText = document.getElementById('productStock');
+  if (stockText) {
+    const status = product.productStock > 10 ? 'In Stock' : product.productStock > 0 ? 'Low Stock' : 'Out of Stock';
+    const color  = product.productStock > 10 ? 'text-emerald-600' : product.productStock > 0 ? 'text-amber-600' : 'text-red-600';
+    stockText.innerHTML = `<span class="${color}">${status}</span> · ${product.productStock || 0} available`;
   }
 
-  // Update specifications table
-  const specsTable = document.getElementById('productSpecs');
-  if (specsTable) {
-    specsTable.innerHTML = `
-      <tr>
-        <td>Category</td>
-        <td><span class="font-medium">${escapeHtml(product.productCategory || 'Not specified')}</span></td>
-      </tr>
-      <tr>
-        <td>Stock Available</td>
-        <td>
-          <span class="font-medium ${product.productStock > 10 ? 'text-green-600' : product.productStock > 0 ? 'text-yellow-600' : 'text-red-600'}">
-            ${product.productStock || 0} units
-          </span>
-        </td>
-      </tr>
-      <tr>
-        <td>Condition</td>
-        <td><span class="font-medium">${product.condition || 'New'}</span></td>
-      </tr>
-      <tr>
-        <td>Store</td>
-        <td><span class="font-medium">${escapeHtml(store.storeName || 'Unknown Store')}</span></td>
-      </tr>
-    `;
+  const desc = document.getElementById('productDescription');
+  if (desc) desc.textContent = escapeHtml(product.productDescription || 'No description available.');
+}
+
+// ── UPDATE SELLER CARD ────────────────────────────
+function updateSellerCard(product, store) {
+  const avatar           = document.getElementById('sellerAvatar');
+  const name             = document.getElementById('sellerName');
+  const storeName        = document.getElementById('sellerStore');
+  const verifiedBadge    = document.getElementById('verifiedBadge');
+  const verificationChip = document.getElementById('verificationChip');
+  const affiliationText  = document.getElementById('affiliationText');
+  const affiliationBadge = document.getElementById('affiliationBadge');
+
+  if (avatar) {
+    avatar.src = store.storeLogo || 'https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=100&h=100&fit=crop';
+    avatar.alt = escapeHtml(store.storeName || 'Store');
+  }
+  if (name)      name.textContent      = escapeHtml(store.sellerName  || 'Unknown');
+  if (storeName) storeName.textContent = escapeHtml(store.storeName   || 'Unknown Store');
+
+  if (verifiedBadge)    verifiedBadge.classList.toggle('hidden', !store.ownerVerified);
+  if (verificationChip) verificationChip.classList.toggle('hidden', !store.ownerVerified);
+
+  // ── Affiliation — student only ────────────────
+  if (affiliationText && affiliationBadge) {
+    const owner       = store.owner;
+    const affiliation = typeof owner?.affiliation === 'string' ? owner.affiliation.toLowerCase() : '';
+    const isStudent   = affiliation.includes('student');
+    const university  = owner?.university || null;
+
+    // Build label: "Student" or "Student · KNUST" etc.
+    let label = isStudent ? 'Student Seller' : 'Seller';
+    if (university) label += ` · ${university}`;
+
+    affiliationText.textContent = label;
+
+    // Badge styling — consistent green for student, neutral gray for others
+    const badgeClass = isStudent
+      ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+      : 'bg-gray-50 text-gray-600 border-gray-200';
+
+    affiliationBadge.className = `mt-1.5 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold border ${badgeClass}`;
+
+    const iconEl = affiliationBadge.querySelector('i');
+    if (iconEl) {
+      iconEl.setAttribute('data-feather', isStudent ? 'graduation-cap' : 'user');
+    }
+  }
+
+  // ── Re-run feather AFTER DOM is updated ───────
+  // Important: feather.replace() must run AFTER all innerHTML changes,
+  // otherwise icons injected by JS never render.
+  if (typeof feather !== 'undefined') feather.replace();
+}
+
+// ── UPDATE SPECS ──────────────────────────────────
+function updateSpecs(product) {
+  const cat   = document.getElementById('specCategory');
+  const cond  = document.getElementById('specCondition');
+  const stock = document.getElementById('specStock');
+  const date  = document.getElementById('specDate');
+
+  if (cat)   cat.textContent   = escapeHtml(product.productCategory || 'General');
+  if (cond)  cond.textContent  = escapeHtml(product.condition || 'New');
+  if (stock) stock.textContent = `${product.productStock || 0} units`;
+  if (date) {
+    const created = product.createdAt ? new Date(product.createdAt) : new Date();
+    date.textContent = created.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
   }
 }
 
-// Update store information
-function updateStoreInfo(store) {
-  const storeInfo = document.getElementById('storeInfo');
-  if (storeInfo) {
-    const verificationBadge = store.ownerVerified
-      ? window.uniVerseVerification.getVerifiedBadgeHtml()
-      : '<span class="store-verify-chip store-verify-chip--unverified"><i class="ri-shield-line mr-1"></i>Pending verification</span>';
-
-    storeInfo.innerHTML = `
-      <div class="store-card-shell">
-        <div class="store-card-header">
-          <div class="store-card-brand">
-            <img src="${store.storeLogo || 'https://images.unsplash.com/photo-1563013544-824ae1b704d3?ixlib=rb-1.2.1&auto=format&fit=crop&w=120&q=80'}"
-                 alt="${escapeHtml(store.storeName || 'Store')}"
-                 class="store-card-avatar">
-            <div>
-              <div class="store-card-kicker">Verified seller profile</div>
-              <h4 class="store-card-name">${escapeHtml(store.storeName || 'Unknown Store')}</h4>
-              <div class="store-card-subtitle">${escapeHtml(store.sellerName || 'Unknown seller')} · Student seller</div>
-            </div>
-          </div>
-          <div class="store-card-badge-wrap">
-            ${verificationBadge}
-          </div>
-        </div>
-
-        <div class="store-card-description">
-          ${escapeHtml(store.storeDescription || 'No store description available.')}
-        </div>
-
-        <div class="store-card-stats">
-          <div class="store-stat">
-            <i class="ri-shield-check-line"></i>
-            <span>${store.ownerVerified ? 'Verified seller' : 'Verification pending'}</span>
-          </div>
-          <div class="store-stat">
-            <i class="ri-smartphone-line"></i>
-            <span>${escapeHtml(store.sellerNumber || 'Contact via WhatsApp')}</span>
-          </div>
-        </div>
-
-        <div class="store-card-footer">
-          <button type="button" class="store-card-action" onclick="document.getElementById('contactSellerBtn')?.click()">
-            <i class="ri-whatsapp-line"></i>
-            Contact seller
-          </button>
-        </div>
-      </div>
-    `;
-  }
+// ── UPDATE BREADCRUMB ─────────────────────────────
+function updateBreadcrumb(product) {
+  const crumb = document.getElementById('breadcrumbProduct');
+  if (crumb) crumb.textContent = escapeHtml(product.productName);
 }
 
-// Set up button actions
+// ── BUTTON ACTIONS ────────────────────────────────
 function setupButtonActions(product, store) {
-  const visitStoreBtn = document.getElementById('visitStoreBtn');
-  const contactSellerBtn = document.getElementById('contactSellerBtn');
-  const shareProductBtn = document.getElementById('shareProductBtn');
+  const visitBtn   = document.getElementById('visitStoreBtn');
+  const contactBtn = document.getElementById('contactSellerBtn');
+  const shareBtn   = document.getElementById('shareProductBtn');
 
-  if (visitStoreBtn && store.storeId) {
-    visitStoreBtn.addEventListener('click', () => {
-      window.location.href = `displayStore.html?slug=${store.storeSlug || store.storeId}`;
-    });
+  if (visitBtn) {
+    // FIX: use store.slug not store.storeSlug — that field doesn't exist
+    visitBtn.onclick = () => {
+      window.location.href = `displayStore.html?slug=${store.slug || store._id}`;
+    };
   }
 
-  if (contactSellerBtn && store.sellerNumber) {
-    contactSellerBtn.addEventListener('click', () => {
-      const countryCode = '233';
-      const cleanNumber = store.sellerNumber.replace(/\D/g, '');
-      const message = encodeURIComponent(
-        `Hi, I'm interested in your product: *${escapeHtml(product.productName)}*\n\nPrice: ₵${(product.productPrice || 0).toFixed(2)}\n\nCan you provide more details?`
+  if (contactBtn && store.sellerNumber) {
+    contactBtn.onclick = () => {
+      const clean = store.sellerNumber.replace(/\D/g, '');
+      const msg   = encodeURIComponent(
+        `Hi, I'm interested in your product: *${product.productName}*\n\nPrice: ₵${(product.productPrice || 0).toFixed(2)}\n\nCan you provide more details?`
       );
-      window.open(`https://api.whatsapp.com/send?phone=${countryCode}${cleanNumber}&text=${message}`, '_blank');
-    });
+      // Track WhatsApp click for analytics before opening
+      UniTracker.whatsappClick(
+        typeof product.storeId === 'object' ? product.storeId._id || product.storeId : product.storeId,
+        product._id,
+        store.owner?._id || store.owner
+      );
+      window.open(`https://api.whatsapp.com/send?phone=233${clean}&text=${msg}`, '_blank');
+    };
   }
 
-  if (shareProductBtn) {
-    shareProductBtn.addEventListener('click', () => {
-      shareProduct(product);
-    });
+  if (shareBtn) {
+    shareBtn.onclick = () => shareProduct(product);
   }
 }
 
-
-
-// Change main image function (global for onclick)
-window.changeMainImage = function(imageUrl, element) {
-  const mainImage = document.getElementById('mainProductImage');
-  if (mainImage) {
-    mainImage.src = imageUrl;
-  }
-  
-  // Update active thumbnail
-  document.querySelectorAll('.gallery-thumb').forEach(thumb => {
-    thumb.classList.remove('active');
-  });
-  element.classList.add('active');
-};
-
-// Set up share functionality
+// ── SHARE ─────────────────────────────────────────
 function setupShareFunctionality(product) {
   window.shareProduct = function(product) {
     const shareData = {
-      title: `${escapeHtml(product.productName)} - UniVerse`,
-      text: `Check out ${escapeHtml(product.productName)} on UniVerse for ₵${(product.productPrice || 0).toFixed(2)}`,
-      url: window.location.href,
+      title: `${product.productName} - UniVerse`,
+      text:  `Check out ${product.productName} on UniVerse for ₵${(product.productPrice || 0).toFixed(2)}`,
+      url:   window.location.href,
     };
-
     if (navigator.share) {
-      navigator.share(shareData)
-        .then(() => console.log('Product shared successfully'))
-        .catch(err => console.error('Error sharing:', err));
+      navigator.share(shareData).catch(() => {});
     } else {
-      // Fallback: Copy to clipboard
       navigator.clipboard.writeText(shareData.url)
-        .then(() => {
-          alert('Link copied to clipboard!');
-        })
-        .catch(err => {
-          console.error('Failed to copy:', err);
-          // Fallback for older browsers
-          const textArea = document.createElement('textarea');
-          textArea.value = shareData.url;
-          document.body.appendChild(textArea);
-          textArea.select();
-          document.execCommand('copy');
-          document.body.removeChild(textArea);
-          alert('Link copied to clipboard!');
-        });
+        .then(() => alert('Link copied to clipboard!'))
+        .catch(() => {});
     }
   };
 }
 
-// Fetch and display related products
+// ── RELATED PRODUCTS ──────────────────────────────
 async function fetchRelatedProducts(category, currentProductId) {
   try {
     const res = await fetch(`https://uni-verse-api.vercel.app/api/products/category/${encodeURIComponent(category)}`);
-    if (!res.ok) throw new Error('Failed to fetch related products');
-    const related = await res.json();
-    const relatedContainer = document.getElementById('relatedProducts');
+    if (!res.ok) throw new Error('Failed');
+    const data = await res.json();
+    const products  = data.products || data;
+    const container = document.getElementById('relatedProducts');
+    const filtered  = products.filter(p => p._id !== currentProductId).slice(0, 4);
 
-    // Update "View all" link
-    const viewAllLink = document.getElementById('viewAllCategory');
-    if (viewAllLink) {
-      viewAllLink.href = `stores.html?category=${encodeURIComponent(category)}`;
-    }
-
-    if (!related || !related.length) {
-      relatedContainer.innerHTML = `
-        <div class="col-span-full text-center py-12">
-          <i class="ri-box-3-line text-4xl text-gray-300 mb-4"></i>
-          <p class="text-gray-500">No related products found in this category.</p>
-        </div>
-      `;
+    if (!filtered.length) {
+      container.innerHTML = '<p class="col-span-full text-center text-gray-400 py-8">No related products found</p>';
       return;
     }
 
-    // Filter out current product and limit to 4
-    const filteredRelated = related
-      .filter(p => p._id !== currentProductId)
-      .slice(0, 4);
-
-    // Build cards asynchronously so we can fetch WhatsApp links like on the homepage
-    const productPromises = filteredRelated.map(async (p, index) => {
+    container.innerHTML = '';
+    filtered.forEach((p, i) => {
       const card = document.createElement('div');
-      card.className = 'premium-product-card fade-up cursor-pointer';
-      card.style.animationDelay = `${index * 0.05}s`;
-      card.addEventListener('click', () => window.location.href = `productDetail.html?id=${p._id}`);
-      const isFeatured = Boolean(p.featured);
-
-      // Get whatsapp link (nav.js exposes getWhatsAppLink)
-      let whatsappLink = '#';
-      if (typeof getWhatsAppLink === 'function') {
-        try { whatsappLink = await getWhatsAppLink(p); } catch (e) { /* ignore */ }
-      }
-
-      const stockStatus = p.productStock > 10 ? 'In Stock' : p.productStock > 0 ? 'Low Stock' : 'Sold Out';
-      const stockClass = p.productStock > 10 ? 'text-green-600' : p.productStock > 0 ? 'text-gold' : 'text-red-500';
-
+      card.className = 'group cursor-pointer fade-up';
+      card.style.animationDelay = `${i * 0.05}s`;
+      card.onclick = () => window.location.href = `productDetail.html?id=${p._id}`;
       card.innerHTML = `
-        <div class="image-container relative group">
-          <img src="${p.productImage || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'}" 
+        <div class="aspect-[3/4] rounded-2xl overflow-hidden bg-gray-100 mb-3 shadow-sm group-hover:shadow-md transition-shadow">
+          <img src="${p.productImage || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=533&fit=crop'}" 
                alt="${escapeHtml(p.productName)}"
                loading="lazy"
-               class="w-full h-80 object-cover transform group-hover:scale-105 transition-transform duration-300 cursor-pointer"
-               onclick="window.location.href='./productDetail.html?id=${p._id}'">
-          <div class="absolute top-4 right-4">
-            <span class="bg-white px-3 py-1 text-xs font-medium shadow-md rounded-full ${stockClass}">
-              ${stockStatus}
-            </span>
-          </div>
-          ${isFeatured ? `
-          <div class="absolute top-4 left-4">
-            <span style="display:inline-flex;align-items:center;gap:3px;padding:2px 8px;
-              background:rgba(124,58,237,0.9);border-radius:999px;
-              font-size:10px;font-weight:600;color:white;">
-              ⭐ Featured
-            </span>
-          </div>` : ''}
+               class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
         </div>
-        <div class="pt-6 pb-2">
-          <div class="flex justify-between items-start mb-2">
-            <h3 class="product-name text-lg font-medium">${escapeHtml(p.productName)}</h3>
-            <span class="product-price text-gold font-semibold">₵${(p.productPrice || 0).toFixed(2)}</span>
-          </div>
-          <div class="flex justify-between items-center">
-            <span class="product-category text-xs uppercase tracking-wider text-gray-500">
-              ${escapeHtml(p.productCategory || 'Uncategorized')}
-            </span>
-          </div>
-                      <span class="text-xs text-gray-400">
-              ${p.productStock || 0} pieces
-            </span>
-          <a href="${whatsappLink}" target="_blank" onclick="event.stopPropagation();">
-            <button class="w-full mt-6 py-3 border border-charcoal text-charcoal hover:bg-green-500 hover:text-white 
-                  text-xs uppercase tracking-[0.2em] font-medium transition-all duration-300">
-              BUY NOW
-            </button>
-          </a>
-        </div>
+        <h3 class="font-medium text-gray-900 text-sm mb-1 truncate">${escapeHtml(p.productName)}</h3>
+        <p class="text-gray-900 font-semibold">₵${(p.productPrice || 0).toFixed(2)}</p>
       `;
-
-      return card;
+      container.appendChild(card);
     });
 
-    const cards = await Promise.all(productPromises);
-    relatedContainer.innerHTML = '';
-    cards.forEach(card => relatedContainer.appendChild(card));
+    // Re-run feather after related products are injected
+    if (typeof feather !== 'undefined') feather.replace();
 
   } catch (err) {
-    console.error("Error loading related products:", err);
-    const relatedContainer = document.getElementById('relatedProducts');
-    if (relatedContainer) relatedContainer.innerHTML = `
-      <div class="col-span-full text-center py-12">
-        <p class="text-gray-500">Unable to load related products.</p>
-      </div>
-    `;
+    console.error("Related products error:", err);
   }
 }
 
-// Update breadcrumb
-function updateBreadcrumb(product) {
-  const breadcrumb = document.getElementById('breadcrumbProduct');
-  if (breadcrumb) {
-    breadcrumb.textContent = escapeHtml(product.productName);
+// ── TRACK PRODUCT VIEW (localStorage — recently viewed) ──
+function trackProductView(product) {
+  try {
+    let viewed = JSON.parse(localStorage.getItem("recentlyViewed") || "[]");
+    viewed = viewed.filter(p => p._id !== product._id);
+    viewed.unshift({
+      _id:             product._id,
+      productName:     product.productName,
+      productPrice:    product.productPrice,
+      productImage:    product.productImage,
+      productCategory: product.productCategory,
+      productStock:    product.productStock,
+      storeId:         product.storeId,
+      featured:        product.featured
+    });
+    localStorage.setItem("recentlyViewed", JSON.stringify(viewed.slice(0, 12)));
+  } catch (e) {
+    console.error("Track view error:", e);
   }
 }
 
-// Show error message
+// ── ERROR ─────────────────────────────────────────
 function showError(message) {
-  const errorDiv = document.createElement('div');
-  errorDiv.className = 'fixed top-4 right-4 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded shadow-lg z-50 max-w-sm';
-  errorDiv.innerHTML = `
-    <div class="flex items-center">
-      <i class="ri-error-warning-line text-xl mr-3"></i>
-      <div>
-        <p class="font-medium">Error</p>
-        <p class="text-sm">${escapeHtml(message)}</p>
-      </div>
-    </div>
+  const div = document.createElement('div');
+  div.className = 'fixed top-4 right-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl shadow-lg z-50 max-w-sm flex items-center gap-3';
+  div.innerHTML = `
+    <i data-feather="alert-circle" class="w-5 h-5 flex-shrink-0"></i>
+    <p class="text-sm font-medium">${escapeHtml(message)}</p>
   `;
-  document.body.appendChild(errorDiv);
-  
-  setTimeout(() => {
-    errorDiv.remove();
-  }, 5000);
+  document.body.appendChild(div);
+  if (typeof feather !== 'undefined') feather.replace();
+  setTimeout(() => div.remove(), 5000);
 }
 
-// Utility function to escape HTML
+// ── UTIL ──────────────────────────────────────────
 function escapeHtml(str) {
   if (!str) return '';
   return String(str)

@@ -391,7 +391,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ── WHATSAPP & UTILITIES (keep existing) ──────────
-async function getWhatsAppLink(product) {
+async function getWhatsAppLink(product, sellerData) {
     let whatsappLink = '#';
     const sellerId = product.sellerId || product.storeId?._id || product.storeId;
     if (!sellerId) return whatsappLink;
@@ -411,6 +411,14 @@ async function getWhatsAppLink(product) {
         whatsappLink = `https://api.whatsapp.com/send?phone=233${cleanNumber}&text=${encodeURIComponent(message)}`;
     } catch (err) {
         console.error("WhatsApp link error:", err);
+    }
+        // Fire click tracking before returning the link
+    if (product._id && sellerData) {
+        UniTracker.whatsappClick(
+            product.sellerId || product.storeId?._id || product.storeId,
+            product._id,
+            sellerData.owner
+        );
     }
     return whatsappLink;
 }

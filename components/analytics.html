@@ -177,6 +177,38 @@
 					</div>
 				</div>
 
+				
+
+				<!-- ── Tier 2: Store Analytics ──────────────────── -->
+				<div id="tier2-content" class="hidden max-w-7xl mx-auto mt-10">
+					<div class="mb-6 border-t border-gray-200 pt-8">
+						<h2 class="text-xl font-bold text-gray-900">Store Analytics</h2>
+						<p class="text-sm text-gray-500">Visitor activity from the last 30 days</p>
+					</div>
+					<div class="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-6">
+						<div class="bg-white rounded-lg shadow-sm p-6 flex flex-col justify-between">
+							<div>
+								<p class="text-sm text-gray-500 mb-1">Store Page Views</p>
+								<h3 class="text-3xl font-bold text-gray-900 mb-1" id="t2-total-views">—</h3>
+								<p class="text-xs text-gray-400">Last 30 days</p>
+							</div>
+							<p class="mt-6 pt-4 border-t border-gray-100 text-xs text-gray-400">Only counts visits from non-owners</p>
+						</div>
+						<div class="xl:col-span-2 bg-white rounded-lg shadow-sm p-6">
+							<h2 class="text-lg font-bold text-gray-900 mb-1">Daily Store Views</h2>
+							<p class="text-sm text-gray-500 mb-4">Last 30 days</p>
+							<div id="daily-views-chart" class="w-full h-52"></div>
+						</div>
+					</div>
+					<div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+						<h2 class="text-lg font-bold text-gray-900 mb-1">Top Products</h2>
+						<p class="text-sm text-gray-500 mb-4">Views and WhatsApp clicks per product (last 30 days)</p>
+						<div id="top-products-table">
+							<p class="text-sm text-gray-400 text-center py-6">No product activity yet</p>
+						</div>
+					</div>
+				</div>
+
 				<!-- Plan gate overlay (shown for free plans) -->
 				<div id="analytics-gate" class="hidden absolute inset-0 bg-gray-50 bg-opacity-95 z-40 flex items-center justify-center p-4">
 					<div class="bg-white rounded-2xl shadow-xl max-w-md w-full p-8 text-center border border-gray-100">
@@ -475,6 +507,7 @@
 					populateStats(data);
 					buildInsights(data);
 					initCharts(data);
+					initTier2(data.tier2);
 
 				} catch (err) {
 					console.error('Analytics error:', err);
@@ -483,6 +516,95 @@
 					contentEl.classList.remove('hidden');
 				}
 			})();
+
+			// ── Tier 2 rendering ─────────────────────────────
+			function initTier2(tier2) {
+				if (!tier2) return;
+
+				document.getElementById('tier2-content').classList.remove('hidden');
+				document.getElementById('t2-total-views').textContent = tier2.totalStoreViews ?? 0;
+
+				// Daily views line chart
+				const dailyChart = echarts.init(document.getElementById('daily-views-chart'));
+				const labels = tier2.dailyViews.map(d => {
+					const dt = new Date(d.date);
+					return `${dt.getDate()}/${dt.getMonth() + 1}`;
+				});
+				const counts = tier2.dailyViews.map(d => d.count);
+
+				dailyChart.setOption({
+					grid: { left: 10, right: 10, top: 10, bottom: 30, containLabel: true },
+					tooltip: { trigger: 'axis', formatter: '{b}: {c} views' },
+					xAxis: {
+						type: 'category',
+						data: labels,
+						axisLabel: { interval: 4, fontSize: 11 },
+						axisLine: { lineStyle: { color: '#d1d5db' } }
+					},
+					yAxis: {
+						type: 'value',
+						minInterval: 1,
+						axisLine: { show: false },
+						splitLine: { lineStyle: { color: '#e5e7eb' } }
+					},
+					series: [{
+						data: counts,
+						type: 'line',
+						smooth: true,
+						symbolSize: 6,
+						lineStyle: { width: 3, color: '#6d28d9' },
+						itemStyle: { color: '#6d28d9' },
+						areaStyle: { color: 'rgba(109,40,217,0.08)' }
+					}]
+				});
+
+				window.addEventListener('resize', () => dailyChart.resize());
+
+				// Top products table
+				const tableEl = document.getElementById('top-products-table');
+				if (!tier2.topProducts || tier2.topProducts.length === 0) {
+					tableEl.innerHTML = `<p class="text-sm text-gray-400 text-center py-6">No product activity yet — views and clicks will appear here once buyers start visiting your store.</p>`;
+					return;
+				}
+
+				tableEl.innerHTML = `
+					<div class="overflow-x-auto">
+						<table class="w-full text-sm">
+							<thead>
+								<tr class="border-b border-gray-100 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+									<th class="pb-3 pr-6">Product</th>
+									<th class="pb-3 pr-6 text-center">Views</th>
+									<th class="pb-3 pr-6 text-center">WhatsApp Clicks</th>
+									<th class="pb-3 text-center">Click Rate</th>
+								</tr>
+							</thead>
+							<tbody>
+								${tier2.topProducts.map((p, i) => {
+									const rate = p.views > 0
+										? ((p.clicks / p.views) * 100).toFixed(1) + '%'
+										: '—';
+									const rateColor = p.views > 0 && (p.clicks / p.views) > 0.1
+										? 'text-green-600 font-semibold'
+										: 'text-gray-500';
+									return `
+										<tr class="border-b border-gray-50 hover:bg-gray-50 transition-colors">
+											<td class="py-3 pr-6 font-medium text-gray-900">
+												<div class="flex items-center gap-2">
+													<span class="w-5 h-5 rounded-full bg-purple-100 text-purple-700 text-xs flex items-center justify-center font-bold flex-shrink-0">${i + 1}</span>
+													${p.name}
+												</div>
+											</td>
+											<td class="py-3 pr-6 text-center text-gray-700">${p.views}</td>
+											<td class="py-3 pr-6 text-center text-gray-700">${p.clicks}</td>
+											<td class="py-3 text-center ${rateColor}">${rate}</td>
+										</tr>
+									`;
+								}).join('')}
+							</tbody>
+						</table>
+					</div>
+				`;
+			}
 		});
 	</script>
 </body>

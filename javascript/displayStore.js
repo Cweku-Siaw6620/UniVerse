@@ -56,6 +56,10 @@ document.addEventListener('DOMContentLoaded', () => {
       updateStoreCategories(storeData);
       updateProductCount(0); // Will be updated after products load
 
+    // Track store view for Tier 2 analytics
+    // Skips automatically if logged-in user is the store owner
+    UniTracker.storeView(store._id, store.owner?._id || store.owner);
+
       return storeData;
     } catch (error) {
       console.error("Error fetching store details:", error);
