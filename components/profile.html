@@ -283,7 +283,7 @@ async function updateProfileDisplay() {
   try {
     const storeRes = await fetch(`https://uni-verse-api.vercel.app/api/stores/${user.id}/exists`);
     const storeData = await storeRes.json();
-    storeStatus.innerHTML = storeData.hasStore ? '🛍️ Active' : '❌ No Store';
+    storeStatus.innerHTML = storeData.hasStore ? `🛍️${storeData.storeName}`  : '❌ No Store';
   } catch (err) {
     storeStatus.innerHTML = 'Error loading';
   }
@@ -350,12 +350,7 @@ async function loadActionButtons() {
         <p class="text-green-700 text-sm">✅ You are a verified student!</p>
         <p class="text-green-600 text-xs mt-1">You have access to student perks</p>
       </div>
-      <button id="createStoreBtn" class="w-full action-btn bg-gray-900 text-white font-medium py-3 rounded-lg hover:bg-gray-800 transition">
-        🛍️ Create a Store
-      </button>
-      <button id="myStoreBtn" class="w-full action-btn border border-gray-900 text-gray-900 font-medium py-3 rounded-lg hover:bg-gray-100 transition">
-        📦 My Store Dashboard
-      </button>
+      <div id="storeBtnContainer"></div>
     `;
     
     document.getElementById("createStoreBtn")?.addEventListener("click", () => {

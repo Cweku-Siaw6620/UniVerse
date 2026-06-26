@@ -492,6 +492,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Organizational button
+    //Remove comment when ready to enable organizational plan
+    /* 
     const orgBtn = document.getElementById('upgrade-organizational');
     if (orgBtn) {
       if (activePlan === 'organizational') {
@@ -505,6 +507,7 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     }
 
+    */
     // Product limit display
     const limitEl = document.getElementById('product-limit');
     if (limitEl) {

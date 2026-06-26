@@ -159,7 +159,7 @@
                                             <option value="fashion">Fashion & Apparel</option>
                                             <option value="health_beauty">Health & Beauty</option>
                                             <option value="home_living">Home & Living</option>
-                                            <option value="groceries">Groceries & Essentials</option>
+                                            <option value="food">Food & Groceries</option>
                                             <option value="appliances">Appliances</option>
                                             <option value="books">Books & Stationery</option>
                                             <option value="kids_baby">Kids, Toys & Baby Products</option>
@@ -372,7 +372,27 @@
                             </div>
 
                             <!-- Organizational Plan -->
-                            <div id="organizational-plan" class="plan-card border-2 border-amber-500 rounded-lg p-6 relative overflow-hidden hover:shadow-2xl transform hover:-translate-y-1 transition bg-gradient-to-r from-amber-50 to-white">
+                            <div id="organizational-plan" class="plan-card border-2 border-amber-500 rounded-lg p-6 relative overflow-hidden hover:shadow-2xl transform hover:-translate-y-1 transition bg-gradient-to-r from-amber-50 to-white opacity-75">
+
+                                <!-- Unavailable ribbon -->
+                                <div style="
+                                    position: absolute;
+                                    top: 22px;
+                                    right: -30px;
+                                    width: 130px;
+                                    background: #f3a006;
+                                    color: #ffffff;
+                                    font-size: 11px;
+                                    font-weight: 700;
+                                    letter-spacing: 0.08em;
+                                    text-align: center;
+                                    padding: 5px 0;
+                                    transform: rotate(38deg);
+                                    box-shadow: 0 2px 6px rgba(10, 214, 85, 0.2);
+                                    z-index: 10;
+                                    pointer-events: none;
+                                ">UNAVAILABLE</div>
+
                                 <h3 class="text-xl font-bold text-amber-600 mb-2">Organizational</h3>
                                 <div class="flex items-end mb-4">
                                     <span class="text-3xl font-bold">GHC 80</span>
@@ -443,11 +463,13 @@
                                         </div>
                                         <span class="text-gray-600">Homepage Banner Promotion</span>
                                     </li>
-
-                                    
                                 </ul>
-                                <button id="upgrade-organizational" class="w-full px-4 py-2 bg-amber-500 text-white font-medium rounded-button hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 whitespace-nowrap">
-                                    Upgrade Plan
+
+                                <!-- Remove disable when ready-->
+                                <button id="upgrade-organizational" disabled
+                                    class="w-full px-4 py-2 bg-gray-300 text-gray-500 font-medium rounded-button cursor-not-allowed whitespace-nowrap"
+                                    title="Coming soon">
+                                    Coming Soon
                                 </button>
                             </div>
                         </div>
@@ -477,8 +499,6 @@
         document.getElementById("shareStoreBtn")?.addEventListener("click", () => {
         const store = JSON.parse(localStorage.getItem("store"));
 
-        //const link = `https://universeweb.netlify.app/components/displayStore?slug=${store.slug}`;
-        //const link = `https://universeweb.netlify.app/stores/${store.slug}`;
         const link = `https://uni-verse-api.vercel.app/stores/${store.slug}`;
 
         navigator.clipboard.writeText(link);

@@ -10,10 +10,10 @@ document.addEventListener('DOMContentLoaded', async function () {
     if (user && user.picture) {
       // Login selectors
       const loginSelectors = [
-        'nav a[href="/components/login"]',          // Desktop nav
-        'nav a[href="/login.html"]',                // Local component navs
-        '#mobileMenu a[href="/components/login"]',  // Mobile menu
-        '#mobileMenu a[href="/login.html"]',        // Local component mobile navs
+        'nav a[href*="/components/login"]',          // Desktop nav
+        'nav a[href$="/login.html"]',                // Local component navs
+        '#mobileMenu a[href*="/components/login"]',  // Mobile menu
+        '#mobileMenu a[href$="/login.html"]',        // Local component mobile navs
         '.auth-link'                                  // Fallback for mobile
       ];
       
@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', async function () {
       // Replace desktop nav login link
       const desktopNav = document.querySelector('nav');
       if (desktopNav) {
-        const desktopLogin = desktopNav.querySelector('a[href="/components/login"]');
+        const desktopLogin = desktopNav.querySelector('a[href*="/components/login"]');
         if (desktopLogin) {
           const desktopProfile = createProfileComponent(false);
           desktopLogin.replaceWith(desktopProfile);
@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', async function () {
       // Replace mobile menu login link
       const mobileMenu = document.getElementById('mobileMenu');
       if (mobileMenu) {
-        const mobileLogin = mobileMenu.querySelector('a[href="/components/login"]') || 
+        const mobileLogin = mobileMenu.querySelector('a[href*="/components/login"]') || 
                            mobileMenu.querySelector('.auth-link');
         if (mobileLogin) {
           const mobileProfile = createProfileComponent(true);
@@ -163,7 +163,7 @@ const CATEGORIES = [
     { name: "Fashion & Apparel", slug: "fashion", image: "https://images.unsplash.com/photo-1445205170230-053b83016050?w=200&h=200&fit=crop" },
     { name: "Health & Beauty", slug: "health_beauty", image: "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=200&h=200&fit=crop" },
     { name: "Home & Living", slug: "home_living", image: "https://images.unsplash.com/photo-1484101403633-562f891dc89a?w=200&h=200&fit=crop" },
-    { name: "Groceries & Essentials", slug: "groceries", image: "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200&h=200&fit=crop" },
+    { name: "Food & Groceries", slug: "food", image: "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200&h=200&fit=crop" },
     { name: "Appliances", slug: "appliances", image: "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?w=200&h=200&fit=crop" },
     { name: "Books & Stationery", slug: "books", image: "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=200&h=200&fit=crop" },
     { name: "Kids, Toys & Baby", slug: "kids_baby", image: "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?w=200&h=200&fit=crop" },
