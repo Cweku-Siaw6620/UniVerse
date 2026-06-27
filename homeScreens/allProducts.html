@@ -428,6 +428,55 @@
                     </div>
 
                     <div class="filter-select-wrap">
+                        <select id="universityFilter" class="filter-select">
+                            <option value="">All Universities</option>
+                            <optgroup label="Public Universities">
+                                <option value="University of Ghana">University of Ghana</option>
+                                <option value="KNUST">KNUST</option>
+                                <option value="University of Cape Coast">University of Cape Coast</option>
+                                <option value="University of Education, Winneba">University of Education, Winneba</option>
+                                <option value="University for Development Studies">University for Development Studies</option>
+                                <option value="University of Professional Studies, Accra">University of Professional Studies, Accra</option>
+                                <option value="University of Health and Allied Sciences">University of Health and Allied Sciences</option>
+                                <option value="University of Environment and Sustainable Development">University of Environment and Sustainable Development</option>
+                                <option value="C.K. Tedam University of Technology and Applied Sciences">C.K. Tedam University of Technology and Applied Sciences</option>
+                                <option value="SD Dombo University of Business and Integrated Development Studies">SD Dombo University of Business and Integrated Development Studies</option>
+                                <option value="Akenten Appiah-Menka University of Skills Training and Entrepreneurial Development">Akenten Appiah-Menka University (AAMUSTED)</option>
+                                <option value="Ho Technical University">Ho Technical University</option>
+                                <option value="Accra Technical University">Accra Technical University</option>
+                                <option value="Kumasi Technical University">Kumasi Technical University</option>
+                                <option value="Takoradi Technical University">Takoradi Technical University</option>
+                                <option value="Cape Coast Technical University">Cape Coast Technical University</option>
+                                <option value="Sunyani Technical University">Sunyani Technical University</option>
+                                <option value="Wa Technical University">Wa Technical University</option>
+                                <option value="Bolgatanga Technical University">Bolgatanga Technical University</option>
+                                <option value="Hilla Limann Technical University">Hilla Limann Technical University</option>
+                            </optgroup>
+                            <optgroup label="Private Universities">
+                                <option value="Ashesi University">Ashesi University</option>
+                                <option value="Central University">Central University</option>
+                                <option value="Valley View University">Valley View University</option>
+                                <option value="Ghana Christian University College">Ghana Christian University College</option>
+                                <option value="Trinity Theological Seminary">Trinity Theological Seminary</option>
+                                <option value="Regent University College of Science and Technology">Regent University College</option>
+                                <option value="Methodist University">Methodist University</option>
+                                <option value="Catholic University College of Ghana">Catholic University College of Ghana</option>
+                                <option value="Pentecost University">Pentecost University</option>
+                                <option value="Wisconsin International University College">Wisconsin International University College</option>
+                                <option value="Academic City University College">Academic City University College</option>
+                                <option value="KAAF University College">KAAF University College</option>
+                                <option value="Bluecrest University College">Bluecrest University College</option>
+                                <option value="Lancaster University Ghana">Lancaster University Ghana</option>
+                                <option value="Ghana Institute of Management and Public Administration">GIMPA</option>
+                                <option value="Ghana Communication Technology University">Ghana Communication Technology University</option>
+                                <option value="Zenith University College">Zenith University College</option>
+                                <option value="Heritage Christian College">Heritage Christian College</option>
+                            </optgroup>
+                        </select>
+                        <i class="fas fa-chevron-down filter-select-chevron"></i>
+                    </div>
+
+                    <div class="filter-select-wrap">
                         <select id="sortFilter" class="filter-select">
                             <option value="newest">Newest First</option>
                             <option value="price-low">Price: Low to High</option>
@@ -532,6 +581,7 @@
         let currentFilters = {
             search: '',
             category: '',
+            university: '',
             sort: 'newest'
         };
 
@@ -572,12 +622,17 @@
                 }
             });
 
-            // Check URL for pre-selected category
+            // Check URL for pre-selected category or university
             const urlParams = new URLSearchParams(window.location.search);
             const preCategory = urlParams.get('category');
+            const preUniversity = urlParams.get('university');
             if (preCategory) {
                 document.getElementById('categoryFilter').value = preCategory;
                 currentFilters.category = preCategory;
+            }
+            if (preUniversity) {
+                document.getElementById('universityFilter').value = preUniversity;
+                currentFilters.university = preUniversity;
             }
 
             // Load products
@@ -591,6 +646,11 @@
 
             document.getElementById('categoryFilter').addEventListener('change', () => {
                 currentFilters.category = document.getElementById('categoryFilter').value;
+                applyFilters();
+            });
+
+            document.getElementById('universityFilter').addEventListener('change', () => {
+                currentFilters.university = document.getElementById('universityFilter').value;
                 applyFilters();
             });
 
@@ -656,6 +716,11 @@
             // Category filter
             if (currentFilters.category) {
                 filtered = filtered.filter(p => p.productCategory === currentFilters.category);
+            }
+
+            // University filter — matches against the owner's university field
+            if (currentFilters.university) {
+                filtered = filtered.filter(p => p.owner?.university === currentFilters.university);
             }
 
             // Sort
@@ -745,6 +810,17 @@
                     onRemove: () => {
                         document.getElementById('categoryFilter').value = '';
                         currentFilters.category = '';
+                        applyFilters();
+                    }
+                });
+            }
+
+            if (currentFilters.university) {
+                chips.push({
+                    label: currentFilters.university,
+                    onRemove: () => {
+                        document.getElementById('universityFilter').value = '';
+                        currentFilters.university = '';
                         applyFilters();
                     }
                 });

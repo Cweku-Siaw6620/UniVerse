@@ -176,7 +176,7 @@ const CATEGORIES = [
     { name: "Services & Digital", slug: "digital", image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=200&h=200&fit=crop" }
 ];
 
-// ── OVERLAY PRODUCT CARD ────────────────────────
+
 function createOverlayCard(prod, options = {}) {
     const { featured = false, compact = false } = options;
     const isFeatured = featured || Boolean(prod.featured);
@@ -227,7 +227,7 @@ function createCategoryCard(category) {
         <div class="category-card-image">
             <img src="${category.image}" alt="${escapeHtml(category.name)}" loading="lazy">
         </div>
-        <p class="category-card-name">${escapeHtml(category.name)}</p>
+        <p class="category-card-name" title="${escapeHtml(category.name)}">${escapeHtml(category.name)}</p>
     `;
     
     return card;
