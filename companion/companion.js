@@ -1,3 +1,12 @@
+/*
+const companionHTML = `
+    <div id="companion-container">
+        <div id="speech-bubble"></div>
+        <img id="companion" alt="UniVerse Companion">
+    </div>
+`;
+document.body.insertAdjacentHTML('beforeend', companionHTML);
+
 const container = document.getElementById("companion-container");
 const companion = document.getElementById("companion");
 const bubble = document.getElementById("speech-bubble");
@@ -8,10 +17,33 @@ const currentCompanion = {
         idle: "../images/kal/kal_idle.png",
         wave: "../images/kal/kal_wave.png"
     },
-    greeting: "Hi! I'm Kal 👋"
+    greetings: {
+        home: "Hi! I'm Kal 👋",
+        stores: "Let's explore some stores!",
+        //products: "Looking for something today?",
+        //profile: "Welcome back to your profile."
+    }
 };
+
+let currentState = "idle";
 let currentRight = -200; //starting position
 const targetRight = 20; //final destination
+
+function detectCurrentPage() {
+    return document.body.dataset.page || "home";
+}
+const currentPage = detectCurrentPage();
+const greeting = currentCompanion.greetings[currentPage] || "Hello!";
+
+//expression setting function
+function setExpression(expression) {
+    companion.src = currentCompanion.images[expression];
+}
+
+//sets the state of what the agent is at the moment
+function setState(state){
+    currentState = state;
+}
 
 //waving image preloading
 const waveImage = new Image();
@@ -19,10 +51,11 @@ waveImage.src = currentCompanion.images.wave;
 let hasWaved = false;
 
 function moveCompanion() {  //moving function
-    companion.src = currentCompanion.images.idle;
+    
     if (currentRight < targetRight) {
         currentRight += 2;
         container.style.right = currentRight + "px";
+        setState("moving");
         requestAnimationFrame(moveCompanion);
     }
     else if (!hasWaved) {
@@ -32,12 +65,15 @@ function moveCompanion() {  //moving function
 }
 
 function wave(){ //waving function
-    companion.src = currentCompanion.images.wave;
-    console.log("Wave started");
-    speak(currentCompanion.greeting);
+    if (currentState === "waving") {
+        return;
+    }
+    setState("waving");
+    setExpression("wave");
+    speak(greeting);
     setTimeout(() => {
-        console.log("Back to idle");
-        companion.src = currentCompanion.images.idle;
+        setState("idle");
+        setExpression("idle");
     }, 2000);
 }
 
@@ -51,4 +87,12 @@ function speak(message){  //speech bubble function
     },4000);
 }
 
-moveCompanion();
+//more like the brain function
+function initializeCompanion() {
+    setExpression("idle");
+    moveCompanion();
+}
+
+initializeCompanion();
+
+*/

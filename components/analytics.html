@@ -210,7 +210,7 @@
 				</div>
 
 				<!-- Plan gate overlay (shown for free plans) -->
-				<div id="analytics-gate" class="hidden absolute inset-0 bg-gray-50 bg-opacity-95 z-40 flex items-center justify-center p-4">
+				<div id="analytics-gate" class="hidden fixed inset-0 z-50 bg-gray-50 bg-opacity-95 flex items-center justify-center p-4">
 					<div class="bg-white rounded-2xl shadow-xl max-w-md w-full p-8 text-center border border-gray-100">
 						<div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
 							<i class="ri-lock-line text-purple-600 text-2xl"></i>
@@ -490,9 +490,13 @@
 
 				if (plan === 'free') {
 					contentEl.classList.add('hidden');
+					document.getElementById('tier2-content').classList.add('hidden');
+					document.body.classList.add('overflow-hidden');
 					gateEl.classList.remove('hidden');
 					return;
 				}
+
+				document.body.classList.remove('overflow-hidden');
 
 				// Premium / Organizational — fetch real analytics
 				try {
