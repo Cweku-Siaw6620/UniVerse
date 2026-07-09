@@ -1,11 +1,11 @@
-/*
 const companionHTML = `
     <div id="companion-container">
         <div id="speech-bubble"></div>
         <img id="companion" alt="UniVerse Companion">
     </div>
 `;
-document.body.insertAdjacentHTML('beforeend', companionHTML);
+document.body.insertAdjacentHTML( "beforeend" , companionHTML);
+
 
 const container = document.getElementById("companion-container");
 const companion = document.getElementById("companion");
@@ -22,6 +22,26 @@ const currentCompanion = {
         stores: "Let's explore some stores!",
         //products: "Looking for something today?",
         //profile: "Welcome back to your profile."
+    },
+    idleMessages: {
+        default: [
+            "Hello!",
+            "Need any help?",
+            "I'm here if you need me."
+        ],
+        home: [
+            "👋 Welcome back!",
+            "Today's featured products are worth checking out.",
+            "Have you explored the categories yet?",
+            "Lots of student businesses have added new products recently.",
+            "Looking for something specific?"
+        ],
+        stores: [
+            "Premium stores get featured more often.",
+            "Some stores are verified. Look for the badge!",
+            "Click a store to explore all its products.",
+            "You can search for stores by university."
+        ],
     }
 };
 
@@ -45,17 +65,22 @@ function setState(state){
     currentState = state;
 }
 
+//generate random idle message from the list of messages
+function getRandomIdleMessage() {
+    const messages = currentCompanion.idleMessages[currentPage] || currentCompanion.idleMessages.default;
+    const randomIndex = Math.floor(Math.random() * messages.length);
+    return messages[randomIndex];
+}
+
 //waving image preloading
 const waveImage = new Image();
 waveImage.src = currentCompanion.images.wave;
 let hasWaved = false;
 
 function moveCompanion() {  //moving function
-    
     if (currentRight < targetRight) {
         currentRight += 2;
         container.style.right = currentRight + "px";
-        setState("moving");
         requestAnimationFrame(moveCompanion);
     }
     else if (!hasWaved) {
@@ -89,10 +114,11 @@ function speak(message){  //speech bubble function
 
 //more like the brain function
 function initializeCompanion() {
-    setExpression("idle");
+    setState('moving')
     moveCompanion();
+    setExpression("idle");
 }
 
 initializeCompanion();
 
-*/
+console.log(getRandomIdleMessage());
