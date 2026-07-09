@@ -1,3 +1,4 @@
+/*
 const companionHTML = `
     <div id="companion-container">
         <div id="speech-bubble"></div>
@@ -122,3 +123,5 @@ function initializeCompanion() {
 initializeCompanion();
 
 console.log(getRandomIdleMessage());
+
+*/

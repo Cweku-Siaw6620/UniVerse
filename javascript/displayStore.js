@@ -287,80 +287,34 @@ document.addEventListener('DOMContentLoaded', () => {
       noProducts.classList.add('hidden');
       grid.innerHTML = '';
 
-            // Get store info for WhatsApp links
-            const sellerNumber = storeData?.sellerNumber || '';
-
-            products.forEach((product, index) => {
-              // Create WhatsApp message with product info
-              let whatsappLink = '#';
-              if (sellerNumber) {
-                const countryCode = '233';
-                const cleanNumber = sellerNumber.replace(/\D/g, '');
-                
-                const message = `Hi, I'm interested in this product from your store:
-                
-      *${product.productName}*
-      Price: ₵${product.productPrice?.toFixed(2) || '0.00'}
-
-      ${product.productImage ? 'Product Image: ' + product.productImage : ''}
-
-      Please let me know if this is available.`;
-          
-          const encodedMessage = encodeURIComponent(message);
-          whatsappLink = `https://api.whatsapp.com/send?phone=${countryCode}${cleanNumber}&text=${encodedMessage}`;
-        }
-
-        // Create product card
-        const card = document.createElement('div');
-        card.className = "premium-product-card fade-up";
-        card.style.animationDelay = `${index * 0.05}s`;
-
-        // Determine stock status
-            const stockStatus = product.productStock > 10 ? 'In Stock' : product.productStock > 0 ? 'Low Stock' : 'Sold Out';
-            const stockClass = product.productStock > 10 ? 'text-green-600' : product.productStock > 0 ? 'text-gold' : 'text-red-500';
+      products.forEach((product, index) => {
         const isFeatured = Boolean(product.featured);
-        
-        card.innerHTML = `
-          <div class="image-container relative group">
-                    <img src="${product.productImage || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'}" 
-                         alt="${escapeHtml(product.productName)}"
-                         loading="lazy"
-                         class="w-full h-80 object-cover transform group-hover:scale-105 transition-transform duration-300 cursor-pointer"
-                         onclick="window.location.href='../components/productDetail.html?id=${product._id}'">
-                    <div class="absolute top-4 right-4">
-                        <span class="bg-white px-3 py-1 text-xs font-medium shadow-md rounded-full ${stockClass}">
-                            ${stockStatus}
-                        </span>
-                    </div>
-              ${isFeatured ? `
-              <div class="absolute top-4 left-4">
-                <span style="display:inline-flex;align-items:center;gap:3px;padding:2px 8px;
-                  background:rgba(124,58,237,0.9);border-radius:999px;
-                  font-size:10px;font-weight:600;color:white;">
-                  ⭐ Featured
-                </span>
-              </div>` : ''}
-                </div>
 
-          <div class="pt-6 pb-2">
-                    <div class="flex justify-between items-start mb-2">
-                        <h3 class="product-name">${escapeHtml(product.productName)}</h3>
-                        <span class="product-price">₵${(product.productPrice || 0).toFixed(2)}</span>
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <span class="product-category">${escapeHtml(product.productCategory || 'Uncategorized')}</span>
-                        <span class="product-stock ${stockClass}">${stockStatus}</span>
-                    </div>
-                    <a href="${whatsappLink}" target="_blank">
-                    <button class="w-full mt-6 py-3 border border-charcoal text-charcoal hover:bg-green-500 hover:text-white 
-                            text-xs uppercase tracking-[0.2em] font-medium transition-all duration-300"
-                    >
-                        BUY NOW
-                    </button>
-                    </a>
+        const card = document.createElement('div');
+        card.className = 'overlay-card fade-up';
+        card.style.animationDelay = `${index * 0.05}s`;
+        card.onclick = () => {
+          window.location.href = `../components/productDetail.html?id=${product._id}`;
+        };
+
+        card.innerHTML = `
+          <div class="overlay-card-image">
+            <img src="${product.productImage || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&h=800&fit=crop'}"
+                 alt="${escapeHtml(product.productName)}"
+                 loading="lazy">
+            <div class="overlay-card-gradient"></div>
+            ${isFeatured ? `
+              <span class="overlay-card-badge">
+                <i data-feather="star" class="w-3 h-3"></i> Featured
+              </span>
+            ` : ''}
+            <div class="overlay-card-info">
+              <h3 class="overlay-card-name">${escapeHtml(product.productName)}</h3>
+              <p class="overlay-card-price">GH₵ ${(product.productPrice || 0).toFixed(2)}</p>
+            </div>
           </div>
         `;
-        
+
         grid.appendChild(card);
       });
 

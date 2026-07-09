@@ -155,7 +155,7 @@ function updateSellerCard(product, store) {
 
     const iconEl = affiliationBadge.querySelector('i');
     if (iconEl) {
-      iconEl.setAttribute('data-feather', isStudent ? 'graduation-cap' : 'user');
+      iconEl.setAttribute('data-feather', isStudent ? 'award' : 'user');
     }
   }
 
