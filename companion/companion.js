@@ -1,4 +1,3 @@
-/*
 const companionHTML = `
     <div id="companion-container">
         <div id="speech-bubble"></div>
@@ -49,6 +48,9 @@ const currentCompanion = {
 let currentState = "idle";
 let currentRight = -200; //starting position
 const targetRight = 20; //final destination
+let lastIdleMessage = ""; //to avoid repeating the same idle message
+let idleTimer = null; //timer for idle messages
+let speechBubbleTimer = null; //timer for speech bubble
 
 function detectCurrentPage() {
     return document.body.dataset.page || "home";
@@ -68,9 +70,21 @@ function setState(state){
 
 //generate random idle message from the list of messages
 function getRandomIdleMessage() {
-    const messages = currentCompanion.idleMessages[currentPage] || currentCompanion.idleMessages.default;
-    const randomIndex = Math.floor(Math.random() * messages.length);
-    return messages[randomIndex];
+    const messages =
+        currentCompanion.idleMessages[currentPage] || currentCompanion.idleMessages.default;
+    let message;
+    do {
+        const randomIndex = Math.floor(Math.random() * messages.length);
+        message = messages[randomIndex];
+    } while (messages.length > 1 && message === lastIdleMessage);
+    lastIdleMessage = message;
+    return message;
+}
+
+function getRandomIdleDelay() {
+    // Between 20 and 60 seconds
+    return Math.floor(Math.random() * 40000) + 20000;
+
 }
 
 //waving image preloading
@@ -103,14 +117,30 @@ function wave(){ //waving function
     }, 2000);
 }
 
-function speak(message){  //speech bubble function
+function speak(message) { //speech bubble function
+    clearTimeout(speechBubbleTimer);
     bubble.textContent = message;
     bubble.style.opacity = "1";
+    bubble.style.visibility = "visible";
     bubble.style.transform = "translateY(0)";
-    setTimeout(()=>{
+    speechBubbleTimer = setTimeout(() => {
         bubble.style.opacity = "0";
-        bubble.style.transform = "translateY(10px)"; 
-    },4000);
+        bubble.style.transform = "translateY(10px)";
+        bubble.style.visibility = "hidden";
+    }, 4000);
+}
+
+function startIdleConversation() {
+    clearTimeout(idleTimer);
+    idleTimer = setTimeout(() => {
+        // Don't interrupt animations
+        if (currentState === "idle") {
+            speak(getRandomIdleMessage());
+        }
+        // Schedule the next conversation
+        startIdleConversation();
+    }, getRandomIdleDelay());
+
 }
 
 //more like the brain function
@@ -118,10 +148,10 @@ function initializeCompanion() {
     setState('moving')
     moveCompanion();
     setExpression("idle");
+    startIdleConversation();
 }
 
 initializeCompanion();
 
-console.log(getRandomIdleMessage());
-
-*/
+//console.log(getRandomIdleMessage());
+//console.log(getRandomIdleDelay());

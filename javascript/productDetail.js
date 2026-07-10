@@ -257,18 +257,27 @@ async function fetchRelatedProducts(category, currentProductId) {
     container.innerHTML = '';
     filtered.forEach((p, i) => {
       const card = document.createElement('div');
-      card.className = 'group cursor-pointer fade-up';
+      card.className = 'carousel-item snap-start fade-up';
       card.style.animationDelay = `${i * 0.05}s`;
       card.onclick = () => window.location.href = `productDetail.html?id=${p._id}`;
+      const isFeatured = Boolean(p.featured);
       card.innerHTML = `
-        <div class="aspect-[3/4] rounded-2xl overflow-hidden bg-gray-100 mb-3 shadow-sm group-hover:shadow-md transition-shadow">
-          <img src="${p.productImage || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=533&fit=crop'}" 
-               alt="${escapeHtml(p.productName)}"
-               loading="lazy"
-               class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+        <div class="overlay-card">
+          <div class="overlay-card-image">
+            <img src="${p.productImage || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&h=800&fit=crop'}" 
+                 alt="${escapeHtml(p.productName)}"
+                 loading="lazy">
+            <div class="overlay-card-gradient"></div>
+            ${isFeatured ? `
+            <span class="overlay-card-badge">
+              <i data-feather="star" class="w-3 h-3"></i> Featured
+            </span>` : ''}
+            <div class="overlay-card-info">
+              <h3 class="overlay-card-name">${escapeHtml(p.productName)}</h3>
+              <p class="overlay-card-price">₵${(p.productPrice || 0).toFixed(2)}</p>
+            </div>
+          </div>
         </div>
-        <h3 class="font-medium text-gray-900 text-sm mb-1 truncate">${escapeHtml(p.productName)}</h3>
-        <p class="text-gray-900 font-semibold">₵${(p.productPrice || 0).toFixed(2)}</p>
       `;
       container.appendChild(card);
     });

@@ -13,6 +13,12 @@
 }
 
 #speech-bubble {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition:
+        opacity .3s ease,
+        transform .3s ease;
     position: absolute;
     bottom: 250px;
     right: 20px;
