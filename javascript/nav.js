@@ -259,14 +259,22 @@ function setupCarousel(carouselId, leftBtnId, rightBtnId) {
 // ── FEATURED PRODUCTS ───────────────────────────
 async function loadFeaturedProducts() {
     const carousel = document.getElementById('featuredCarousel');
+  const section = document.getElementById('featuredProductsSection');
     if (!carousel) return;
+
+  if (section) {
+    section.classList.remove('hidden');
+  }
 
     try {
         const res = await fetch("https://uni-verse-api.vercel.app/api/products/featured");
         const data = await res.json();
         
         if (!data.success || !data.products?.length) {
-            carousel.innerHTML = '<div class="col-span-full text-center py-12 text-gray-400">No featured products yet</div>';
+      if (section) {
+        section.classList.add('hidden');
+      }
+      carousel.innerHTML = '';
             return;
         }
 
@@ -280,7 +288,10 @@ async function loadFeaturedProducts() {
 
     } catch (err) {
         console.error("Featured products error:", err);
-        carousel.innerHTML = '<div class="col-span-full text-center py-12 text-gray-400">Unable to load featured products</div>';
+      if (section) {
+        section.classList.add('hidden');
+      }
+      carousel.innerHTML = '';
     }
 }
 

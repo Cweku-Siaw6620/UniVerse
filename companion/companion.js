@@ -156,5 +156,4 @@ initializeCompanion();
 
 //console.log(getRandomIdleMessage());
 //console.log(getRandomIdleDelay());
-
 */
