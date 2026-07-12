@@ -1,4 +1,3 @@
-/*
 const companionHTML = `
     <div id="companion-container">
         <div id="speech-bubble"></div>
@@ -15,8 +14,16 @@ const bubble = document.getElementById("speech-bubble");
 const currentCompanion = {
     name: "Kal",
     images: {
+        angry: "../images/kal/kal_angry.png",
+        blush: "../images/kal/kal_blush.png",
+        embarrassed: "../images/kal/kal_embarrassed.png",
+        happy: "../images/kal/kal_happy.png",
         idle: "../images/kal/kal_idle.png",
-        wave: "../images/kal/kal_wave.png"
+        laugh: "../images/kal/kal_laugh.png",
+        sleep: "../images/kal/kal_sleep.png",
+        surprised: "../images/kal/kal_surprised.png",
+        thinking: "../images/kal/kal_thinking.png",
+        wave: "../images/kal/kal_wave.png",
     },
     greetings: {
         home: "Hi! I'm Kal 👋",
@@ -31,18 +38,45 @@ const currentCompanion = {
             "I'm here if you need me."
         ],
         home: [
-            "👋 Welcome back!",
-            "Today's featured products are worth checking out.",
-            "Have you explored the categories yet?",
-            "Lots of student businesses have added new products recently.",
-            "Looking for something specific?"
-        ],
-        stores: [
-            "Premium stores get featured more often.",
-            "Some stores are verified. Look for the badge!",
-            "Click a store to explore all its products.",
-            "You can search for stores by university."
-        ],
+        {
+            emotion: "happy",
+            text: "👋 Welcome back!"
+        },
+        {
+            emotion: "happy",
+            text: "Today's featured products are worth checking out."
+        },
+        {
+            emotion: "thinking",
+            text: "Have you explored the categories yet?"
+        },
+        {
+            emotion: "happy",
+            text: "Lots of student businesses have added new products recently."
+        },
+        {
+            emotion: "thinking",
+            text: "Looking for something specific?"
+        }
+    ],
+    stores: [
+        {
+            emotion: "happy",
+            text: "Premium stores get featured more often."
+        },
+        {
+            emotion: "happy",
+            text: "Some stores are verified. Look for the badge!"
+        },
+        {
+            emotion: "thinking",
+            text: "Click a store to explore all its products."
+        },
+        {
+            emotion: "thinking",
+            text: "You can search for stores by university."
+        }
+    ],
     }
 };
 
@@ -52,16 +86,34 @@ const targetRight = 20; //final destination
 let lastIdleMessage = ""; //to avoid repeating the same idle message
 let idleTimer = null; //timer for idle messages
 let speechBubbleTimer = null; //timer for speech bubble
+let expressionTimer = null; //timer for expression changes
 
+//detects the current page based on the data-page attribute in the body tag
 function detectCurrentPage() {
     return document.body.dataset.page || "home";
 }
+
 const currentPage = detectCurrentPage();
 const greeting = currentCompanion.greetings[currentPage] || "Hello!";
 
 //expression setting function
 function setExpression(expression) {
     companion.src = currentCompanion.images[expression];
+}
+
+//function to express an emotion for a certain duration
+function express(expression, duration = 3000) {
+    clearTimeout(expressionTimer);
+    setExpression(expression);
+    expressionTimer = setTimeout(() => {
+        setExpression("idle");
+    }, duration);
+}
+
+//function to express an emotion and speak a message simultaneously
+function expressAndSpeak(expression, message, duration = 3000) {
+    express(expression, duration);
+    speak(message);
 }
 
 //sets the state of what the agent is at the moment
@@ -136,7 +188,11 @@ function startIdleConversation() {
     idleTimer = setTimeout(() => {
         // Don't interrupt animations
         if (currentState === "idle") {
-            speak(getRandomIdleMessage());
+            const message = getRandomIdleMessage();
+            expressAndSpeak(
+                message.emotion,
+                message.text
+            );
         }
         // Schedule the next conversation
         startIdleConversation();
@@ -156,4 +212,3 @@ initializeCompanion();
 
 //console.log(getRandomIdleMessage());
 //console.log(getRandomIdleDelay());
-*/
