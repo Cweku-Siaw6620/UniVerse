@@ -80,6 +80,89 @@ const currentCompanion = {
     }
 };
 
+//command responses for the companion
+const commandResponses = {
+    hello: {
+        triggers: ["hello", "hi", "hey"],
+        emotion: "happy",
+        response: "Hello! It's great to see you."
+    },
+    goodMorning: {
+        triggers: ["good morning"],
+        emotion: "happy",
+        response: "Good morning! Ready to explore UniVerse?"
+    },
+    thanks: {
+        triggers: ["thanks", "thank you"],
+        emotion: "happy",
+        response: "You're very welcome!"
+    },
+    sorry: {
+        triggers: ["sorry"],
+        emotion: "blush",
+        response: "That's okay. No hard feelings."
+    },
+    bye: {
+        triggers: ["bye", "goodbye"],
+        emotion: "wave",
+        response: "See you later! Come back soon."
+    },
+    stop: {
+        triggers: ["stop"],
+        emotion: "thinking",
+        response: "Okay, I'll stop for now."
+    },
+    comeHere: {
+        triggers: ["come here"],
+        emotion: "happy",
+        response: "I'm right here!"
+    },
+    whoAreYou: {
+        triggers: ["who are you"],
+        emotion: "happy",
+        response: "I'm Kal, your UniVerse companion."
+    },
+    whatCanYouDo: {
+        triggers: ["what can you do"],
+        emotion: "thinking",
+        response: "I can guide you around UniVerse, answer simple commands, and keep you company."
+    },
+    goodJob: {
+        triggers: ["good job", "well done"],
+        emotion: "laugh",
+        response: "Haha, thank you! I appreciate that."
+    }
+};
+
+function findCommand(userInput) { //finds the command based on user input
+    const input = userInput.trim().toLowerCase();
+    for (const command of Object.values(commandResponses)) {
+        //limitation: only checks if the input includes the trigger, not exact match and some commands may be triggered by unrelated inputs. For example, "hello there" will trigger the hello command.
+        if (
+            command.triggers.some(trigger => {
+            const escapedTrigger = trigger.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+            const regex = new RegExp(`\\b${escapedTrigger}\\b`, "i");
+            return regex.test(input);
+        })
+        ) {
+            return command;
+        }
+    }
+    return null;
+}
+
+function handleCommand(userInput) { //handle user input and respond with the appropriate command
+    const command = findCommand(userInput);
+    if (!command) {
+        return false;
+    }
+    expressAndSpeak(
+        command.emotion,
+        command.response
+    );
+    return true;
+}
+
 let currentState = "idle";
 let currentRight = -200; //starting position
 const targetRight = 20; //final destination
