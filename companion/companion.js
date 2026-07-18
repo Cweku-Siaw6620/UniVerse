@@ -245,11 +245,27 @@ const personalities = {
             "Coming over!",
             "Here I am."
         ],
-        whoAreYou: [
-            "I'm Kal, your UniVerse companion.",
-            "I'm Kal. I'm here to help you around UniVerse.",
-            "I'm Kal! Nice to meet you."
-        ],
+
+        whoAreYou: {
+            1: [
+
+                "I'm Kal, your UniVerse companion.",
+                "I'm Kal! I'm here to help you around UniVerse."
+            ],
+            2: [
+
+                "Still me. 😄 I'm Kal.",
+                "We've already met! I'm Kal."
+
+            ],
+            3: [
+
+                "Haha... you really like asking who I am.",
+                "I'm still Kal. I haven't changed. 😄"
+
+            ]
+        },
+    
         whatCanYouDo: [
             "I can guide you around UniVerse and answer simple commands.",
             "I'm here to help you explore the platform.",
@@ -338,20 +354,33 @@ function handleCommand(userInput) {
     if (!command) {
         return false;
     }
+
+    rememberCommand(command.responseKey); //found in companion/memory.js, this function stores the last command in session memory
+    if (command.responseKey === "whoAreYou") {
+        incrementIdentityQuestions();
+    }
+
     // Get the current companion's personality
     const personality = personalities[currentCompanion.name.toLowerCase()];
     let response;
     // If this command has been migrated to the personality system
     if (command.responseKey && personality[command.responseKey]) {
-        const responses = personality[command.responseKey];
-        const randomIndex = Math.floor(Math.random() * responses.length);
-        response = responses[randomIndex];
+        // Special case: "Who are you?"
+        if (command.responseKey === "whoAreYou") {
+            const stage = getIdentityStage();
+            const responses = personality.whoAreYou[stage];
+            const randomIndex = Math.floor(Math.random() * responses.length);
+            response = responses[randomIndex];
+        }
+        // All other commands
+        else {
+            const responses = personality[command.responseKey];
+            const randomIndex = Math.floor(Math.random() * responses.length);
+            response = responses[randomIndex];
+        }
     }
-    // Otherwise use the original response
     else {
-
         response = command.response;
-
     }
     expressAndSpeak(
         command.emotion,
@@ -500,12 +529,13 @@ function switchCompanion(companionName) {
     if (currentCompanion === companions[companionName]) {
         return;
     }
-    // Stop any idle conversation
     clearTimeout(idleTimer);
     clearTimeout(expressionTimer);
     clearTimeout(speechBubbleTimer);
     
     currentCompanion = companions[companionName];
+    rememberCompanion(currentCompanion.name); //from companion/memory.js, this function stores the last companion in session memory
+    incrementCompanionSwitches(); //from companion/memory.js, this function increments the companion switch count in session memory
     companion.src = currentCompanion.images.idle;
     currentState = "idle";
 
