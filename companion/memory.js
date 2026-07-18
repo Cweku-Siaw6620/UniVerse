@@ -4,6 +4,8 @@
 
 const sessionMemory = {
 
+    interactions: {},
+
     // Greetings
     greeted: false,
     greetingCount: 0,
@@ -11,9 +13,6 @@ const sessionMemory = {
     // User interactions
     thanksCount: 0,
     apologyCount: 0,
-
-    // identity questions asked by the companion
-    identityQuestions: 0,
 
     // Companion activity
     companionSwitches: 0,
@@ -62,15 +61,19 @@ function incrementIdleMessagesSeen() {
     sessionMemory.idleMessagesSeen++;
 }
 
-function incrementIdentityQuestions() {
-    sessionMemory.identityQuestions++;
+function rememberInteraction(interaction) {
+    if (!sessionMemory.interactions[interaction]) {
+        sessionMemory.interactions[interaction] = 0;
+    }
+    sessionMemory.interactions[interaction]++;
 }
 
-function getIdentityStage() {
-    if (sessionMemory.identityQuestions === 1) {
+function getInteractionStage(interaction) {
+    const count = sessionMemory.interactions[interaction] || 0;
+    if (count <= 1) {
         return 1;
     }
-    if (sessionMemory.identityQuestions <= 3) {
+    if (count <= 3) {
         return 2;
     }
     return 3;
