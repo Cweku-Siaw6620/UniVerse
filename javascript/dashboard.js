@@ -573,7 +573,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // open Paystack payment model
   const handler = PaystackPop.setup({
-  key:         'pk_test_06a5336a803a441f45b7989742954a4a76e30c2f',
+  key:         'pk_live_1530cc9582f891105ea93e8c6f2a22b64ff06e18',
   email:       user?.email || '',
   amount:      plan === 'premium' ? 3500 : 8000,
   currency:    'GHS',
