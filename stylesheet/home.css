@@ -476,7 +476,7 @@
 
         .multi-row {
             display: flex;
-            gap: 1rem;
+            gap: 0.5rem;
         }
 
         .multi-row .overlay-card {
@@ -522,6 +522,15 @@
             
             .multi-row .overlay-card {
                 width: 160px;
+            }
+
+            .multi-row-scroll {
+                gap: 0.5rem;
+                padding: 0.25rem 0;
+            }
+
+            .multi-row {
+                gap: 0rem;
             }
 
             .section-header {

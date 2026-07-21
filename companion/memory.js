@@ -1,3 +1,4 @@
+/*
 // =====================================================
 // SESSION MEMORY
 // =====================================================
@@ -91,3 +92,4 @@ function resetSessionMemory() {
     sessionMemory.lastCompanion = null;
 }
 
+*/

@@ -1,3 +1,4 @@
+/*
 const companionHTML = `
     <div id="companion-container">
         <div id="speech-bubble"></div>
@@ -10,6 +11,10 @@ document.body.insertAdjacentHTML( "beforeend" , companionHTML);
 const container = document.getElementById("companion-container");
 const companion = document.getElementById("companion");
 const bubble = document.getElementById("speech-bubble");
+
+companion.addEventListener("click", () => {
+    openCompanionMenu(currentCompanion);
+});
 
 const companions = {
     kal,
@@ -237,3 +242,4 @@ function initializeCompanion() {
 }
 
 initializeCompanion();
+*/
