@@ -130,7 +130,20 @@ document.addEventListener('DOMContentLoaded', async function () {
           });
         }
       }
+
     }
+
+    // Intercept blog clicks in navbars while the blog page is still inactive.
+    const inactiveBlogLinks = document.querySelectorAll(
+      'nav a[href*="blog.html"], nav a[href*="/blog.html"], #mobileMenu a[href*="blog.html"], #mobileMenu a[href*="/blog.html"]'
+    );
+
+    inactiveBlogLinks.forEach(link => {
+      link.addEventListener('click', (event) => {
+        event.preventDefault();
+        showNavToast('Blog is currently inactive. Please check back soon.');
+      });
+    });
     
     // Load featured and all products on the homepage; only all products elsewhere.
     const isHomepage =
@@ -455,4 +468,19 @@ function escapeHtml(str) {
         .replace(/'/g, '&#39;')
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;');
+}
+
+function showNavToast(message) {
+  const existingToast = document.querySelector('.nav-toast');
+  if (existingToast) existingToast.remove();
+
+  const toast = document.createElement('div');
+  toast.className = 'nav-toast fixed top-6 right-6 z-50 max-w-sm rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-medium text-amber-800 shadow-lg';
+  toast.textContent = message;
+  document.body.appendChild(toast);
+
+  setTimeout(() => {
+    toast.classList.add('opacity-0', 'transition-opacity', 'duration-300');
+    setTimeout(() => toast.remove(), 300);
+  }, 3500);
 }

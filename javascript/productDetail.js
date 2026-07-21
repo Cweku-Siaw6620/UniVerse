@@ -12,7 +12,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     const store = await fetchStoreDetails(product.storeId);
 
     updateProductDisplay(product, store);
-    updateMetaTags(product);
     updateSellerCard(product, store);
     updateSpecs(product);
     updateBreadcrumb(product);
@@ -239,44 +238,6 @@ function setupShareFunctionality(product) {
         .catch(() => {});
     }
   };
-}
-
-function updateMetaTags(product) {
-    // Update og:title
-    let metaTitle = document.querySelector('meta[property="og:title"]');
-    if (!metaTitle) {
-        metaTitle = document.createElement('meta');
-        metaTitle.setAttribute('property', 'og:title');
-        document.head.appendChild(metaTitle);
-    }
-    metaTitle.setAttribute('content', `${product.productName} - UniVerse`);
-
-    // Update og:description
-    let metaDesc = document.querySelector('meta[property="og:description"]');
-    if (!metaDesc) {
-        metaDesc = document.createElement('meta');
-        metaDesc.setAttribute('property', 'og:description');
-        document.head.appendChild(metaDesc);
-    }
-    metaDesc.setAttribute('content', `₵${(product.productPrice || 0).toFixed(2)} · ${product.productDescription || 'Check out this product on UniVerse'}`);
-
-    // Update og:image
-    let metaImage = document.querySelector('meta[property="og:image"]');
-    if (!metaImage) {
-        metaImage = document.createElement('meta');
-        metaImage.setAttribute('property', 'og:image');
-        document.head.appendChild(metaImage);
-    }
-    metaImage.setAttribute('content', product.productImage || '/images/logo.png');
-
-    // Update og:url
-    let metaUrl = document.querySelector('meta[property="og:url"]');
-    if (!metaUrl) {
-        metaUrl = document.createElement('meta');
-        metaUrl.setAttribute('property', 'og:url');
-        document.head.appendChild(metaUrl);
-    }
-    metaUrl.setAttribute('content', window.location.href);
 }
 
 // ── RELATED PRODUCTS ──────────────────────────────

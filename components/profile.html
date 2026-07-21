@@ -507,6 +507,7 @@ const approveBtn = document.getElementById("approveBtn");
 const rejectBtn = document.getElementById("rejectBtn");
 
 let currentPendingUserId = null;
+let userHasStore = null;
 
 // Fetch user's verification status
 async function fetchUserStatus() {
@@ -535,8 +536,10 @@ async function updateProfileDisplay() {
   try {
     const storeRes = await fetch(`https://uni-verse-api.vercel.app/api/stores/${user.id}/exists`);
     const storeData = await storeRes.json();
+    userHasStore = Boolean(storeData.hasStore);
     storeStatus.innerHTML = storeData.hasStore ? `🛍️ ${storeData.storeName}` : '❌ No Store';
   } catch (err) {
+    userHasStore = null;
     storeStatus.innerHTML = 'Error loading';
   }
   
@@ -591,6 +594,7 @@ async function loadActionButtons() {
   const affiliation = status?.affiliation || user.affiliation;
   const isVerified = status?.isVerified || user.isVerified;
   const idCardStatus = status?.idCardStatus;
+  const hasStore = userHasStore === true;
   
   actionArea.innerHTML = "";
   
@@ -604,6 +608,11 @@ async function loadActionButtons() {
           <p class="text-green-600 text-xs">You have access to student perks</p>
         </div>
       </div>
+      ${hasStore ? '' : `
+      <button id="createStoreBtn" class="w-full action-btn btn-primary py-3.5 text-sm">
+        🛍️ Create a Store
+      </button>
+      `}
     `;
     
     document.getElementById("createStoreBtn")?.addEventListener("click", () => {
@@ -728,9 +737,11 @@ async function loadActionButtons() {
     <button id="verifyStudentBtn" class="w-full action-btn btn-success py-3.5 text-sm">
       🎓 Verify as Student
     </button>
+    ${hasStore ? '' : `
     <button id="createStoreBtn" class="w-full action-btn btn-primary py-3.5 text-sm">
       🛍️ Create a Store
     </button>
+    `}
   `;
   
   document.getElementById("verifyStudentBtn")?.addEventListener("click", () => {
