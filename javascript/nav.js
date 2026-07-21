@@ -173,7 +173,7 @@ const CATEGORIES = [
     { name: "Pet Supplies", slug: "pets", image: "https://images.unsplash.com/photo-1450778869180-41d0601e046e?w=200&h=200&fit=crop" },
     { name: "Tools & Industrial", slug: "tools", image: "https://plus.unsplash.com/premium_photo-1723478480754-436a04e21412?w=200&h=200&fit=crop" },
     { name: "Music, Art & Entertainment", slug: "music_art", image: "https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=200&h=200&fit=crop" },
-    { name: "Services & Digital", slug: "digital", image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=200&h=200&fit=crop" }
+    { name: "Services & Digital Listings", slug: "digital", image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=200&h=200&fit=crop" }
 ];
 
 

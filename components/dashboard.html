@@ -105,12 +105,12 @@
                     </div>
 
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-                        <!-- Add Product Section -->
+                        <!-- Add Listing Section -->
                         <div class="lg:col-span-2 bg-white rounded-lg shadow-sm p-6">
                             <div class="flex items-center justify-between mb-6">
-                                <h2 class="text-lg font-bold text-gray-900">Add New Product</h2>
+                                <h2 class="text-lg font-bold text-gray-900">Add New Listing</h2>
                                 <div class="flex items-center">
-                                    <span class="text-sm text-gray-500 mr-2">Products: </span>
+                                    <span class="text-sm text-gray-500 mr-2">Listings: </span>
                                     <span class="text-sm font-medium" id="product-count">0</span>
                                     <span class="text-sm text-gray-500 mx-1">/</span>
                                     <span class="text-sm font-medium" id="product-limit">15</span>
@@ -136,15 +136,15 @@
                                 </div>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
-                                        <label for="productName" class="block text-sm font-medium text-gray-700 mb-1">Product Name</label>
-                                        <input type="text" id="productName" name = "productName" class="w-full px-4 py-2 border border-gray-300 rounded-button text-sm" placeholder="Enter product name">
+                                        <label for="productName" class="block text-sm font-medium text-gray-700 mb-1">Listing Name</label>
+                                        <input type="text" id="productName" name = "productName" class="w-full px-4 py-2 border border-gray-300 rounded-button text-sm" placeholder="Enter listing name">
                                     </div>
                                     <div>
                                         <label for="productPrice" class="block text-sm font-medium text-gray-700 mb-1">Price (Ghc)</label>
                                         <input type="number" id="productPrice" name="productPrice" class="w-full px-4 py-2 border border-gray-300 rounded-button text-sm" placeholder="0.00">
                                     </div>
                                     <div>
-                                        <label for="productStock" class="block text-sm font-medium text-gray-700 mb-1">Stock Quantity</label>
+                                        <label for="productStock" class="block text-sm font-medium text-gray-700 mb-1">Stock / Availability</label>
                                         <input type="number" id="productStock" name="productStock" class="w-full px-4 py-2 border border-gray-300 rounded-button text-sm" placeholder="0">
                                     </div>
                                     <div>
@@ -165,17 +165,17 @@
                                             <option value="pets">Pet Supplies</option>
                                             <option value="tools">Tools & Industrial</option>
                                             <option value="music_art">Music, Art & Entertainment</option>
-                                            <option value="digital">Services & Digital Products</option>
+                                            <option value="digital">Services & Digital Listings</option>
                                         </select>
                                     </div>
                                     <div class="md:col-span-2">
                                         <label for="productDescription" class="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                                        <textarea id="productDescription" name="productDescription" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-button text-sm" placeholder="Enter product description"></textarea>
+                                        <textarea id="productDescription" name="productDescription" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-button text-sm" placeholder="Enter listing description"></textarea>
                                     </div>
                                 </div>
                                 <div class="mt-6">
                                     <button id="addProductBtn" type="submit" class="w-full px-4 py-2 bg-green-500 text-white font-medium rounded-button hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 whitespace-nowrap">
-                                        <span id="addProductText">Add Product</span>
+                                        <span id="addProductText">Add Listing</span>
                                         <span id="addProductSpinner" class="hidden ml-2 animate-spin border-2 border-white border-t-transparent rounded-full w-4 h-4"></span>
                                     </button>
                                 </div>
@@ -185,7 +185,7 @@
                         <!-- Product List -->
                         <div class="bg-white rounded-lg shadow-sm p-6">
                             <div class="flex items-center justify-between mb-6">
-                                <h2 class="text-lg font-bold text-gray-900">Recent Products</h2>
+                                <h2 class="text-lg font-bold text-gray-900">Recent Listings</h2>
                                 <a href="./product.html" class="text-sm font-medium text-primary hover:text-primary/80">View all</a>
                             </div>
                             <div id="product-list" class="space-y-4 max-h-[500px] overflow-y-auto pr-2">
@@ -193,8 +193,8 @@
                                     <div class="w-16 h-16 flex items-center justify-center mx-auto mb-4 text-gray-300">
                                         <i class="ri-shopping-bag-line text-4xl"></i>
                                     </div>
-                                    <p>No products added yet</p>
-                                    <p class="text-sm mt-2">Add your first product to get started</p>
+                                    <p>No listings added yet</p>
+                                    <p class="text-sm mt-2">Add your first listing to get started</p>
                                 </div>
                             </div>
                         </div>

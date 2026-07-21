@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Featured Products | UniVerse</title>
+    <title>Featured Listings | UniVerse</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="/javascript/feather.min.js"></script>
     <script src="/javascript/nav.js"></script>
@@ -315,16 +315,16 @@
             <nav class="breadcrumb mb-6" aria-label="Breadcrumb">
                 <a href="../index.html">Home</a>
                 <span class="breadcrumb-separator">/</span>
-                <span class="breadcrumb-current" aria-current="page">Featured Products</span>
+                <span class="breadcrumb-current" aria-current="page">Featured Listings</span>
             </nav>
 
             <div class="max-w-2xl">
                 <span class="text-xs uppercase tracking-[0.2em] text-gold mb-3 block">Curated Selection</span>
                 <h1 class="text-3xl sm:text-4xl lg:text-5xl font-semibold text-charcoal mb-4" style="font-family: 'Playfair Display', serif;">
-                    Featured Products
+                    Featured Listings
                 </h1>
                 <p class="text-graphite text-base sm:text-lg leading-relaxed">
-                    Hand-picked highlights from our finest student creators. Each piece chosen for quality, craftsmanship, and uniqueness.
+                    Hand-picked highlights from our finest student creators. Each listing is chosen for quality, craftsmanship, and uniqueness.
                 </p>
             </div>
         </div>
@@ -336,7 +336,7 @@
             <!-- Filter Bar -->
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
                 <p class="text-sm text-graphite">
-                    Showing <span id="productCount" class="font-medium text-charcoal">0</span> featured products
+                    Showing <span id="productCount" class="font-medium text-charcoal">0</span> featured listings
                 </p>
                 <div class="filter-bar">
                     <select id="sortFilter" class="filter-select">
@@ -367,7 +367,7 @@
                 <div class="empty-state-icon">
                     <i data-feather="star" class="w-full h-full"></i>
                 </div>
-                <h3 class="text-xl font-medium text-charcoal mb-2">No featured products yet</h3>
+                <h3 class="text-xl font-medium text-charcoal mb-2">No featured listings yet</h3>
                 <p class="text-graphite text-sm">Featured items will appear here once they are marked by our curators.</p>
                 <a href="index.html" class="inline-flex items-center mt-6 px-6 py-3 bg-charcoal text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors">
                     Back to Home
@@ -380,7 +380,7 @@
                     <i data-feather="alert-circle" class="w-full h-full"></i>
                 </div>
                 <h3 class="text-xl font-medium text-charcoal mb-2">Unable to load products</h3>
-                <p class="text-graphite text-sm mb-6">Something went wrong while fetching featured products.</p>
+                <p class="text-graphite text-sm mb-6">Something went wrong while fetching featured listings.</p>
                 <button onclick="loadFeaturedProducts()" class="inline-flex items-center px-6 py-3 border border-charcoal text-charcoal text-sm font-medium rounded-lg hover:bg-charcoal hover:text-white transition-all duration-300">
                     <i data-feather="refresh-cw" class="w-4 h-4 mr-2"></i>
                     Try Again
