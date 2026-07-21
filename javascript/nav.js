@@ -431,7 +431,7 @@ async function getWhatsAppLink(product, sellerData) {
         if (!sellerData?.sellerNumber) return whatsappLink;
         
         const cleanNumber = sellerData.sellerNumber.replace(/\D/g, '');
-        const message = `Hi, I'm interested in this product: ${product.productName} (₵${product.productPrice?.toFixed(2) || '0.00'})`;
+        const message = `Hello,\nI am interested in your listing, ${product.productName}${product.productPrice ? ` (₵${product.productPrice?.toFixed(2) || '0.00'})` : ''}.\nKindly share more details about availability, pricing, and any delivery or pickup options.\n\nThank you.`;
         whatsappLink = `https://api.whatsapp.com/send?phone=233${cleanNumber}&text=${encodeURIComponent(message)}`;
     } catch (err) {
         console.error("WhatsApp link error:", err);

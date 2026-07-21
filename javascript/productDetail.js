@@ -203,8 +203,9 @@ function setupButtonActions(product, store) {
   if (contactBtn && store.sellerNumber) {
     contactBtn.onclick = () => {
       const clean = store.sellerNumber.replace(/\D/g, '');
+      const sellerName = store.sellerName || 'there';
       const msg   = encodeURIComponent(
-        `Hi, I'm interested in your product: *${product.productName}*\n\nPrice: ₵${(product.productPrice || 0).toFixed(2)}\n\nCan you provide more details?`
+        `Hello ${sellerName},\nI am interested in your listing, *${product.productName}*${product.productPrice ? ` (₵${(product.productPrice || 0).toFixed(2)})` : ''}.\nKindly share more details about availability, pricing, and any delivery or pickup options.\nThank you.`
       );
       // Track WhatsApp click for analytics before opening
       UniTracker.whatsappClick(

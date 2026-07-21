@@ -180,8 +180,10 @@ document.addEventListener('DOMContentLoaded', () => {
           e.preventDefault();
           const countryCode = '233';
           const cleanNumber = store.sellerNumber.replace(/\D/g, '');
+          const sellerName = store.sellerName || 'there';
+          const storeName = store.storeName || 'your store';
           const message = encodeURIComponent(
-            `Hi ${escapeHtml(store.sellerName)}! I saw your store "${escapeHtml(store.storeName)}" on UniVerse and I'm interested in learning more about your products.`
+            `Hello ${sellerName},\nI found your store, "${storeName}", on UniVerse and would like to learn more about your products and services.\nPlease share any relevant details, including availability, pricing, and how to proceed.\nThank you.`
           );
           window.open(`https://api.whatsapp.com/send?phone=${countryCode}${cleanNumber}&text=${message}`, '_blank');
         });
