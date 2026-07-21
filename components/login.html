@@ -5,36 +5,69 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>UniVerse | Login</title>
 
-    <script src="/javascript/login.js"></script>
-
-  <!-- Google Identity Script -->
+  <script src="/javascript/login.js"></script>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <link rel="stylesheet" href="/stylesheet/login.css">
-  <style href=></style>
+  <!-- Classic serif font -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 </head>
 <body>
 
-  <div class="login-container">
-    <h1> Login into UniVerse</h1>
-    <h2>Continue with Google</h2>
+<div class="login-card">
 
-    <!-- Google Sign-In button -->
-    <div id="g_id_onload"
-         data-client_id="464107628893-1uoq0vs1tqj9e1jlghtdo8h9a7del4is.apps.googleusercontent.com"
-         data-callback="handleGoogleLogin"
-         data-auto_prompt="false">
+  <!-- LEFT: brand panel (redesigned) -->
+  <div class="brand-panel">
+    <div class="brand-overlay"></div>
+    <div class="brand-content">
+      <img src="/images/logo.png" 
+           alt="UniVerse" class="brand-logo" />
+      <h1 class="brand-title">UniVerse</h1>
+      <p class="brand-tagline">where students discover, create, and connect.</p>
+      <div class="brand-divider"></div>
+      <p class="brand-quote">“The marketplace built for the next generation of creators.”</p>
+      <div class="brand-badge">✦ student first</div>
     </div>
-
-    <div class="g_id_signin"
-         data-type="standard"
-         data-size="large"
-         data-theme="outline"
-         data-text="sign_in_with"
-         data-shape="rectangular"
-         data-logo_alignment="left">
-    </div>
-
   </div>
+
+  <!-- RIGHT: login panel (refreshed) -->
+  <div class="login-panel">
+    <div class="login-box">
+
+      <div class="login-header">
+        <p class="welcome-text">Welcome back</p>
+        <h2 class="login-title">Sign in to your account</h2>
+        <p class="login-sub">Continue with your Google account</p>
+      </div>
+
+      <!-- divider -->
+      <div class="divider">
+        <span>secure access</span>
+      </div>
+
+      <!-- Google Sign-In button (exactly as required, but with redesigned container) -->
+      <div id="g_id_onload"
+           data-client_id="464107628893-1uoq0vs1tqj9e1jlghtdo8h9a7del4is.apps.googleusercontent.com"
+           data-callback="handleGoogleLogin"
+           data-auto_prompt="false">
+      </div>
+
+      <div class="g_id_signin"
+           data-type="standard"
+           data-size="large"
+           data-theme="outline"
+           data-text="sign_in_with"
+           data-shape="rectangular"
+           data-logo_alignment="left">
+      </div>
+
+      <!-- footer with legal links -->
+      <div class="login-footer">
+        <p>By signing in, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.</p>
+      </div>
+
+    </div>
+  </div>
+</div>
 
 </body>
 </html>
