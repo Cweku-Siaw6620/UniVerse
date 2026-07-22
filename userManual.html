@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniVerse | User Manual</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="/javascript/feather.min.js"></script>
+    <script src="/javascript/nav.js"></script>
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(160deg, #f8fafc 0%, #f1f5f9 100%);
+            color: #1e293b;
+        }
+
+        .manual-header {
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .manual-header::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 60%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(124, 58, 237, 0.08), transparent 70%);
+            pointer-events: none;
+        }
+
+        .section-card {
+            background: white;
+            border-radius: 20px;
+            padding: 32px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            transition: all 0.3s ease;
+        }
+
+        .section-card:hover {
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
+            transform: translateY(-2px);
+        }
+
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            color: white;
+            font-weight: 700;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .badge-verified {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: white;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .badge-premium {
+            background: linear-gradient(135deg, #7c3aed, #6d28d9);
+            color: white;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .badge-organizational {
+            background: linear-gradient(135deg, #d97706, #b45309);
+            color: white;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .gold-divider {
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #e2c275, transparent);
+            margin: 0 auto 20px;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid #f1f5f9;
+            padding: 16px 0;
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+
+        .faq-question {
+            font-weight: 600;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .faq-question i {
+            color: #7c3aed;
+            font-size: 14px;
+        }
+
+        .faq-answer {
+            color: #64748b;
+            font-size: 0.95rem;
+            margin-top: 6px;
+            padding-left: 28px;
+        }
+
+        .mobile-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background-color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+        }
+
+        .mobile-menu.active {
+            display: block;
+        }
+
+        .premium-footer {
+            background: #0f172a;
+        }
+
+        .share-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: #f1f5f9;
+            color: #1e293b;
+            transition: all 0.3s ease;
+            font-size: 18px;
+        }
+
+        .share-icon:hover {
+            background: #1e293b;
+            color: white;
+            transform: translateY(-4px);
+        }
+
+        .share-icon.whatsapp:hover { background: #25D366; color: white; }
+        .share-icon.instagram:hover { background: #E4405F; color: white; }
+        .share-icon.tiktok:hover { background: #000; color: white; }
+        .share-icon.facebook:hover { background: #1877F2; color: white; }
+        .share-icon.snapchat:hover { background: #FFFC00; color: #000; }
+
+        @media (max-width: 768px) {
+            .section-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md shadow-sm">
+    <div class="container mx-auto px-6 py-4">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center">
+                <a href="index.html">
+                    <img src="/images/logo.png" alt="UniVerse Logo" class="h-14 w-14 md:h-16 md:w-16 object-contain rounded-full"/>
+                </a>
+            </div>
+
+            <nav class="hidden md:flex items-center gap-2 text-sm font-semibold text-gray-800">
+                <a href="index.html" class="px-4 py-2 rounded hover:bg-gray-100 transition">Home</a>
+                <a href="stores.html" class="px-4 py-2 rounded hover:bg-gray-100 transition">Stores</a>
+                <a href="blog.html" class="px-4 py-2 rounded hover:bg-gray-100 transition">Blog</a>
+                <a href="userManual.html" class="px-4 py-2 rounded bg-gray-900 text-white transition">Guide</a>
+                <a href="./components/login.html" class="ml-6 px-5 py-2 bg-gray-900 text-white rounded hover:bg-gray-700 transition">
+                    Sign In
+                </a>
+            </nav>
+
+            <button id="mobileMenuButton" class="md:hidden text-gray-700 focus:outline-none">
+                <i class="fas fa-bars text-2xl"></i>
+            </button>
+        </div>
+
+        <div id="mobileMenu" class="mobile-menu">
+            <div class="flex flex-col p-6 space-y-4">
+                <a href="index.html" class="text-gray-800 font-medium py-2 hover:text-gray-900">Home</a>
+                <a href="stores.html" class="text-gray-800 font-medium py-2 hover:text-gray-900">Stores</a>
+                <a href="blog.html" class="text-gray-800 font-medium py-2 hover:text-gray-900">Blog</a>
+                <a href="userManual.html" class="text-gray-800 font-medium py-2 text-gray-900">Guide</a>
+                <a href="/components/login.html" class="auth-link block mt-4 px-5 py-2 bg-gray-900 text-white rounded text-center hover:bg-gray-700 transition">
+                    Sign In
+                </a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- ===== HERO SECTION ===== -->
+<section class="manual-header text-white py-20">
+    <div class="container mx-auto px-6 relative z-10">
+        <div class="max-w-4xl mx-auto text-center">
+            <span class="inline-block text-xs uppercase tracking-[0.3em] text-amber-400 mb-4">User Manual</span>
+            <h1 class="text-4xl md:text-5xl font-bold font-serif mb-4">Welcome to UniVerse</h1>
+            <div class="w-20 h-1 bg-amber-400 mx-auto mb-6"></div>
+            <p class="text-xl text-gray-300 max-w-2xl mx-auto">
+                Your Digital Frontier for Commerce
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- ===== MAIN CONTENT ===== -->
+<div class="container mx-auto px-6 py-12 max-w-5xl">
+
+    <!-- Introduction -->
+    <div class="section-card mb-8">
+        <p class="text-gray-600 text-lg leading-relaxed">
+            UniVerse is an online marketplace built specifically for university students. It enables student entrepreneurs to create professional online stores, showcase their products, and connect with customers across campus and beyond.
+        </p>
+        <p class="text-gray-600 text-lg leading-relaxed mt-4">
+            Whether you sell fashion, electronics, beauty products, books, food, handmade items, or offer services, UniVerse provides a platform to help you grow your business.
+        </p>
+    </div>
+
+    <!-- ===== GETTING STARTED ===== -->
+    <h2 class="text-3xl font-serif font-bold text-gray-900 mt-12 mb-6">Getting Started</h2>
+    <div class="gold-divider"></div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Shopping -->
+        <div class="section-card text-center">
+            <div class="text-4xl mb-4">🛍️</div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Shopping</h3>
+            <p class="text-gray-600 text-sm">Users can shop with or without an account. Reach sellers near you.</p>
+        </div>
+
+        <!-- Start Selling -->
+        <div class="section-card text-center border-2 border-amber-200/50 bg-amber-50/30">
+            <div class="text-4xl mb-4">🚀</div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Start Selling</h3>
+            <p class="text-gray-600 text-sm">Create an account and begin your journey as a student entrepreneur.</p>
+            <a href="./components/login.html" class="inline-block mt-4 px-6 py-2 bg-gray-900 text-white rounded-full text-sm font-medium hover:bg-gray-800 transition">
+                Create Account →
+            </a>
+        </div>
+    </div>
+
+    <!-- ===== STEP 1: CREATE STORE ===== -->
+    <h2 class="text-3xl font-serif font-bold text-gray-900 mt-16 mb-6">Step 1 — Create Your Store</h2>
+    <div class="gold-divider"></div>
+
+    <div class="section-card">
+        <div class="flex items-center gap-4 mb-4">
+            <span class="step-number">1</span>
+            <span class="font-medium text-gray-600">Navigate to</span>
+            <span class="bg-gray-100 px-4 py-1.5 rounded-full text-sm font-medium text-gray-700">Profile → Create Store</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+            <div>
+                <p class="font-semibold text-gray-800 mb-3">Fill in:</p>
+                <ul class="space-y-2 text-gray-600">
+                    <li class="flex items-center gap-2"><i class="fas fa-store text-gray-400 w-5"></i> Store Name</li>
+                    <li class="flex items-center gap-2"><i class="fas fa-align-left text-gray-400 w-5"></i> Store Description</li>
+                    <li class="flex items-center gap-2"><i class="fas fa-tag text-gray-400 w-5"></i> Category</li>
+                    <li class="flex items-center gap-2"><i class="fab fa-whatsapp text-gray-400 w-5"></i> WhatsApp Number</li>
+                    <li class="flex items-center gap-2"><i class="fas fa-image text-gray-400 w-5"></i> Store Logo</li>
+                </ul>
+            </div>
+            <div class="bg-green-50 rounded-xl p-5 border border-green-200 flex flex-col items-center justify-center text-center">
+                <div class="text-4xl mb-3">🎉</div>
+                <p class="font-semibold text-green-700">Click <span class="bg-green-600 text-white px-4 py-1 rounded-full text-sm">Create Store</span></p>
+                <p class="text-green-600 text-sm mt-2">Congratulations! You now own your own online shop.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== STEP 2: ADD PRODUCTS ===== -->
+    <h2 class="text-3xl font-serif font-bold text-gray-900 mt-12 mb-6">Step 2 — Add Products</h2>
+    <div class="gold-divider"></div>
+
+    <div class="section-card">
+        <div class="flex flex-wrap items-center gap-4 mb-4">
+            <span class="step-number">2</span>
+            <span class="font-medium text-gray-600">Open your dashboard</span>
+            <span class="bg-gray-100 px-4 py-1.5 rounded-full text-sm font-medium text-gray-700">Click Add Product</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <p class="font-semibold text-gray-800 mb-3">Upload:</p>
+                <ul class="space-y-2 text-gray-600">
+                    <li class="flex items-center gap-2"><i class="fas fa-image text-gray-400 w-5"></i> Product Image</li>
+                    <li class="flex items-center gap-2"><i class="fas fa-tag text-gray-400 w-5"></i> Product Name</li>
+                    <li class="flex items-center gap-2"><i class="fas fa-money-bill-wave text-gray-400 w-5"></i> Price</li>
+                    <li class="flex items-center gap-2"><i class="fas fa-align-left text-gray-400 w-5"></i> Description</li>
+                    <li class="flex items-center gap-2"><i class="fas fa-list text-gray-400 w-5"></i> Category</li>
+                </ul>
+            </div>
+            <div class="bg-blue-50 rounded-xl p-5 border border-blue-200 flex flex-col items-center justify-center text-center">
+                <div class="text-4xl mb-3">📦</div>
+                <p class="text-blue-700 font-medium">Your product is now visible to customers.</p>
+                <p class="text-blue-600 text-sm mt-2">Customers can discover it on the marketplace!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== STEP 3: SHARE ===== -->
+    <h2 class="text-3xl font-serif font-bold text-gray-900 mt-12 mb-6">Step 3 — Share Your Store</h2>
+    <div class="gold-divider"></div>
+
+    <div class="section-card text-center">
+        <p class="text-gray-600 mb-4">
+            Each store has its own unique link. Share it on your social media channels:
+        </p>
+
+        <div class="flex flex-wrap justify-center gap-4 mb-4">
+            <a href="#" class="share-icon whatsapp"><i class="fab fa-whatsapp"></i></a>
+            <a href="#" class="share-icon instagram"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="share-icon tiktok"><i class="fab fa-tiktok"></i></a>
+            <a href="#" class="share-icon facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="share-icon snapchat"><i class="fab fa-snapchat-ghost"></i></a>
+        </div>
+
+        <p class="text-gray-500 text-sm">The more people you share it with, the more customers you can reach.</p>
+    </div>
+
+    <!-- ===== COMPLETE PROFILE ===== -->
+    <h2 class="text-3xl font-serif font-bold text-gray-900 mt-16 mb-6">Complete Your Profile</h2>
+    <div class="gold-divider"></div>
+
+    <div class="section-card">
+        <p class="text-gray-600 mb-4">Add the following details to make your profile more trustworthy:</p>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="bg-gray-50 rounded-xl p-4 text-center">
+                <div class="text-3xl mb-2">📸</div>
+                <p class="text-sm font-medium text-gray-700">Profile Picture</p>
+            </div>
+            <div class="bg-gray-50 rounded-xl p-4 text-center">
+                <div class="text-3xl mb-2">📱</div>
+                <p class="text-sm font-medium text-gray-700">Phone Number</p>
+            </div>
+            <div class="bg-gray-50 rounded-xl p-4 text-center">
+                <div class="text-3xl mb-2">🎓</div>
+                <p class="text-sm font-medium text-gray-700">University</p>
+            </div>
+            <div class="bg-gray-50 rounded-xl p-4 text-center">
+                <div class="text-3xl mb-2">✏️</div>
+                <p class="text-sm font-medium text-gray-700">Bio</p>
+            </div>
+        </div>
+        <p class="text-gray-500 text-sm text-center mt-4">A complete profile helps customers trust you.</p>
+    </div>
+
+    <!-- ===== STUDENT VERIFICATION ===== -->
+    <h2 class="text-3xl font-serif font-bold text-gray-900 mt-16 mb-6">Student Verification</h2>
+    <div class="gold-divider"></div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Why Verify -->
+        <div class="section-card">
+            <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <span class="badge-verified">Why Verify?</span>
+            </h3>
+            <p class="text-gray-600 text-sm mb-4">
+                Verified student sellers receive a special badge on their store. This helps customers know that the seller is a genuine university student.
+            </p>
+            <div class="space-y-2">
+                <div class="flex items-center gap-2 text-green-600 text-sm"><i class="fas fa-check-circle"></i> Increased customer trust</div>
+                <div class="flex items-center gap-2 text-green-600 text-sm"><i class="fas fa-check-circle"></i> Better store visibility</div>
+                <div class="flex items-center gap-2 text-green-600 text-sm"><i class="fas fa-check-circle"></i> Higher credibility</div>
+                <div class="flex items-center gap-2 text-green-600 text-sm"><i class="fas fa-check-circle"></i> Priority placement in selected sections</div>
+            </div>
+        </div>
+
+        <!-- How to Verify -->
+        <div class="section-card bg-blue-50/40 border-blue-200/50">
+            <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <i class="fas fa-shield-alt text-blue-600"></i> How to Verify
+            </h3>
+            <div class="space-y-3 text-sm">
+                <div class="flex items-center gap-3">
+                    <span class="step-number !w-8 !h-8 !text-xs">1</span>
+                    <span>Go to <span class="bg-white px-3 py-1 rounded-full text-xs font-medium">Profile → Verify Student</span></span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="step-number !w-8 !h-8 !text-xs">2</span>
+                    <span>Upload a clear picture of your <strong>Student ID Card</strong></span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="step-number !w-8 !h-8 !text-xs">3</span>
+                    <span>Submit it. Our administrators will review your request.</span>
+                </div>
+                <div class="bg-green-100 rounded-xl p-4 text-center mt-3">
+                    <div class="text-3xl mb-2">🎉</div>
+                    <p class="font-semibold text-green-700">Once approved: Your account becomes Verified.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rejection Reasons -->
+    <div class="section-card mt-6 bg-red-50/40 border-red-200/50">
+        <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+            <i class="fas fa-times-circle text-red-500"></i> Why Was My Verification Rejected?
+        </h3>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+            <div class="bg-white rounded-xl p-3 text-center border border-red-100">
+                <div class="text-2xl mb-1">📷</div>
+                <p class="text-gray-600">Blurry ID card</p>
+            </div>
+            <div class="bg-white rounded-xl p-3 text-center border border-red-100">
+                <div class="text-2xl mb-1">⏰</div>
+                <p class="text-gray-600">Expired student ID</p>
+            </div>
+            <div class="bg-white rounded-xl p-3 text-center border border-red-100">
+                <div class="text-2xl mb-1">📄</div>
+                <p class="text-gray-600">Wrong document uploaded</p>
+            </div>
+            <div class="bg-white rounded-xl p-3 text-center border border-red-100">
+                <div class="text-2xl mb-1">🔍</div>
+                <p class="text-gray-600">Important details not visible</p>
+            </div>
+        </div>
+        <p class="text-gray-600 text-sm text-center mt-4">Simply upload a clearer image and submit again.</p>
+    </div>
+
+    <!-- ===== STANDARD & PREMIUM PLANS ===== -->
+    <h2 class="text-3xl font-serif font-bold text-gray-900 mt-16 mb-6">Standard &amp; Premium Plans</h2>
+    <div class="gold-divider"></div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="section-card border border-gray-200">
+            <h3 class="text-xl font-bold text-gray-900 mb-2">🆓 Free Plan</h3>
+            <p class="text-gray-500 text-sm mb-4">Perfect for getting started</p>
+            <ul class="space-y-2 text-gray-600 text-sm">
+                <li class="flex items-center gap-2"><i class="fas fa-check text-green-500 w-5"></i> Create your store</li>
+                <li class="flex items-center gap-2"><i class="fas fa-check text-green-500 w-5"></i> Add unlimited products</li>
+                <li class="flex items-center gap-2"><i class="fas fa-check text-green-500 w-5"></i> Basic analytics</li>
+                <li class="flex items-center gap-2"><i class="fas fa-check text-green-500 w-5"></i> WhatsApp integration</li>
+            </ul>
+        </div>
+
+        <div class="section-card border-2 border-purple-300 bg-purple-50/30 relative overflow-hidden">
+            <div class="absolute top-0 right-0 bg-purple-600 text-white text-xs font-bold px-4 py-1 rounded-bl-xl">POPULAR</div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2 flex items-center gap-2">
+                ⭐ <span class="text-purple-700">Premium</span>
+            </h3>
+            <p class="text-gray-500 text-sm mb-4">Unlock advanced features</p>
+            <ul class="space-y-2 text-gray-600 text-sm">
+                <li class="flex items-center gap-2"><i class="fas fa-check text-purple-500 w-5"></i> ⭐ Premium badge</li>
+                <li class="flex items-center gap-2"><i class="fas fa-check text-purple-500 w-5"></i> Higher visibility</li>
+                <li class="flex items-center gap-2"><i class="fas fa-check text-purple-500 w-5"></i> Priority listings</li>
+                <li class="flex items-center gap-2"><i class="fas fa-check text-purple-500 w-5"></i> Enhanced analytics</li>
+                <li class="flex items-center gap-2"><i class="fas fa-check text-purple-500 w-5"></i> Promotional opportunities</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ===== DASHBOARD ===== -->
+    <h2 class="text-3xl font-serif font-bold text-gray-900 mt-16 mb-6">Dashboard</h2>
+    <div class="gold-divider"></div>
+
+    <div class="section-card">
+        <p class="text-gray-600 mb-4">Your dashboard allows you to:</p>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <div class="bg-gray-50 rounded-xl p-4 text-center">
+                <div class="text-2xl mb-2">📦</div>
+                <p class="text-sm font-medium text-gray-700">Manage your products</p>
+            </div>
+            <div class="bg-gray-50 rounded-xl p-4 text-center">
+                <div class="text-2xl mb-2">🏪</div>
+                <p class="text-sm font-medium text-gray-700">Edit your store</p>
+            </div>
+            <div class="bg-gray-50 rounded-xl p-4 text-center">
+                <div class="text-2xl mb-2">📊</div>
+                <p class="text-sm font-medium text-gray-700">View store analytics</p>
+            </div>
+            <div class="bg-gray-50 rounded-xl p-4 text-center">
+                <div class="text-2xl mb-2">👁️</div>
+                <p class="text-sm font-medium text-gray-700">Track product views</p>
+            </div>
+            <div class="bg-gray-50 rounded-xl p-4 text-center">
+                <div class="text-2xl mb-2">💬</div>
+                <p class="text-sm font-medium text-gray-700">Monitor WhatsApp clicks</p>
+            </div>
+            <div class="bg-gray-50 rounded-xl p-4 text-center">
+                <div class="text-2xl mb-2">✏️</div>
+                <p class="text-sm font-medium text-gray-700">Update your profile</p>
+            </div>
+        </div>
+        <p class="text-gray-500 text-sm text-center mt-4">Everything you need to manage your business is available here.</p>
+    </div>
+
+    <!-- ===== BUYING PRODUCTS ===== -->
+    <h2 class="text-3xl font-serif font-bold text-gray-900 mt-16 mb-6">Buying Products</h2>
+    <div class="gold-divider"></div>
+
+    <div class="section-card">
+        <p class="text-gray-600 mb-4">Browse products using:</p>
+        <div class="flex flex-wrap gap-3 justify-center">
+            <span class="bg-gray-100 px-5 py-2 rounded-full text-sm font-medium text-gray-700">Categories</span>
+            <span class="bg-gray-100 px-5 py-2 rounded-full text-sm font-medium text-gray-700">Search</span>
+            <span class="bg-gray-100 px-5 py-2 rounded-full text-sm font-medium text-gray-700">Featured Products</span>
+        </div>
+        <div class="bg-blue-50 rounded-xl p-5 border border-blue-200 mt-4 text-center">
+            <p class="font-medium text-blue-700">When you find something you like:</p>
+            <div class="flex flex-wrap justify-center gap-4 mt-3 text-sm">
+                <span class="bg-white px-4 py-2 rounded-full shadow-sm">🔍 Open the product</span>
+                <span class="bg-white px-4 py-2 rounded-full shadow-sm">💬 Contact the seller</span>
+                <span class="bg-white px-4 py-2 rounded-full shadow-sm">💰 Arrange payment and delivery</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== SAFETY TIPS ===== -->
+    <h2 class="text-3xl font-serif font-bold text-gray-900 mt-16 mb-6">Safety Tips</h2>
+    <div class="gold-divider"></div>
+
+    <div class="section-card">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="flex items-start gap-3">
+                <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                <p class="text-gray-600 text-sm">Verify product details before making payment.</p>
+            </div>
+            <div class="flex items-start gap-3">
+                <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                <p class="text-gray-600 text-sm">Meet in safe public locations when necessary.</p>
+            </div>
+            <div class="flex items-start gap-3">
+                <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                <p class="text-gray-600 text-sm">Report suspicious sellers.</p>
+            </div>
+            <div class="flex items-start gap-3">
+                <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                <p class="text-gray-600 text-sm">Never share your password.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== FAQ ===== -->
+    <h2 class="text-3xl font-serif font-bold text-gray-900 mt-16 mb-6">Frequently Asked Questions</h2>
+    <div class="gold-divider"></div>
+
+    <div class="section-card">
+        <div class="faq-item">
+            <div class="faq-question"><i class="fas fa-question-circle"></i> Is UniVerse free?</div>
+            <div class="faq-answer">Yes. Creating an account and opening a store is free.</div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question"><i class="fas fa-question-circle"></i> Can non-students buy?</div>
+            <div class="faq-answer">Yes. Anyone can purchase products. Only student sellers receive the verified badge.</div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question"><i class="fas fa-question-circle"></i> Do I need to verify?</div>
+            <div class="faq-answer">No. Verification is optional. However, verified sellers are generally trusted more by buyers and may receive additional platform benefits.</div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question"><i class="fas fa-question-circle"></i> How do I edit my store?</div>
+            <div class="faq-answer">Open your Dashboard → Click <span class="bg-gray-100 px-3 py-1 rounded-full text-xs font-medium">Edit Store</span> → Save your changes.</div>
+        </div>
+    </div>
+
+    <!-- ===== BOTTOM CTA ===== -->
+    <div class="mt-12 text-center bg-gradient-to-r from-gray-900 to-gray-800 rounded-3xl p-10 text-white">
+        <h3 class="text-2xl font-serif font-bold mb-3">Ready to Start?</h3>
+        <p class="text-gray-300 mb-6 max-w-md mx-auto">Join UniVerse today and turn your passion into a thriving business.</p>
+        <div class="flex flex-wrap justify-center gap-4">
+            <a href="./components/login.html" class="inline-block bg-white text-gray-900 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition">
+                Get Started →
+            </a>
+            <a href="stores.html" class="inline-block border border-white/30 text-white px-8 py-3 rounded-full font-semibold hover:bg-white/10 transition">
+                Explore Stores
+            </a>
+        </div>
+    </div>
+
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer class="premium-footer text-white py-12 mt-16">
+    <div class="container mx-auto px-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div class="col-span-1 md:col-span-2">
+                <div class="flex items-center mb-4">
+                    <img src="./images/keltec.jpg" alt="Keltec" class="h-10 rounded-full">
+                    <span class="ml-3 text-xl font-semibold text-white">Keltec</span>
+                </div>
+                <p class="text-gray-400 max-w-md text-sm">
+                    A curation of exceptional student commerce. Where quality meets authenticity.
+                </p>
+            </div>
+            <div>
+                <h4 class="text-sm uppercase tracking-wider mb-4">Explore</h4>
+                <ul class="space-y-2">
+                    <li><a href="stores.html" class="text-gray-400 hover:text-white text-sm transition">Collections</a></li>
+                    <li><a href="blog.html" class="text-gray-400 hover:text-white text-sm transition">Journal</a></li>
+                    <li><a href="aboutMe.html" class="text-gray-400 hover:text-white text-sm transition">The Curator</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-sm uppercase tracking-wider mb-4">Connect</h4>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition">Instagram</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition">Twitter</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition">LinkedIn</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="border-t border-gray-800 mt-10 pt-8 flex flex-col md:flex-row justify-between items-center">
+            <p class="text-gray-500 text-xs">© 2025 Keltec. All rights reserved.</p>
+            <p class="text-gray-500 text-xs">Crafted by <a href="aboutMe.html" class="text-green-400 hover:text-green-300">Kelvin Ashong</a></p>
+        </div>
+    </div>
+</footer>
+
+<script>
+    // Mobile menu toggle
+    document.addEventListener('DOMContentLoaded', function() {
+        const mobileMenuButton = document.getElementById('mobileMenuButton');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        if (mobileMenuButton && mobileMenu) {
+            mobileMenuButton.addEventListener('click', function() {
+                mobileMenu.classList.toggle('active');
+                const icon = mobileMenuButton.querySelector('i');
+                if (mobileMenu.classList.contains('active')) {
+                    icon.classList.remove('fa-bars');
+                    icon.classList.add('fa-times');
+                } else {
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
+            });
+        }
+    });
+</script>
+
+</body>
+</html>
