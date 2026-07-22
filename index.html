@@ -32,29 +32,84 @@
                   <a href="index.html" class="px-4 py-2 rounded hover:bg-gray-100 transition bg-gray-100">Home</a>
                   <a href="stores.html" class="px-4 py-2 rounded hover:bg-gray-100 transition">Stores</a>
                   <a href="blog.html" class="px-4 py-2 rounded hover:bg-gray-100 transition">Blog</a>
+                  <a href="userManual.html" class="px-4 py-2 rounded bg-blue-500 hover:bg-blue-600 transition text-white">Guide</a>
                   <a href="./components/login.html"
                     class="ml-6 px-5 py-2 bg-gray-900 text-white rounded hover:bg-gray-700 transition">
                     Sign In
                   </a>
                 </nav>
-                
-                <!-- Mobile menu button -->
-                <button id="mobileMenuButton" class="md:hidden text-gray-700 focus:outline-none">
-                    <i class="fas fa-bars text-2xl"></i>
-                </button>
-            </div>
+        
+            <!-- Mobile Menu Button -->
+            <button id="mobileMenuButton" class="md:hidden relative w-10 h-10 flex items-center justify-center rounded-xl hover:bg-gray-100 transition-colors group">
+                <span class="sr-only">Open menu</span>
+                <div class="relative w-6 h-6">
+                    <span class="absolute block w-6 h-0.5 bg-gray-700 transition-all duration-300 ease-out -translate-y-2 group-[.active]:translate-y-0 group-[.active]:rotate-45"></span>
+                    <span class="absolute block w-6 h-0.5 bg-gray-700 transition-all duration-300 ease-out group-[.active]:opacity-0"></span>
+                    <span class="absolute block w-6 h-0.5 bg-gray-700 transition-all duration-300 ease-out translate-y-2 group-[.active]:translate-y-0 group-[.active]:-rotate-45"></span>
+                </div>
+            </button>
 
-            <div id="mobileMenu" class="mobile-menu">
-                <div class="flex flex-col p-6 space-y-4">
-                    <a href="index.html" class="block rounded bg-gray-100 px-4 py-3 text-[15px] font-medium text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900">Home</a>
-                    <a href="stores.html" class="block rounded px-4 py-3 text-[15px] font-medium text-gray-900 transition-colors hover:bg-gray-100 hover:text-gray-900">Stores</a>
-                    <a href="blog.html" class="block rounded px-4 py-3 text-[15px] font-medium text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900">Blog</a>
-                    <a href="/components/login.html" class="auth-link mt-4 block rounded bg-gray-900 px-5 py-3 text-center text-[15px] font-medium text-white transition-colors hover:bg-gray-700">
-                      Sign In
+            <!-- Mobile Menu Overlay -->
+            <div id="mobileMenuOverlay" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 hidden transition-opacity duration-300"></div>
+
+            <!-- Mobile Menu Drawer -->
+            <div id="mobileMenu" class="fixed top-0 left-0 h-full w-80 bg-white z-50 transform -translate-x-full transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] shadow-2xl">
+                <!-- Header -->
+                <div class="flex items-center justify-between px-6 py-5 border-b border-gray-100">
+                    <div class="flex items-center gap-3">
+                        <img src="/images/logo.png" alt="UniVerse" class="h-10 w-10 object-contain">
+                    </div>
+                    <button id="closeMobileMenu" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors">
+                        <i class="fas fa-times text-gray-500 text-lg"></i>
+                    </button>
+                </div>
+
+                <!-- Navigation Links -->
+                <nav class="px-4 py-6 space-y-1">
+                    <!-- Auth Section -->
+                    <div class="px-4 py-4 space-y-3">
+                    <a href="/components/login.html" class="flex items-center justify-center gap-2 w-full px-4 py-3 bg-gray-900 text-white rounded-xl font-medium hover:bg-gray-800 transition-all">
+                        <i class="fas fa-sign-in-alt text-sm"></i>
+                        Sign In
                     </a>
 
-
                 </div>
+                    <a href="index.html" class="flex items-center gap-4 px-4 py-3 rounded-xl bg-gray-900 text-white hover:bg-gray-800 transition-all group">
+                        <span class="w-8 h-8 flex items-center justify-center rounded-lg bg-gray-100 group-hover:bg-gray-200 transition-colors">
+                            <i class="fas fa-home text-gray-500 group-hover:text-gray-700 text-sm"></i>
+                        </span>
+                        <span class="font-medium">Home</span>
+                    </a>
+
+                    <a href="stores.html" class="flex items-center gap-4 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-all group">
+                        <span class="w-8 h-8 flex items-center justify-center rounded-lg bg-gray-100 group-hover:bg-gray-200 transition-colors">
+                            <i class="fas fa-store text-gray-500 group-hover:text-gray-700 text-sm"></i>
+                        </span>
+                        <span class="font-medium">Stores</span>
+                    </a>
+
+                    <a href="./homeScreens/allProducts.html" class="flex items-center gap-4 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-all group">
+                        <span class="w-8 h-8 flex items-center justify-center rounded-lg bg-gray-100 group-hover:bg-gray-200 transition-colors">
+                            <i class="fas fa-box text-gray-500 group-hover:text-gray-700 text-sm"></i>
+                        </span>
+                        <span class="font-medium">Products</span>
+                    </a>
+
+                    <a href="blog.html" class="flex items-center gap-4 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-all group">
+                        <span class="w-8 h-8 flex items-center justify-center rounded-lg bg-gray-100 group-hover:bg-gray-200 transition-colors">
+                            <i class="fas fa-pen-fancy text-gray-500 group-hover:text-gray-700 text-sm"></i>
+                        </span>
+                        <span class="font-medium">Blog</span>
+                    </a>
+
+                    <a href="userManual.html" class="flex items-center gap-4 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-all group">
+                        <span class="w-8 h-8 flex items-center justify-center rounded-lg bg-gray-100 group-hover:bg-gray-200 transition-colors">
+                            <i class="fas fa-book text-gray-500 group-hover:text-gray-700 text-sm"></i>
+                        </span>
+                        <span class="font-medium">Guide</span>
+                    </a>
+                </nav>
+ 
             </div>
         </div>
     </header>
@@ -298,26 +353,7 @@
         </div>
     </footer>
 
-    <script>
-        // Simple JavaScript for mobile menu toggle (can be expanded)
-        document.addEventListener('DOMContentLoaded', function() {
-            const mobileMenuButton = document.getElementById('mobileMenuButton');
-            const mobileMenu = document.getElementById('mobileMenu');
-            
-            mobileMenuButton.addEventListener('click', function() {
-                mobileMenu.classList.toggle('active');
-                // Change icon based on menu state
-                const icon = mobileMenuButton.querySelector('i');
-                if (mobileMenu.classList.contains('active')) {
-                    icon.classList.remove('fa-bars');
-                    icon.classList.add('fa-times');
-                } else {
-                    icon.classList.remove('fa-times');
-                    icon.classList.add('fa-bars');
-                }
-            });
-        });
-    </script>
+    <script src="/javascript/mobileView.js"></script>
     <script src="companion/memory.js"></script>
     <script src="companion/personality.js"></script>
     <script src="companion/companion.js"></script>

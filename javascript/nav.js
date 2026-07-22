@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         elements.forEach(el => loginLinks.push(el));
       });
 
+      /*
       // Create profile UI component
       function createProfileComponent(isMobile = false) {
         const profileWrapper = document.createElement("div");
@@ -78,7 +79,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             const storeLink = dropdown.querySelector('#storeLink');
             const hasStore = result.hasStore;
             storeLink.href = hasStore ? '/components/dashboard.html' : '/components/createStore.html';
-            storeLink.textContent = hasStore ? 'Open Store' : 'Create Your Store';
+            storeLink.textContent = hasStore ? 'Dashboard' : 'Create Your Store';
           })
           .catch(err => {
             console.error("Failed to check store existence:", err);
@@ -88,6 +89,108 @@ document.addEventListener('DOMContentLoaded', async function () {
           });
 
         return profileWrapper;
+      } */
+
+      function createProfileComponent(isMobile = false) {
+          const profileWrapper = document.createElement("div");
+          profileWrapper.className = isMobile ? "relative w-full" : "relative";
+
+          const profileImg = document.createElement("img");
+          profileImg.src = user.picture;
+          profileImg.alt = user.name;
+          profileImg.title = user.name;
+          profileImg.className = isMobile 
+              ? "h-12 w-12 rounded-full object-cover cursor-pointer mx-auto ring-2 ring-gray-200 hover:ring-gray-300 transition-all"
+              : "h-10 w-10 rounded-full object-cover cursor-pointer ring-2 ring-gray-200 hover:ring-gray-300 transition-all";
+
+          const dropdown = document.createElement("div");
+          dropdown.className = isMobile
+              ? "hidden mt-3 w-full bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden"
+              : "hidden absolute right-0 mt-3 w-56 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden z-50";
+
+          dropdown.innerHTML = `
+            <!-- Menu Items -->
+              <div class="py-1">
+                  <a href="/components/profile.html" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors group">
+                      <span class="w-8 h-8 flex items-center justify-center rounded-lg bg-gray-100 group-hover:bg-gray-200 transition-colors">
+                          <i data-feather="user" class="w-4 h-4 text-gray-500"></i>
+                      </span>
+                      <span class="font-medium">Profile</span>
+                  </a>
+                  
+                  <a href="#" id="storeLink" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors group">
+                      <span class="w-8 h-8 flex items-center justify-center rounded-lg bg-gray-100 group-hover:bg-gray-200 transition-colors">
+                          <i data-feather="shopping-bag" class="w-4 h-4 text-gray-500"></i>
+                      </span>
+                      <span class="font-medium">Loading...</span>
+                  </a>
+              </div>
+              
+              <!-- Divider -->
+              <div class="border-t border-gray-100"></div>
+              
+              <!-- Logout -->
+              <div class="py-1">
+                  <button id="logoutBtn${isMobile ? 'Mobile' : ''}" class="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors group">
+                      <span class="w-8 h-8 flex items-center justify-center rounded-lg bg-red-50 group-hover:bg-red-100 transition-colors">
+                          <i data-feather="log-out" class="w-4 h-4 text-red-500"></i>
+                      </span>
+                      <span class="font-medium">Sign Out</span>
+                  </button>
+              </div>
+          `;
+
+          profileImg.addEventListener('click', (e) => {
+              e.stopPropagation();
+              dropdown.classList.toggle('hidden');
+          });
+
+          dropdown.querySelector(`#logoutBtn${isMobile ? 'Mobile' : ''}`).addEventListener('click', () => {
+              try {
+                  localStorage.removeItem("user");
+              } catch (err) {
+                  console.error("Failed to remove user from localStorage:", err);
+              }
+              window.location.href = '../index.html';
+          });
+
+          profileWrapper.appendChild(profileImg);
+          profileWrapper.appendChild(dropdown);
+
+          // Close dropdown when clicking outside
+          document.addEventListener('click', (e) => {
+              if (!profileWrapper.contains(e.target)) {
+                  dropdown.classList.add('hidden');
+              }
+          });
+
+          // Fetch store status and update link
+          fetch(`https://uni-verse-api.vercel.app/api/stores/${encodeURIComponent(user.id)}/exists`)
+              .then(res => res.json())
+              .then(result => {
+                  const storeLink = dropdown.querySelector('#storeLink');
+                  const hasStore = result.hasStore;
+                  const iconHtml = hasStore 
+                      ? '<i data-feather="layout" class="w-4 h-4 text-gray-500"></i>'
+                      : '<i data-feather="plus-circle" class="w-4 h-4 text-gray-500"></i>';
+                  
+                  storeLink.querySelector('span').innerHTML = iconHtml;
+                  storeLink.href = hasStore ? '/components/dashboard.html' : '/components/createStore.html';
+                  storeLink.querySelector('span:last-child').textContent = hasStore ? 'Dashboard' : 'Create Store';
+                  
+                  // Re-run feather for the new icon
+                  if (typeof feather !== 'undefined') feather.replace();
+              })
+              .catch(err => {
+                  console.error("Failed to check store existence:", err);
+                  const storeLink = dropdown.querySelector('#storeLink');
+                  storeLink.querySelector('span').innerHTML = '<i data-feather="plus-circle" class="w-4 h-4 text-gray-500"></i>';
+                  storeLink.href = '/components/createStore.html';
+                  storeLink.querySelector('span:last-child').textContent = 'Create Store';
+                  if (typeof feather !== 'undefined') feather.replace();
+              });
+
+          return profileWrapper;
       }
 
       // Replace desktop nav login link
@@ -117,7 +220,7 @@ document.addEventListener('DOMContentLoaded', async function () {
           
           // Wrap in div for mobile layout
           const wrapper = document.createElement('div');
-          wrapper.className = "flex flex-col items-center py-4 border-t border-gray-200 mt-4";
+          wrapper.className = "flex flex-col items-center py-4";
           wrapper.appendChild(mobileProfile);
           
           mobileLogin.replaceWith(wrapper);
@@ -135,7 +238,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     // Intercept blog clicks in navbars while the blog page is still inactive.
     const inactiveBlogLinks = document.querySelectorAll(
-      'nav a[href="/blog.html"], nav a[href="/components/blog.html"], #mobileMenu a[href="/blog.html"], #mobileMenu a[href="/components/blog.html"]'
+      'nav a[href="blog.html"], nav a[href="/blog.html"], #mobileMenu a[href="blog.html"], #mobileMenu a[href="/blog.html"]'
     );
 
     inactiveBlogLinks.forEach(link => {
@@ -191,6 +294,13 @@ const CATEGORIES = [
 
 
 function createOverlayCard(prod, options = {}) {
+  if (!prod || typeof prod !== 'object') {
+        console.warn('createOverlayCard: invalid product', prod);
+        const empty = document.createElement('div');
+        empty.style.display = 'none';
+        return Promise.resolve(empty);
+    }
+    
     const { featured = false, compact = false } = options;
     const isFeatured = featured || Boolean(prod.featured);
 
@@ -322,7 +432,7 @@ function loadCategories() {
 }
 
 // ── RECENTLY VIEWED ───────────────────────────────
-async function loadRecentlyViewed() {
+/*async function loadRecentlyViewed() {
     const section = document.getElementById('recentlyViewedSection');
     const carousel = document.getElementById('recentCarousel');
     if (!section || !carousel) return;
@@ -355,6 +465,51 @@ async function loadRecentlyViewed() {
     );
 
     const cards = await Promise.all(refreshedViewed.map((prod) => createOverlayCard(prod)));
+    cards.forEach(card => carousel.appendChild(card));
+    if (typeof feather !== 'undefined') feather.replace();
+    setupCarousel('recentCarousel', 'recentArrowLeft', 'recentArrowRight');
+}*/
+async function loadRecentlyViewed() {
+    const section = document.getElementById('recentlyViewedSection');
+    const carousel = document.getElementById('recentCarousel');
+    if (!section || !carousel) return;
+
+    const user = localStorage.getItem("user");
+    const viewed = JSON.parse(localStorage.getItem("recentlyViewed") || "[]");
+    
+    if (!user || !viewed.length) {
+        section.classList.add('hidden');
+        return;
+    }
+
+    section.classList.remove('hidden');
+    carousel.innerHTML = '';
+
+    const refreshedViewed = await Promise.all(
+        viewed.slice(0, 8).map(async (prod) => {
+            if (!prod?._id) return null;  // ← guard bad entries
+
+            try {
+                const res = await fetch(`https://uni-verse-api.vercel.app/api/products/id/${encodeURIComponent(prod._id)}`);
+                if (!res.ok) return null;  // ← return null on failure
+                return await res.json();
+            } catch (err) {
+                return null;
+            }
+        })
+    );
+
+    // Filter out nulls before creating cards
+    const validProducts = refreshedViewed.filter(prod => prod != null && prod._id);
+    
+    if (!validProducts.length) {
+        section.classList.add('hidden');
+        return;
+    }
+
+    const cardPromises = validProducts.map((prod) => createOverlayCard(prod));
+    const cards = await Promise.all(cardPromises);
+    
     cards.forEach(card => carousel.appendChild(card));
     if (typeof feather !== 'undefined') feather.replace();
     setupCarousel('recentCarousel', 'recentArrowLeft', 'recentArrowRight');
