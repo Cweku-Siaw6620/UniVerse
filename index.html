@@ -352,6 +352,22 @@
             </div>
         </div>
     </footer>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Check if user has seen the manual before
+        const hasSeenManual = localStorage.getItem('universe_manual_seen');
+
+        // If this is their first visit, redirect to userManual.html after 2 seconds
+        if (!hasSeenManual) {
+            setTimeout(function() {
+                // Open userManual.html in a new tab
+                window.open('userManual.html');
+                // Mark as seen so it doesn't happen again
+                localStorage.setItem('universe_manual_seen', 'true');
+            }, 1000);
+        }
+    });
+    </script>
 
     <script src="/javascript/mobileView.js"></script>
     <script src="companion/memory.js"></script>
