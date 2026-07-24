@@ -171,7 +171,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     // Intercept blog clicks in navbars while the blog page is still inactive.
     const inactiveBlogLinks = document.querySelectorAll(
-      'nav a[href="#"], nav a[href="/#"], #mobileMenu a[href="#"], #mobileMenu a[href="/#"]'
+      'nav a[href*="/blog"], nav a[href*="/blog"], #mobileMenu a[href*="/blog"], #mobileMenu a[href*="/blog"]'
     );
 
     inactiveBlogLinks.forEach(link => {
