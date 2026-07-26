@@ -205,7 +205,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="text-sm text-gray-500">Rating</div>
         </div>
         <div class="stats-card text-center">
-          <div class="text-2xl font-bold text-gray-800 mb-1">${store.joinedDate ? new Date(store.joinedDate).getFullYear() : '2024'}</div>
+          <div class="text-2xl font-bold text-gray-800 mb-1">${store.createdAt ? new Date(store.createdAt).getFullYear() : '2026'}</div>
           <div class="text-sm text-gray-500">Member Since</div>
         </div>
         <div class="stats-card text-center">

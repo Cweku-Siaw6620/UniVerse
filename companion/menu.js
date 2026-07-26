@@ -33,13 +33,19 @@ const menuHTML = `
 
 document.body.insertAdjacentHTML("beforeend", menuHTML);
 
-function openCompanionMenu(companion){
-    document.getElementById("companion-menu").classList.remove("hidden");
-    document.getElementById("menu-name").textContent = companion.name;
-    document.getElementById("menu-avatar").src = companion.images.idle;
+function openCompanionMenu(){
+    const menu = document.getElementById("companion-menu");
+    if (!menu.classList.contains("hidden")) {
+        return;
+    }
+    menu.classList.remove("hidden");
+    document.getElementById("menu-name").textContent = currentCompanion.name;
+    document.getElementById("menu-avatar").src = currentCompanion.images.idle;
 }
 
 function closeCompanionMenu(){
     document.getElementById("companion-menu").classList.add("hidden");
 }
+
+document.getElementById("close-menu-btn").addEventListener("click", closeCompanionMenu);
 */

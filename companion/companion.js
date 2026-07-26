@@ -13,7 +13,7 @@ const companion = document.getElementById("companion");
 const bubble = document.getElementById("speech-bubble");
 
 companion.addEventListener("click", () => {
-    openCompanionMenu(currentCompanion);
+    openCompanionMenu();
 });
 
 const companions = {
