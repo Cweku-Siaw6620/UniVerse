@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniVerse | Settings</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>tailwind.config={theme:{extend:{colors:{primary:'#4f46e5',secondary:'#6366f1'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/logo.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/logo.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+    <script src="../javascript/verification.js"></script>
+    <link rel="stylesheet" href="../stylesheet/dashboard.css">
+</head>
+<body>
+    <!-- Sidebar Overlay (Mobile) -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <div class="sidebar w-64 bg-white shadow-lg fixed h-full transition-transform duration-300 ease-in-out" id="sidebar">
+            <div class="p-6">
+                <a href="../index.html">
+                <img src="/images/logo.png"alt="UniVerse Logo" class="h-14 w-14 md:h-20 md:w-20 object-contain"/>
+                </a>
+            </div>
+
+            <nav class="mt-6">
+                <div class="px-4 space-y-2">
+                    <a href="./dashboard.html" class="flex items-center px-6 py-3 text-gray-900 hover:bg-gray-100 transition-colors">
+                        <div class="w-5 h-5 flex items-center justify-center mr-3">
+                            <i class="ri-dashboard-line"></i>
+                        </div>
+                        Dashboard
+                    </a>
+
+                    <a href="./product.html" class="flex items-center px-6 py-3 text-gray-900 hover:bg-gray-100 transition-colors">
+                        <div class="w-6 h-6 flex items-center justify-center mr-3">
+                            <i class="ri-shopping-bag-line"></i>
+                        </div>
+                        <span class="font-medium">Products</span>
+                    </a>
+
+                    <a href="./analytics.html" class="flex items-center px-6 py-3 text-gray-900 hover:bg-gray-100 transition-colors">
+                        <div class="w-5 h-5 flex items-center justify-center mr-3">
+                            <i class="ri-bar-chart-line"></i>
+                        </div>
+                        Analytics
+                    </a>
+
+                    <a href="./settings.html" class="flex items-center px-6 py-3 text-gray-900 bg-gray-100 border-l-4 border-primary">
+                        <div class="w-5 h-5 flex items-center justify-center mr-3">
+                            <i class="ri-settings-3-line text-primary"></i>
+                        </div>
+                        Settings
+                    </a>      
+                </div>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 main-content lg:ml-64">
+            <!-- Header -->
+            <header class="bg-white border-b border-gray-200 flex items-center justify-between px-6 py-4">
+                 <button class="lg:hidden mr-4" id="mobile-menu-toggle">
+                            <div class="w-6 h-6 flex items-center justify-center">
+                                <i class="ri-menu-line text-xl"></i>
+                            </div>
+                        </button>
+
+                <div class="flex items-center space-x-4" id="store-info">
+                    <!-- Store info will be loaded here -->
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 flex items-center justify-center bg-gray-200 rounded-full overflow-hidden mr-3">
+                            <i class="ri-store-2-line text-gray-500 text-xl"></i>
+                        </div>
+                        <div class="hidden md:block">
+                            <div class="text-sm font-medium text-gray-900" id="header-store-name">Loading store...</div>
+                            <div class="text-xs text-gray-500" id="header-seller-name">Loading seller...</div>
+                        </div>
+                    </div>
+                    <div class="relative">
+                        <button class="w-10 h-10 flex items-center justify-center bg-gray-100 rounded-full focus:outline-none">
+                            <div class="w-10 h-10 flex items-center justify-center">
+                                <i class="ri-notification-3-line"></i>
+                            </div>
+                        </button>
+                        <div class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></div>
+                    </div>
+                    <div class="w-10 h-10 flex items-center justify-center bg-gray-100 rounded-full">
+                        <i class="ri-user-line"></i>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Content Area -->
+            <main class="flex-1 overflow-y-auto bg-gray-50 p-6">
+                <div class="max-w-4xl mx-auto">
+                    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
+                        <h1 class="text-2xl font-bold text-gray-900">Store Settings</h1>
+                        <span class="text-sm text-gray-500 mt-2 md:mt-0" id="store-status-badge">Loading...</span>
+                    </div>
+
+                    <!-- Store Information Card -->
+                    <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+                        <div class="flex items-center justify-between mb-6">
+                            <h2 class="text-lg font-bold text-gray-900">Store Information</h2>
+                            <div class="flex items-center space-x-2">
+                                <span id="plan-badge" class="px-3 py-1 bg-green-100 text-green-700 text-sm font-medium rounded-full">Free</span>
+                            </div>
+                        </div>
+
+                        <div id="store-info-display" class="space-y-6">
+                            <!-- Store Logo -->
+                            <div class="flex items-start">
+                                <div class="w-10 h-10 flex items-center justify-center bg-primary/10 rounded-full mr-4">
+                                    <i class="ri-image-line text-primary text-lg"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="text-sm text-gray-500 mb-1">Store Logo</p>
+                                    <div class="flex items-center space-x-3">
+                                        <img id="store-logo-preview" src="" alt="Store Logo" class="w-16 h-16 rounded-lg object-cover border border-gray-200 hidden">
+                                        <span id="store-logo-text" class="text-base font-medium text-gray-900">No logo uploaded</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Store Name -->
+                            <div class="flex items-start">
+                                <div class="w-10 h-10 flex items-center justify-center bg-primary/10 rounded-full mr-4">
+                                    <i class="ri-store-2-line text-primary text-lg"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="text-sm text-gray-500 mb-1">Store Name</p>
+                                    <p class="text-base font-medium text-gray-900" id="store-name">Loading...</p>
+                                </div>
+                            </div>
+
+                            <!-- Seller Name -->
+                            <div class="flex items-start">
+                                <div class="w-10 h-10 flex items-center justify-center bg-primary/10 rounded-full mr-4">
+                                    <i class="ri-user-line text-primary text-lg"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="text-sm text-gray-500 mb-1">Seller Name</p>
+                                    <p class="text-base font-medium text-gray-900" id="seller-name">Loading...</p>
+                                </div>
+                            </div>
+
+                            <!-- Seller Phone -->
+                            <div class="flex items-start">
+                                <div class="w-10 h-10 flex items-center justify-center bg-primary/10 rounded-full mr-4">
+                                    <i class="ri-phone-line text-primary text-lg"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="text-sm text-gray-500 mb-1">Phone Number</p>
+                                    <p class="text-base font-medium text-gray-900" id="seller-phone">Not provided</p>
+                                </div>
+                            </div>
+
+                            <!-- Store Category -->
+                            <div class="flex items-start">
+                                <div class="w-10 h-10 flex items-center justify-center bg-primary/10 rounded-full mr-4">
+                                    <i class="ri-price-tag-3-line text-primary text-lg"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="text-sm text-gray-500 mb-1">Category</p>
+                                    <p class="text-base font-medium text-gray-900" id="store-category">Not specified</p>
+                                </div>
+                            </div>
+
+                            <!-- Store Description -->
+                            <div class="flex items-start">
+                                <div class="w-10 h-10 flex items-center justify-center bg-primary/10 rounded-full mr-4">
+                                    <i class="ri-file-text-line text-primary text-lg"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="text-sm text-gray-500 mb-1">Description</p>
+                                    <p class="text-base font-medium text-gray-900" id="store-description">No description</p>
+                                </div>
+                            </div>
+
+                            <!-- Store Slug / Link -->
+                            <div class="flex items-start">
+                                <div class="w-10 h-10 flex items-center justify-center bg-primary/10 rounded-full mr-4">
+                                    <i class="ri-link text-primary text-lg"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="text-sm text-gray-500 mb-1">Store Link</p>
+                                    <a id="store-slug" href="#" target="_blank" class="text-base font-medium text-primary hover:underline">Loading...</a>
+                                </div>
+                            </div>
+
+                            <!-- Personal Website -->
+                            <div class="flex items-start">
+                                <div class="w-10 h-10 flex items-center justify-center bg-primary/10 rounded-full mr-4">
+                                    <i class="ri-global-line text-primary text-lg"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="text-sm text-gray-500 mb-1">Personal Website</p>
+                                    <a id="personal-website" href="#" target="_blank" class="text-base font-medium text-primary hover:underline">Not provided</a>
+                                </div>
+                            </div>
+
+                            <!-- Plan -->
+                            <div class="flex items-start">
+                                <div class="w-10 h-10 flex items-center justify-center bg-primary/10 rounded-full mr-4">
+                                    <i class="ri-vip-crown-line text-primary text-lg"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="text-sm text-gray-500 mb-1">Current Plan</p>
+                                    <div>
+                                        <span class="text-base font-medium text-gray-900" id="store-plan">Free</span>
+                                        <span id="plan-expiry" class="text-sm text-gray-500 ml-2"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Store ID (hidden, for API calls) -->
+                            <input type="hidden" id="store-id" value="">
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <button id="edit-store-btn" class="flex items-center justify-center px-6 py-4 bg-primary text-white font-medium rounded-button hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-colors">
+                            <div class="w-5 h-5 flex items-center justify-center mr-2">
+                                <i class="ri-edit-line"></i>
+                            </div>
+                            Edit Store
+                        </button>
+
+                        <button id="delete-store-btn" class="flex items-center justify-center px-6 py-4 bg-red-500 text-white font-medium rounded-button hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors">
+                            <div class="w-5 h-5 flex items-center justify-center mr-2">
+                                <i class="ri-delete-bin-line"></i>
+                            </div>
+                            Delete Store
+                        </button>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Edit Store Modal -->
+    <div id="edit-modal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-lg shadow-xl max-w-lg w-full p-6 transform transition-all max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-xl font-bold text-gray-900">Edit Store</h3>
+                <button id="close-edit-modal" class="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-600">
+                    <i class="ri-close-line text-xl"></i>
+                </button>
+            </div>
+            <form id="edit-store-form" enctype="multipart/form-data">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Store Logo</label>
+                        <div class="flex items-center space-x-3">
+                            <img id="edit-logo-preview" src="" alt="Store Logo" class="w-20 h-20 rounded-lg object-cover border border-gray-200">
+                            <input type="file" id="edit-store-logo" accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-button file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Store Name *</label>
+                        <input type="text" id="edit-store-name" class="w-full px-4 py-2 border border-gray-300 rounded-button text-sm focus:ring-2 focus:ring-primary focus:border-transparent" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Seller Name *</label>
+                        <input type="text" id="edit-seller-name" class="w-full px-4 py-2 border border-gray-300 rounded-button text-sm focus:ring-2 focus:ring-primary focus:border-transparent" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                        <input type="tel" id="edit-seller-phone" class="w-full px-4 py-2 border border-gray-300 rounded-button text-sm focus:ring-2 focus:ring-primary focus:border-transparent">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Store Category</label>
+                        <select id="edit-store-category" class="w-full px-4 py-2 border border-gray-300 rounded-button text-sm focus:ring-2 focus:ring-primary focus:border-transparent">
+                            <option value="">Select category</option>
+                            <option value="Electronics">Electronics</option>
+                            <option value="Fashion">Fashion</option>
+                            <option value="Books">Books</option>
+                            <option value="Food & Beverage">Food & Beverage</option>
+                            <option value="Art & Crafts">Art & Crafts</option>
+                            <option value="Services">Services</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Store Description</label>
+                        <textarea id="edit-store-description" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-button text-sm focus:ring-2 focus:ring-primary focus:border-transparent"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Personal Website</label>
+                        <input type="url" id="edit-personal-website" class="w-full px-4 py-2 border border-gray-300 rounded-button text-sm focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="https://example.com">
+                    </div>
+                </div>
+                <div class="flex justify-end space-x-3 pt-6 mt-4 border-t border-gray-200">
+                    <button type="button" id="cancel-edit" class="px-4 py-2 bg-gray-100 text-gray-700 font-medium rounded-button hover:bg-gray-200 transition-colors">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-primary text-white font-medium rounded-button hover:bg-primary/90 transition-colors" id="edit-submit-btn">
+                        <span id="edit-btn-text">Save Changes</span>
+                        <span id="edit-btn-loading" class="hidden"><i class="ri-loader-4-line animate-spin"></i> Saving...</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Store Modal -->
+    <div id="delete-modal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6 transform transition-all">
+            <div class="w-16 h-16 flex items-center justify-center bg-red-100 rounded-full mx-auto mb-4">
+                <i class="ri-alert-line text-red-500 text-3xl"></i>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 text-center mb-2">Delete Store</h3>
+            <p class="text-gray-600 text-center mb-2">Are you sure you want to delete your store?</p>
+            <p class="text-sm text-red-500 text-center mb-6">This action cannot be undone. All your products and data will be permanently removed.</p>
+            <div class="flex justify-center space-x-3">
+                <button id="cancel-delete" class="px-6 py-2 bg-gray-100 text-gray-700 font-medium rounded-button hover:bg-gray-200 transition-colors">Cancel</button>
+                <button id="confirm-delete" class="px-6 py-2 bg-red-500 text-white font-medium rounded-button hover:bg-red-600 transition-colors">
+                    <span id="delete-btn-text">Delete Store</span>
+                    <span id="delete-btn-loading" class="hidden"><i class="ri-loader-4-line animate-spin"></i> Deleting...</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="notification" class="fixed top-4 right-4 bg-white border border-gray-200 rounded-lg shadow-lg p-4 transform translate-x-full transition-transform duration-300 ease-in-out z-50 flex items-center max-w-sm">
+        <div id="notification-icon" class="w-8 h-8 flex items-center justify-center bg-green-100 rounded-full mr-3">
+            <i id="notification-icon-icon" class="ri-check-line text-green-500"></i>
+        </div>
+        <div>
+            <h3 class="font-medium text-gray-900" id="notification-title">Success</h3>
+            <p class="text-sm text-gray-600" id="notification-message">Operation completed successfully.</p>
+        </div>
+        <button id="close-notification" class="ml-4 text-gray-400 hover:text-gray-500">
+            <div class="w-5 h-5 flex items-center justify-center">
+                <i class="ri-close-line"></i>
+            </div>
+        </button>
+    </div>
+
+    <script src="../javascript/settings.js"></script>
+</body>
+</html>
