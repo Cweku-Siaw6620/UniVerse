@@ -225,10 +225,15 @@ function setupButtonActions(product, store) {
 // ── SHARE ─────────────────────────────────────────
 function setupShareFunctionality(product) {
   window.shareProduct = function(product) {
+    // Share the API's OG-tagged product URL, not the frontend URL directly.
+    // The server (/products/:id) renders og:title/og:description/og:image,
+    // so WhatsApp, Facebook, Twitter, etc. auto-build the rich preview card
+    // (image + title + description) themselves when this link is shared —
+    // no client-side image fetching/attaching needed.
     const shareData = {
       title: `${product.productName} - UniVerse`,
       text:  `Check out ${product.productName} on UniVerse for ₵${(product.productPrice || 0).toFixed(2)}`,
-      url:   window.location.href,
+      url:   `https://uni-verse-api.vercel.app/products/${product._id}`,
     };
     if (navigator.share) {
       navigator.share(shareData).catch(() => {});
