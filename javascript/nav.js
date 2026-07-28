@@ -364,44 +364,7 @@ function loadCategories() {
     setupCarousel('categoryCarousel', 'categoryArrowLeft', 'categoryArrowRight');
 }
 
-// ── RECENTLY VIEWED ───────────────────────────────
-/*async function loadRecentlyViewed() {
-    const section = document.getElementById('recentlyViewedSection');
-    const carousel = document.getElementById('recentCarousel');
-    if (!section || !carousel) return;
-
-    // Check if user is logged in
-    const user = localStorage.getItem("user");
-    const viewed = JSON.parse(localStorage.getItem("recentlyViewed") || "[]");
-    
-    if (!user || !viewed.length) {
-        section.classList.add('hidden');
-        return;
-    }
-
-    section.classList.remove('hidden');
-    carousel.innerHTML = '';
-
-    // Refresh each item so featured badges reflect the current backend state.
-    const refreshedViewed = await Promise.all(
-      viewed.slice(0, 8).map(async (prod) => {
-        if (!prod?._id) return prod;
-
-        try {
-          const res = await fetch(`https://uni-verse-api.vercel.app/api/products/id/${encodeURIComponent(prod._id)}`);
-          if (!res.ok) return prod;
-          return await res.json();
-        } catch (err) {
-          return prod;
-        }
-      })
-    );
-
-    const cards = await Promise.all(refreshedViewed.map((prod) => createOverlayCard(prod)));
-    cards.forEach(card => carousel.appendChild(card));
-    if (typeof feather !== 'undefined') feather.replace();
-    setupCarousel('recentCarousel', 'recentArrowLeft', 'recentArrowRight');
-}*/
+// ── RECENTLY VIEWED PRODUCTS ─────────────────────
 async function loadRecentlyViewed() {
     const section = document.getElementById('recentlyViewedSection');
     const carousel = document.getElementById('recentCarousel');
