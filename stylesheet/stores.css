@@ -714,3 +714,196 @@
         min-width: 260px;
     }
 }
+
+
+/* ============================================
+   MOBILE VIEW: 2-COLUMN GRID FIX
+   ============================================ */
+
+/* Ensure grid is 2 columns on mobile */
+@media (max-width: 639px) {
+    /* All Stores Grid - force 2 columns */
+    #shops.stores-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 0.75rem !important;
+    }
+
+    /* Featured Carousel - override flex to grid on mobile */
+    .featured-carousel.stores-grid {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 0.75rem !important;
+        overflow-x: visible !important;
+        scroll-snap-type: none !important;
+        padding-bottom: 0 !important;
+    }
+
+    /* Hide scroll indicators on mobile grid */
+    .featured-carousel.stores-grid .featured-card {
+        flex: none !important;
+        min-width: auto !important;
+        scroll-snap-align: none !important;
+        width: 100% !important;
+    }
+
+    /* Adjust featured card for mobile 2-col */
+    .featured-card .featured-card-image-wrap {
+        height: 120px;
+    }
+
+    .featured-card .featured-card-logo {
+        width: 48px;
+        height: 48px;
+    }
+
+    .featured-card .featured-card-logo-wrap {
+        top: 88px;
+        left: 12px;
+    }
+
+    .featured-card .featured-card-body {
+        padding: 36px 12px 12px;
+    }
+
+    .featured-card .featured-card-name {
+        font-size: 13px;
+        white-space: normal;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        display: -webkit-box;
+        overflow: hidden;
+    }
+
+    .featured-card .featured-card-category {
+        font-size: 10px;
+    }
+
+    .featured-card .featured-card-seller {
+        font-size: 10px;
+    }
+
+    .featured-card .featured-plan-badge {
+        font-size: 9px;
+    }
+
+    .featured-card .featured-card-btn {
+        font-size: 11px;
+        padding: 8px 0;
+    }
+
+    .featured-card .featured-card-badge {
+        font-size: 8px;
+        padding: 2px 8px;
+        top: 6px;
+        right: 6px;
+    }
+
+    /* Smaller category badge on mobile */
+    .store-category-badge {
+        font-size: 8px !important;
+        padding: 2px 6px !important;
+    }
+
+    /* Smaller store card title on mobile */
+    .store-card-title {
+        font-size: 0.85rem !important;
+    }
+
+    /* Smaller description on mobile */
+    .store-card-description {
+        font-size: 0.75rem !important;
+        -webkit-line-clamp: 2 !important;
+    }
+
+    /* Smaller seller text on mobile */
+    .store-card-seller {
+        font-size: 0.65rem !important;
+    }
+
+    /* Smaller contact text on mobile */
+    .store-card-contact {
+        font-size: 0.6rem !important;
+    }
+
+    /* Smaller button on mobile */
+    .store-card-btn {
+        font-size: 0.65rem !important;
+        padding: 4px 10px !important;
+    }
+
+    /* Adjust store card content padding on mobile */
+    .store-card-content {
+        padding: 0.6rem !important;
+    }
+
+    /* Adjust store card image height on mobile */
+    .store-card > img:first-child,
+    .store-card > a > img:first-child {
+        height: 120px !important;
+        aspect-ratio: auto !important;
+    }
+
+    /* Hide featured navigation on mobile (since we're showing grid) */
+    .featured-nav {
+        display: none !important;
+    }
+
+    /* Featured section margin adjustment */
+    #featuredStoresSection .featured-header {
+        margin-bottom: 12px;
+    }
+
+    #featuredStoresSection .featured-title {
+        font-size: 16px;
+    }
+}
+
+/* Extra small screens (very tiny phones) */
+@media (max-width: 400px) {
+    #shops.stores-grid {
+        gap: 0.5rem !important;
+    }
+
+    .featured-carousel.stores-grid {
+        gap: 0.5rem !important;
+    }
+
+    .store-card-content {
+        padding: 0.4rem !important;
+    }
+
+    .store-card-title {
+        font-size: 0.75rem !important;
+    }
+
+    .store-card-description {
+        font-size: 0.65rem !important;
+    }
+
+    .store-card-btn {
+        font-size: 0.55rem !important;
+        padding: 3px 8px !important;
+    }
+
+    .featured-card .featured-card-image-wrap {
+        height: 100px;
+    }
+
+    .featured-card .featured-card-logo {
+        width: 40px;
+        height: 40px;
+    }
+
+    .featured-card .featured-card-logo-wrap {
+        top: 72px;
+        left: 10px;
+    }
+
+    .featured-card .featured-card-body {
+        padding: 30px 10px 10px;
+    }
+
+    .featured-card .featured-card-name {
+        font-size: 11px;
+    }
+}

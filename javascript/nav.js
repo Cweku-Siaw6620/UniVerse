@@ -472,10 +472,11 @@ async function loadAllProducts() {
 }
 
 // ── INIT ──────────────────────────────────────────
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     loadCategories();
     loadRecentlyViewed();
     loadAllProducts();
+    await updateMobileDashboardLink();
 });
 
 // ── WHATSAPP & UTILITIES (keep existing) ──────────
@@ -534,4 +535,58 @@ function showNavToast(message) {
     toast.classList.add('opacity-0', 'transition-opacity', 'duration-300');
     setTimeout(() => toast.remove(), 300);
   }, 3500);
+}
+
+/**
+ * Updates the mobile menu dashboard/store link based on user status
+ * - Not logged in: "Start Selling" → goes to login
+ * - Logged in, no store: "Create Store" → goes to createStore.html
+ * - Logged in, has store: "Dashboard" → goes to dashboard.html
+ */
+async function updateMobileDashboardLink() {
+    const link = document.getElementById('mobileDashboardLink');
+    const icon = document.getElementById('mobileDashboardIcon');
+    const text = document.getElementById('mobileDashboardText');
+    
+    if (!link || !icon || !text) return;
+
+    let user = null;
+    try {
+        const userData = localStorage.getItem("user");
+        user = userData ? JSON.parse(userData) : null;
+    } catch (err) {
+        console.error("Failed to parse user from localStorage:", err);
+    }
+
+    // CASE 1: Not logged in → "Start Selling"
+    if (!user || !user.id) {
+        link.href = './components/login.html';
+        icon.className = 'fas fa-store-alt text-gray-500 group-hover:text-gray-700 text-sm';
+        text.textContent = 'Start Selling';
+        return;
+    }
+
+    // CASE 2: Logged in → check store status
+    try {
+        const res = await fetch(`https://uni-verse-api.vercel.app/api/stores/${encodeURIComponent(user.id)}/exists`);
+        const result = await res.json();
+
+        if (result.hasStore) {
+            // Has store → "Dashboard"
+            link.href = './components/dashboard.html';
+            icon.className = 'fas fa-chart-pie text-gray-500 group-hover:text-gray-700 text-sm';
+            text.textContent = 'Dashboard';
+        } else {
+            // No store → "Create Store"
+            link.href = './components/createStore.html';
+            icon.className = 'fas fa-plus-circle text-gray-500 group-hover:text-gray-700 text-sm';
+            text.textContent = 'Create Your Store';
+        }
+    } catch (err) {
+        console.error("Failed to check store existence:", err);
+        // Fallback: assume no store
+        link.href = './components/createStore.html';
+        icon.className = 'fas fa-plus-circle text-gray-500 group-hover:text-gray-700 text-sm';
+        text.textContent = 'Create Store';
+    }
 }
