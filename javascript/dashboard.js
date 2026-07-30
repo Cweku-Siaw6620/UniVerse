@@ -168,7 +168,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const productCategory = document.getElementById('productCategory').value
                 
                 // Form validation
-                if (!productName || !productPrice || !productStock || !productDescription || !productCategory) {
+                if (!productName || !productPrice || !productStock || !productCategory) {
                     showNotification('Error', 'Please fill in all required fields', 'error');
                     return;
                 }
