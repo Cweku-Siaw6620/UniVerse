@@ -240,12 +240,6 @@ function createOverlayCard(prod, options = {}) {
     return (async () => {
         const card = document.createElement("div");
         card.className = "carousel-item snap-start";
-        
-        const whatsappLink = await getWhatsAppLink({
-            ...prod,
-            sellerId: prod.storeId?._id || prod.storeId
-        });
-
         const aspectClass = compact ? "aspect-square" : "aspect-[3/4]";
 
         card.innerHTML = `

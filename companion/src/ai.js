@@ -6,7 +6,9 @@ class AIManager {
         // Fake AI for now
         return {
             text: "Hello! I'm still learning, but soon I'll be able to help you shop on UniVerse.",
-            emotion: "happy"
+            emotion: "happy",
+            actions: [],
+            memory: []
         };
     }
 }
