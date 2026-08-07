@@ -180,20 +180,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         showNavToast('Blog is currently inactive. Please check back soon.');
       });
     });
-    
-    // Load featured and all products on the homepage; only all products elsewhere.
-    const isHomepage =
-      window.location.pathname === '/' ||
-      window.location.pathname.endsWith('index.html') ||
-      window.location.pathname === '/index.html';
-
-    if (isHomepage) {
-      loadFeaturedProducts();
-      loadAllProducts()
-    } else {
-      loadAllProducts();
-    }
-});
+}); 
 
 // Add this to your profile page script
 const urlParams = new URLSearchParams(window.location.search);
@@ -467,9 +454,22 @@ async function loadAllProducts() {
 
 // ── INIT ──────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', async () => {
+    const isHomepage = window.location.pathname === '/' ||
+                       window.location.pathname.endsWith('index.html');
+
     loadCategories();
+
+    if (isHomepage) {
+        loadFeaturedProducts();
+    }
+    
+    // Only load "all products" section if the container exists
+    const allProductsContainer = document.getElementById('allProductsScroll');
+    if (allProductsContainer) {
+        loadAllProducts();
+    }
+    
     loadRecentlyViewed();
-    loadAllProducts();
     await updateMobileDashboardLink();
 });
 

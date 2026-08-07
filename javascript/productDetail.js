@@ -84,12 +84,16 @@ function updateProductDisplay(product, store) {
   const featuredBadge = document.getElementById('featuredBadge');
   if (featuredBadge) {
     featuredBadge.classList.toggle('hidden', !product.featured);
+    const featuredSpan = featuredBadge.querySelector('span');
+    if (featuredSpan) {
+      featuredSpan.className = 'bg-amber-600 text-white px-3 py-1.5 rounded-full text-xs font-semibold shadow-sm flex items-center gap-1';
+    }
   }
 
   const catTag = document.getElementById('productCategoryTag');
   if (catTag) {
     catTag.innerHTML = `
-      <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition cursor-pointer"
+      <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-amber-50 text-amber-800 border border-amber-100 hover:bg-amber-100 transition cursor-pointer"
             onclick="window.location.href='../homeScreens/allProducts.html?category=${encodeURIComponent(product.productCategory || '')}'">
         ${escapeHtml(product.productCategory || 'General')}
       </span>
@@ -205,7 +209,11 @@ function setupButtonActions(product, store) {
       const clean = store.sellerNumber.replace(/\D/g, '');
       const sellerName = store.sellerName || 'there';
       const msg   = encodeURIComponent(
-        `Hello ${sellerName},\nI am interested in your listing, *${product.productName}*${product.productPrice ? ` (₵${(product.productPrice || 0).toFixed(2)})` : ''}.\nKindly share more details about availability, pricing, and any delivery or pickup options.\nThank you.`
+       `@universeweb.co
+        Hello, I'm interested in your listing:
+        • ${product.productName}${product.productPrice ? ` — ₵${product.productPrice.toFixed(2)}` : ''}
+        Is it available? Also, what are your delivery/pickup options?
+        Thank you.`
       );
       // Track WhatsApp click for analytics before opening
       UniTracker.whatsappClick(
