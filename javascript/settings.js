@@ -357,6 +357,7 @@ document.addEventListener('DOMContentLoaded', function () {
         try {
             const response = await fetch(`${API_BASE}/api/stores/${storeId}`, {
                 method: 'PUT',
+                credentials: 'include',
                 body: formData
             });
 

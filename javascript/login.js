@@ -3,6 +3,7 @@ function handleGoogleLogin(response) {
 
       fetch('https://uni-verse-api.vercel.app/api/auth/google', {
         method: 'POST',
+        credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ token: idToken })
       })

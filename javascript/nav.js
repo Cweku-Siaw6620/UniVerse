@@ -78,9 +78,13 @@ document.addEventListener('DOMContentLoaded', async function () {
               dropdown.classList.toggle('hidden');
           });
 
-          dropdown.querySelector(`#logoutBtn${isMobile ? 'Mobile' : ''}`).addEventListener('click', () => {
+          dropdown.querySelector(`#logoutBtn${isMobile ? 'Mobile' : ''}`).addEventListener('click', async () => {
               try {
-                  localStorage.removeItem("user");
+                await fetch('https://uni-verse-api.vercel.app/api/auth/logout', {
+                method: 'POST',
+                credentials: 'include'
+                });
+                localStorage.removeItem("user");
               } catch (err) {
                   console.error("Failed to remove user from localStorage:", err);
               }

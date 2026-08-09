@@ -55,13 +55,14 @@ document.addEventListener("DOMContentLoaded", function () {
       e.preventDefault();
 
       let user = null;
+
       try {
         const userData = localStorage.getItem("user");
         user = userData ? JSON.parse(userData) : null;
       } catch (err) {
         console.error("Failed to parse user from localStorage:", err);
       }
-      
+
       if (!user || !user.id) {
         showNotification("User not found. Please log in first.", "error");
         window.location.href = "/components/login.html";
@@ -69,45 +70,73 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       const formData = new FormData(storeForm);
-      formData.append("userId", user.id);
 
-      // ✅ Disable and blur the button
+      // DO NOT send userId anymore
+      // formData.append("userId", user.id);
+
       createBtn.disabled = true;
-      createBtn.classList.add("opacity-60", "cursor-not-allowed", "blur-[1px]");
+      createBtn.classList.add(
+        "opacity-60",
+        "cursor-not-allowed",
+        "blur-[1px]"
+      );
       createBtn.textContent = "Creating...";
 
       try {
-        const response = await fetch("https://uni-verse-api.vercel.app/api/stores", {
-          method: "POST",
-          body: formData,
-        });
+        const response = await fetch(
+          "https://uni-verse-api.vercel.app/api/stores",
+          {
+            method: "POST",
+            credentials: "include",
+            body: formData,
+          }
+        );
 
         const result = await response.json();
 
         if (response.ok) {
           showNotification("Store created successfully!", "success");
+
           try {
             localStorage.setItem("store", JSON.stringify(result));
           } catch (err) {
             console.error("Failed to save store to localStorage:", err);
           }
 
-          // ✅ Keep button blurred until redirect
-          setTimeout(() => (window.location.href = "dashboard.html"), 2000);
+          setTimeout(
+            () => (window.location.href = "dashboard.html"),
+            2000
+          );
+
         } else {
-          showNotification(result.message || "Failed to create store.", "error");
-          // ✅ Re-enable if failed
+          showNotification(
+            result.message || "Failed to create store.",
+            "error"
+          );
+
           createBtn.disabled = false;
-          createBtn.classList.remove("opacity-60", "cursor-not-allowed", "blur-[1px]");
+          createBtn.classList.remove(
+            "opacity-60",
+            "cursor-not-allowed",
+            "blur-[1px]"
+          );
           createBtn.textContent = "Create Store";
         }
+
       } catch (error) {
         console.error("Store creation error:", error);
-        showNotification("Something went wrong. Please try again.", "error");
 
-        // ✅ Re-enable on error
+        showNotification(
+          "Something went wrong. Please try again.",
+          "error"
+        );
+
         createBtn.disabled = false;
-        createBtn.classList.remove("opacity-60", "cursor-not-allowed", "blur-[1px]");
+        createBtn.classList.remove(
+          "opacity-60",
+          "cursor-not-allowed",
+          "blur-[1px]"
+        );
         createBtn.textContent = "Create Store";
       }
     });
