@@ -490,6 +490,7 @@ document.addEventListener('DOMContentLoaded', function () {
         try {
             const res = await fetch(`https://uni-verse-api.vercel.app/api/products/${productId}`, {
                 method: 'DELETE',
+                credentials: 'include',
             });
 
             const data = await res.json();
@@ -756,6 +757,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const response = await fetch(`https://uni-verse-api.vercel.app/api/products/${productId}`, {
                 method: 'PUT',
+                credentials: 'include',
                 body: formData
             });
 

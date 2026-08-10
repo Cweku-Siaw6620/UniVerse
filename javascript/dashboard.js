@@ -207,11 +207,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 const formData = new FormData(addProductForm);
                 formData.append("storeId", store._id);
-                formData.append("userId", currentUser.id);
 
                  try {
                   const response = await fetch("https://uni-verse-api.vercel.app/api/products", {
                     method: "POST",
+                    credentials: "include",
                     body: formData,
                 });
                 const result = await response.json();

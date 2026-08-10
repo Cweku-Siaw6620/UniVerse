@@ -376,7 +376,8 @@ document.addEventListener('DOMContentLoaded', function () {
     async function deleteStore(storeId) {
         try {
             const response = await fetch(`${API_BASE}/api/stores/${storeId}`, {
-                method: 'DELETE'
+                method: 'DELETE',
+                credentials: 'include'
             });
 
             if (!response.ok) {
