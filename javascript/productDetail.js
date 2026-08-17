@@ -44,14 +44,18 @@ async function fetchProductDetails(productId) {
 }
 
 async function fetchStoreDetails(storeId) {
-  const res = await fetch(`https://uni-verse-api.vercel.app/api/stores/storeID/${storeId}`);
-  if (!res.ok) throw new Error("Failed to fetch store");
+  const res = await fetch(
+    `https://uni-verse-api.vercel.app/api/stores/storeID/${storeId}`
+  );
+  if (!res.ok) {
+    throw new Error("Failed to fetch store");
+  }
   const store = await res.json();
-  const ownerId = store.owner?._id || store.owner;
-  const verification = window.uniVerseVerification && ownerId
-    ? await window.uniVerseVerification.fetchVerificationStatus(ownerId)
-    : { isVerified: false };
-  return { ...store, ownerVerified: verification.isVerified };
+  const ownerVerified =
+    store.owner?.isVerified === true ||
+    store.owner?.affiliation === 'student_verified';
+
+  return {...store,ownerVerified};
 }
 
 // ── UPDATE PRODUCT DISPLAY ────────────────────────

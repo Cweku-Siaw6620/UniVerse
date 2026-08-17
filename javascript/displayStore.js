@@ -37,10 +37,11 @@ document.addEventListener('DOMContentLoaded', () => {
       // Save storeId for product fetching
       resolvedStoreId = store._id;
 
-      const verification = window.uniVerseVerification
-        ? await window.uniVerseVerification.fetchVerificationStatus(store.owner)
-        : { isVerified: false };
-      storeData = { ...store, ownerVerified: verification.isVerified };
+      const ownerVerified =
+        store.owner?.isVerified === true ||
+        store.owner?.affiliation === 'student_verified';
+
+      storeData = {...store,ownerVerified };
 
       // Save to localStorage
       try {

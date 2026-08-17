@@ -23,9 +23,11 @@ document.addEventListener('DOMContentLoaded', function () {
       if (!res.ok) throw new Error("Failed to fetch store");
 
       const store = await res.json();
-            const verification = window.uniVerseVerification
-                ? await window.uniVerseVerification.fetchVerificationStatus(userId)
-                : { isVerified: false };
+            const verification = {
+                isVerified:
+                  store.owner?.isVerified === true ||
+                  store.owner?.affiliation === 'student_verified'
+              };
             updateStoreInfo(store, verification);
     } catch (error) {
       console.error('Failed to get store:', error);
