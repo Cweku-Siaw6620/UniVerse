@@ -204,27 +204,21 @@ function setupButtonActions(product, store) {
     };
   }
 
-  if (contactBtn && store.sellerNumber) {
+if (contactBtn && store.sellerNumber) {
     contactBtn.onclick = () => {
-      const clean = store.sellerNumber.replace(/\D/g, '');
-      const sellerName = store.sellerName || 'there';
-      const msg   = encodeURIComponent(
-       `@universeweb.co
-        Hello, I'm interested in your listing:
-        • ${product.productName}${product.productPrice ? ` — ₵${product.productPrice.toFixed(2)}` : ''}
-        Is it available? Also, what are your delivery/pickup options?
-        Thank you.`
-      );
-      // Track WhatsApp click for analytics before opening
-      UniTracker.whatsappClick(
-        typeof product.storeId === 'object' ? product.storeId._id || product.storeId : product.storeId,
-        product._id,
-        store.owner?._id || store.owner
-      );
-      window.open(`https://api.whatsapp.com/send?phone=233${clean}&text=${msg}`, '_blank');
+        const clean = store.sellerNumber.replace(/\D/g, '');
+        const productUrl = `https://uni-verse-api.vercel.app/products/${product._id}`;
+        const msg = encodeURIComponent(
+            `Hi, I'm interested in your product:\n\n*${product.productName}*\nPrice: ₵${(product.productPrice || 0).toFixed(2)}\n${productUrl}`
+        );
+        UniTracker.whatsappClick(
+            typeof product.storeId === 'object' ? product.storeId._id || product.storeId : product.storeId,
+            product._id,
+            store.owner?._id || store.owner
+        );
+        window.open(`https://api.whatsapp.com/send?phone=233${clean}&text=${msg}`, '_blank');
     };
-  }
-
+}
   if (shareBtn) {
     shareBtn.onclick = () => shareProduct(product);
   }
@@ -233,11 +227,6 @@ function setupButtonActions(product, store) {
 // ── SHARE ─────────────────────────────────────────
 function setupShareFunctionality(product) {
   window.shareProduct = function(product) {
-    // Share the API's OG-tagged product URL, not the frontend URL directly.
-    // The server (/products/:id) renders og:title/og:description/og:image,
-    // so WhatsApp, Facebook, Twitter, etc. auto-build the rich preview card
-    // (image + title + description) themselves when this link is shared —
-    // no client-side image fetching/attaching needed.
     const shareData = {
       title: `${product.productName} - UniVerse`,
       text:  `Check out ${product.productName} on UniVerse for ₵${(product.productPrice || 0).toFixed(2)}`,

@@ -1,4 +1,3 @@
-/*
 class SessionManager {
     constructor() {
         this.storageKey = "universe-ai-session";
@@ -15,4 +14,3 @@ class SessionManager {
 const sessionManager = new SessionManager();
 
 window.sessionManager = sessionManager;
-*/

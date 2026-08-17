@@ -422,12 +422,11 @@
 
                 noResults.classList.add("hidden");
 
-                        const cards = await Promise.all(shops.map(async shop => {
-                           const ownerId = typeof shop.owner === 'object' ? shop.owner?._id : shop.owner;
-
-                            const verification = window.uniVerseVerification && ownerId
-                                ? await window.uniVerseVerification.fetchVerificationStatus(ownerId)
-                                : { isVerified: false };
+                        const cards = shops.map(shop => {
+                            const verification = {
+                                isVerified: shop.owner?.isVerified === true ||
+                                            shop.owner?.affiliation === 'student_verified'
+                            };
                             return `
                 <article class="store-card">
                     <img src="${shop.storeLogo || '/images/placeholder.png'}"
@@ -468,7 +467,7 @@
                     </div>
                 </article>
                             `;
-                        }));
+                        });
 
                         if (currentToken !== renderToken) {
                             return;
@@ -645,8 +644,14 @@
         fetchShops();
         loadFeaturedStores();
     </script>
+    
+     <!-- AI JavaScript -->
     <script src="companion/memory.js"></script>
     <script src="companion/personality.js"></script>
     <script src="companion/companion.js"></script>
+    <script src="companion/menu.js"></script>
+    <script src="companion/src/chat.js"></script>
+    <script src="companion/src/ai.js"></script>
+    <script src="companion/src/session.js"></script>
 </body>
 </html>

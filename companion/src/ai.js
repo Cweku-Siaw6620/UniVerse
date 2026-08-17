@@ -1,4 +1,4 @@
-/*
+
 class AIManager {
     async ask(message) {
         console.log("AI received:", message);
@@ -13,4 +13,3 @@ class AIManager {
     }
 }
 const aiManager = new AIManager();
-*/

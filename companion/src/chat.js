@@ -1,4 +1,4 @@
-/*
+
 class ChatManager {
     async send(message) {
         console.log("User:", message);
@@ -8,7 +8,7 @@ class ChatManager {
             page: window.location.pathname,
             message: message
         };
-        const response = await fetch("http://localhost:5000/api/ai/chat", {
+        const response = await fetch("https://uni-verse-api.vercel.app/api/ai/chat", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -16,10 +16,9 @@ class ChatManager {
             body: JSON.stringify(request)
         });
         const data = await response.json();
-        console.log(data);
+        expressAndSpeak("happy", data.text);
     }
 
 }
 
 const chatManager = new ChatManager();
-*/

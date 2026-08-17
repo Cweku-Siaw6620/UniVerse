@@ -181,9 +181,10 @@ document.addEventListener('DOMContentLoaded', () => {
           const countryCode = '233';
           const cleanNumber = store.sellerNumber.replace(/\D/g, '');
           const sellerName = store.sellerName || 'there';
+          const storeUrl = `https://uni-verse-api.vercel.app/stores/${store.slug}`;
           const storeName = store.storeName || 'your store';
           const message = encodeURIComponent(
-            `Hello ${sellerName},\nI found your store, "${storeName}", on UniVerse and would like to learn more about your products and services.\nPlease share any relevant details, including availability, pricing, and how to proceed.\nThank you.`
+            `Hello ${sellerName},\nI found your store, "${storeName}", on UniVerse and would like to learn more about your products and services.\nStore Link: ${storeUrl}`
           );
           window.open(`https://api.whatsapp.com/send?phone=${countryCode}${cleanNumber}&text=${message}`, '_blank');
         });

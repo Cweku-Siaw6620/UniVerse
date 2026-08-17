@@ -1,4 +1,4 @@
-/*
+
 const companionHTML = `
     <div id="companion-container">
         <div id="speech-bubble"></div>
@@ -75,7 +75,12 @@ function handleCommand(userInput) {
     return true;
 }
 
-let currentCompanion = companions.kal;
+//let currentCompanion = companions.kal;
+const savedCompanion = localStorage.getItem("selectedCompanion");
+let currentCompanion = savedCompanion && companions[savedCompanion]
+    ? companions[savedCompanion]
+    : companions.kal;
+
 let currentState = "idle";
 let currentRight = -200; //starting position
 const targetRight = 20; //final destination
@@ -83,6 +88,7 @@ let lastIdleMessage = ""; //to avoid repeating the same idle message
 let idleTimer = null; //timer for idle messages
 let speechBubbleTimer = null; //timer for speech bubble
 let expressionTimer = null; //timer for expression changes
+let chatMode = false;
 
 //detects the current page based on the data-page attribute in the body tag
 function detectCurrentPage() {
@@ -108,6 +114,10 @@ function setExpression(expression) {
 function express(expression, duration = 3000) {
     clearTimeout(expressionTimer);
     setExpression(expression);
+      // Keep the expression active during chat
+    if (chatMode) {
+        return;
+    }
     expressionTimer = setTimeout(() => {
         setExpression("idle");
     }, duration);
@@ -182,6 +192,10 @@ function speak(message) { //speech bubble function
     bubble.style.opacity = "1";
     bubble.style.visibility = "visible";
     bubble.style.transform = "translateY(0)";
+    // Don't automatically close the bubble during chat
+    if (chatMode) {
+        return;
+    }
     speechBubbleTimer = setTimeout(() => {
         bubble.style.opacity = "0";
         bubble.style.transform = "translateY(10px)";
@@ -193,7 +207,7 @@ function startIdleConversation() {
     clearTimeout(idleTimer);
     idleTimer = setTimeout(() => {
         // Don't interrupt animations
-        if (currentState === "idle") {
+        if (currentState === "idle" && !chatMode) {
             const message = getRandomIdleMessage();
             expressAndSpeak(
                 message.emotion,
@@ -220,6 +234,7 @@ function switchCompanion(companionName) {
     clearTimeout(speechBubbleTimer);
     
     currentCompanion = companions[companionName];
+    localStorage.setItem("selectedCompanion", companionName);
     rememberCompanion(currentCompanion.name); //from companion/memory.js, this function stores the last companion in session memory
     incrementCompanionSwitches(); //from companion/memory.js, this function increments the companion switch count in session memory
     companion.src = currentCompanion.images.idle;
@@ -242,4 +257,3 @@ function initializeCompanion() {
 }
 
 initializeCompanion();
-*/
