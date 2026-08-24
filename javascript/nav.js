@@ -85,10 +85,12 @@ document.addEventListener('DOMContentLoaded', async function () {
                 credentials: 'include'
                 });
                 localStorage.removeItem("user");
+                localStorage.removeItem("store");
+                localStorage.removeItem("recentlyViewed");
               } catch (err) {
                   console.error("Failed to remove user from localStorage:", err);
-              }
-              window.location.href = '../index.html';
+                }
+                window.location.href = '../index.html';
           });
 
           profileWrapper.appendChild(profileImg);
