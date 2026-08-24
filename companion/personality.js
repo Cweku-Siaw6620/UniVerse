@@ -1,8 +1,3 @@
-
-// =====================================================
-// KAL
-// =====================================================
-
 const kal = {
     name: "Kal",
     images: {
@@ -20,8 +15,10 @@ const kal = {
     greetings: {
         home: "Hi! I'm Kal 👋",
         stores: "Let's explore some stores!",
-        //products: "Looking for something today?",
-        //profile: "Welcome back to your profile."
+        productDetail: "Here's a closer look at this product.",
+        displayStore: "Here's what this store has to offer.",
+        allProducts: "Take your time browsing through everything.",
+        featured: "These are the standout picks right now."
     },
     idleMessages: {
         default: [
@@ -30,45 +27,121 @@ const kal = {
             "I'm here if you need me."
         ],
         home: [
-        {
-            emotion: "happy",
-            text: "👋 Welcome back!"
-        },
-        {
-            emotion: "happy",
-            text: "Today's featured products are worth checking out."
-        },
-        {
-            emotion: "thinking",
-            text: "Have you explored the categories yet?"
-        },
-        {
-            emotion: "happy",
-            text: "Lots of student businesses have added new products recently."
-        },
-        {
-            emotion: "thinking",
-            text: "Looking for something specific?"
-        }
-    ],
-    stores: [
-        {
-            emotion: "happy",
-            text: "Premium stores get featured more often."
-        },
-        {
-            emotion: "happy",
-            text: "Some stores are verified. Look for the badge!"
-        },
-        {
-            emotion: "thinking",
-            text: "Click a store to explore all its products."
-        },
-        {
-            emotion: "thinking",
-            text: "You can search for stores by university."
-        }
-    ],
+            {
+                emotion: "happy",
+                text: "👋 Welcome back!"
+            },
+            {
+                emotion: "happy",
+                text: "Today's featured products are worth checking out."
+            },
+            {
+                emotion: "thinking",
+                text: "Have you explored the categories yet?"
+            },
+            {
+                emotion: "happy",
+                text: "Lots of student businesses have added new products recently."
+            },
+            {
+                emotion: "thinking",
+                text: "Looking for something specific?"
+            }
+        ],
+        stores: [
+            {
+                emotion: "happy",
+                text: "Premium stores get featured more often."
+            },
+            {
+                emotion: "happy",
+                text: "Some stores are verified. Look for the badge!"
+            },
+            {
+                emotion: "thinking",
+                text: "Click a store to explore all its products."
+            },
+            {
+                emotion: "thinking",
+                text: "You can search for stores by university."
+            }
+        ],
+        productDetail: [
+            {
+                emotion: "happy",
+                text: "This one has solid reviews."
+            },
+            {
+                emotion: "thinking",
+                text: "Need a closer look at the details?"
+            },
+            {
+                emotion: "thinking",
+                text: "Check the description for specs and sizing."
+            },
+            {
+                emotion: "happy",
+                text: "The seller has other items worth browsing too."
+            },
+            {
+                emotion: "thinking",
+                text: "Compare this with similar products if you're unsure."
+            }
+        ],
+        displayStore: [
+            {
+                emotion: "happy",
+                text: "This store has a good catalog."
+            },
+            {
+                emotion: "thinking",
+                text: "Use the filters to narrow things down."
+            },
+            {
+                emotion: "happy",
+                text: "Student-run businesses often have unique finds."
+            },
+            {
+                emotion: "thinking",
+                text: "Want to see their best-selling items first?"
+            }
+        ],
+        allProducts: [
+            {
+                emotion: "happy",
+                text: "Quite a lot to go through here."
+            },
+            {
+                emotion: "thinking",
+                text: "Try sorting by price or popularity."
+            },
+            {
+                emotion: "happy",
+                text: "New arrivals are usually worth a scroll."
+            },
+            {
+                emotion: "thinking",
+                text: "Anything specific you're hunting for?"
+            }
+        ],
+        featured: [
+            {
+                emotion: "happy",
+                text: "These are curated by the team."
+            },
+            {
+                emotion: "thinking",
+                text: "Featured items tend to sell quickly."
+            },
+            {
+                emotion: "happy",
+                text: "There's usually a reason these get highlighted."
+            },
+            {
+                emotion: "thinking",
+                text: "Looking for inspiration? Start here."
+            }
+        ]
     }
 };
 
@@ -79,20 +152,22 @@ const kal = {
 const rei = {
     name: "Rei",
     images: {
-        angry: "../images/rei/rei_angry.png", //redo
+        angry: "../images/rei/rei_angry.png",
         blush: "../images/rei/rei_blush.png",
         embarrassed: "../images/rei/rei_embarrassed.png",
         happy: "../images/rei/rei_happy.png",
         idle: "../images/rei/rei_idle.png",
-       // laugh: "../images/rei/rei_laugh.png",
-       // sleep: "../images/rei/rei_sleep.png",
         surprised: "../images/rei/rei_surprised.png",
         thinking: "../images/rei/rei_thinking.png",
         wave: "../images/rei/rei_wave.png"
     },
     greetings: {
         home: "Hi! I'm Rei! 😊",
-        stores: "Let's go shopping together!"
+        stores: "Let's go shopping together!",
+        productDetail: "Ooo, this product looks interesting! Let's take a closer look! 🌸",
+        displayStore: "Ooo, I love this store! Let's see what they have! 🌸",
+        allProducts: "So many things to look at! Where do we start? ✨",
+        featured: "Ooo, the best of the best! Let's check them out! 🌟"
     },
     idleMessages: {
         default: [
@@ -139,9 +214,86 @@ const rei = {
                 emotion: "happy",
                 text: "You might discover something really cool today!"
             }
+        ],
+        productDetail: [
+            {
+                emotion: "happy",
+                text: "This one looks super neat! 🌸"
+            },
+            {
+                emotion: "thinking",
+                text: "Ooo, I wonder what the reviews say!"
+            },
+            {
+                emotion: "happy",
+                text: "The photos look really nice, don't they? 📸"
+            },
+            {
+                emotion: "thinking",
+                text: "Do you think this would be a good fit?"
+            },
+            {
+                emotion: "happy",
+                text: "The seller seems really creative! 💡"
+            }
+        ],
+        displayStore: [
+            {
+                emotion: "happy",
+                text: "This store has such a fun vibe! 🎀"
+            },
+            {
+                emotion: "thinking",
+                text: "I wonder what their most popular item is? 🤔"
+            },
+            {
+                emotion: "happy",
+                text: "Ooo, I bet there's something cute in here! ✨"
+            },
+            {
+                emotion: "happy",
+                text: "Student stores always have the coolest stuff! 🌟"
+            }
+        ],
+        allProducts: [
+            {
+                emotion: "happy",
+                text: "So much to see, so little time! 🎉"
+            },
+            {
+                emotion: "thinking",
+                text: "Maybe sort by newest? I love seeing fresh drops! 🆕"
+            },
+            {
+                emotion: "happy",
+                text: "You could scroll forever and still find gems! 💎"
+            },
+            {
+                emotion: "thinking",
+                text: "Is there a category you're drawn to? 🌈"
+            }
+        ],
+        featured: [
+            {
+                emotion: "happy",
+                text: "These are the stars of the show! ⭐"
+            },
+            {
+                emotion: "surprised",
+                text: "Ooo, some of these are selling fast! 🏃‍♀️"
+            },
+            {
+                emotion: "happy",
+                text: "The featured picks never disappoint! 🎁"
+            },
+            {
+                emotion: "thinking",
+                text: "I bet you'll find a favorite here! 💖"
+            }
         ]
     }
 };
+
 //command responses for the companion
 const commandResponses = {
     hello: {

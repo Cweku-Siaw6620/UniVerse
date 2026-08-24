@@ -14,6 +14,8 @@
   <script src="../javascript/verification.js"></script>
   <script src="../javascript/nav.js"></script>
   <link rel="stylesheet" href="../stylesheet/displayStore.css">
+  <link rel="stylesheet" href="../stylesheetCompanion/aiCompanion.css">
+  <link rel="stylesheet" href="../stylesheetCompanion/aiMenu.css">
   <style>
     .mobile-menu {
       display: none;
@@ -31,7 +33,7 @@
     }
   </style>
 </head>
-<body class=" bg-[url('/images/leaf.png')] bg-cover bg-center bg-no-repeat">
+<body class=" bg-[url('/images/leaf.png')] bg-cover bg-center bg-no-repeat" data-page="displayStore">
   <header class="sticky top-0 z-50 bg-white shadow-sm">
     <div class="container mx-auto px-6 py-4">
       <div class="flex items-center justify-between relative">
@@ -307,12 +309,19 @@
   </main>
 
   <!-- JavaScript -->
-   <script src="../javascript/mobileView.js"></script>
+  <script src="../javascript/mobileView.js"></script>
   <script src="../javascript/tracker.js"></script>
   <script src="../javascript/displayStore.js"></script>
-  <script>
-    // Initialize feather icons
-    feather.replace();
-  </script>
+  <script> feather.replace(); </script>
+
+      <!-- AI JavaScript 
+  <script src="../companion/memory.js"></script>
+  <script src="../companion/personality.js"></script>
+  <script src="../companion/companion.js"></script>
+  <script src="../companion/menu.js"></script>
+  <script src="../companion/src/chat.js"></script>
+  <script src="../companion/src/ai.js"></script>
+  <script src="../companion/src/session.js"></script>
+  -->
 </body>
 </html>

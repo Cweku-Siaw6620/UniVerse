@@ -12,35 +12,66 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/images/logo.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="/stylesheet/home.css">
+    <link rel="stylesheet" href="../stylesheetCompanion/aiCompanion.css">
+    <link rel="stylesheet" href="../stylesheetCompanion/aiMenu.css">
+
+    <!-- Classical Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
     <style>
-        /* ── Page-specific styles ─────────────────────── */
+        :root {
+            --amber-main: #d97706;
+            --amber-light: #f59e0b;
+            --amber-gold: #b45309;
+            --warm-cream: #fbf9f5;
+            --cream-card: #f5f0e6;
+            --deep-charcoal: #1c1917;
+            --gold: #d97706;
+            --charcoal: #1c1917;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--warm-cream);
+            color: var(--deep-charcoal);
+        }
+
+        /* Classical Page Hero with Amber Warmth */
         .page-hero {
-            background: linear-gradient(135deg, #faf7f2 0%, #f0ebe3 100%);
+            background: linear-gradient(135deg, #281d18 0%, #17120e 100%);
             position: relative;
             overflow: hidden;
+            border-bottom: 2px solid rgba(217, 119, 6, 0.25);
         }
 
         .page-hero::before {
             content: '';
             position: absolute;
-            top: -50%;
-            right: -20%;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(183,155,91,0.08) 0%, transparent 70%);
+            top: -40%;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(217, 119, 6, 0.18) 0%, transparent 70%);
             pointer-events: none;
         }
 
-        /* Filter bar */
+        .classical-heading {
+            font-family: 'Cinzel', serif;
+            letter-spacing: 0.02em;
+        }
+
+        /* Sleek Amber Filter Bar */
         .filter-bar {
             display: flex;
             align-items: center;
             gap: 12px;
             background: #ffffff;
-            border: 1px solid #e5e7eb;
-            border-radius: 14px;
-            padding: 10px 12px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+            border: 1px solid #e7e5e4;
+            border-radius: 12px;
+            padding: 12px 16px;
+            box-shadow: 0 4px 20px -2px rgba(28, 25, 23, 0.05);
             flex-wrap: wrap;
         }
 
@@ -55,25 +86,26 @@
             left: 14px;
             top: 50%;
             transform: translateY(-50%);
-            color: #9ca3af;
+            color: #78716c;
             font-size: 14px;
         }
 
         .filter-search-input {
             width: 100%;
-            padding: 11px 14px 11px 38px;
-            border: 1px solid #e5e7eb;
-            border-radius: 10px;
-            font-size: 14px;
-            color: #111827;
-            background: #f9fafb;
+            padding: 10px 14px 10px 38px;
+            border: 1px solid #e7e5e4;
+            border-radius: 8px;
+            font-size: 13.5px;
+            color: #1c1917;
+            background: #fafaf9;
             outline: none;
-            transition: border-color 0.15s, background 0.15s;
+            transition: border-color 0.2s, background 0.2s;
         }
 
         .filter-search-input:focus {
-            border-color: var(--gold);
+            border-color: var(--amber-main);
             background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.12);
         }
 
         .filter-select-wrap {
@@ -84,22 +116,23 @@
 
         .filter-select {
             width: 100%;
-            padding: 11px 32px 11px 14px;
-            border: 1px solid #e5e7eb;
-            border-radius: 10px;
-            font-size: 14px;
-            color: #374151;
-            background: #f9fafb;
+            padding: 10px 32px 10px 14px;
+            border: 1px solid #e7e5e4;
+            border-radius: 8px;
+            font-size: 13.5px;
+            color: #44403c;
+            background: #fafaf9;
             outline: none;
             appearance: none;
             -webkit-appearance: none;
             cursor: pointer;
-            transition: border-color 0.15s, background 0.15s;
+            transition: border-color 0.2s, background 0.2s;
         }
 
         .filter-select:focus {
-            border-color: var(--gold);
+            border-color: var(--amber-main);
             background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.12);
         }
 
         .filter-select-chevron {
@@ -107,12 +140,12 @@
             right: 14px;
             top: 50%;
             transform: translateY(-50%);
-            color: #9ca3af;
+            color: #78716c;
             font-size: 11px;
             pointer-events: none;
         }
 
-        /* Active filter chips */
+        /* Amber Active Filter Chips */
         .filter-chips {
             display: flex;
             flex-wrap: wrap;
@@ -124,17 +157,18 @@
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            padding: 6px 12px;
-            background: #f3f4f6;
+            padding: 5px 12px;
+            background: #fef3c7;
+            border: 1px solid #fde68a;
             border-radius: 999px;
-            font-size: 13px;
+            font-size: 12.5px;
             font-weight: 500;
-            color: #374151;
+            color: #92400e;
             transition: background 0.15s;
         }
 
         .filter-chip:hover {
-            background: #e5e7eb;
+            background: #fde68a;
         }
 
         .filter-chip button {
@@ -142,33 +176,33 @@
             border: none;
             padding: 0;
             cursor: pointer;
-            color: #9ca3af;
+            color: #b45309;
             display: flex;
             align-items: center;
         }
 
         .filter-chip button:hover {
-            color: #ef4444;
+            color: #dc2626;
         }
 
-        /* Product grid */
+        /* Product Grid Layout */
         .products-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
+            gap: 1.25rem;
         }
 
         @media (min-width: 640px) {
             .products-grid {
                 grid-template-columns: repeat(3, 1fr);
-                gap: 1.25rem;
+                gap: 1.5rem;
             }
         }
 
         @media (min-width: 1024px) {
             .products-grid {
                 grid-template-columns: repeat(4, 1fr);
-                gap: 1.5rem;
+                gap: 1.75rem;
             }
         }
 
@@ -178,12 +212,12 @@
             }
         }
 
-        /* Overlay card */
+        /* Unchanged Product Overlay Card Styles */
         .overlay-card {
             position: relative;
             border-radius: 16px;
             overflow: hidden;
-            background: var(--cream);
+            background: var(--cream-card);
             cursor: pointer;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             box-shadow: 0 2px 8px rgba(0,0,0,0.06);
@@ -267,7 +301,7 @@
         .overlay-card-price {
             font-size: 1.1rem;
             font-weight: 600;
-            color: var(--gold);
+            color: var(--amber-light);
             text-shadow: 0 1px 3px rgba(0,0,0,0.3);
         }
 
@@ -278,11 +312,11 @@
             text-shadow: 0 1px 2px rgba(0,0,0,0.3);
         }
 
-        /* Loading skeletons */
+        /* Loading Skeletons */
         .skeleton-card {
             aspect-ratio: 3/4;
             border-radius: 16px;
-            background: linear-gradient(90deg, #f0f0f0 25%, #f8f8f8 50%, #f0f0f0 75%);
+            background: linear-gradient(90deg, #e7e5e4 25%, #f5f5f4 50%, #e7e5e4 75%);
             background-size: 200% 100%;
             animation: skeleton-loading 1.5s infinite;
         }
@@ -302,44 +336,60 @@
             width: 64px;
             height: 64px;
             margin: 0 auto 1.5rem;
-            color: #d1d5db;
+            color: #d97706;
         }
 
-        /* Breadcrumb */
+        /* Classical Breadcrumb */
         .breadcrumb {
             display: flex;
             align-items: center;
             gap: 8px;
-            font-size: 14px;
-            color: #6b7280;
+            font-size: 13px;
+            color: rgba(255,255,255,0.6);
         }
 
         .breadcrumb a {
-            color: #6b7280;
+            color: rgba(255,255,255,0.6);
             transition: color 0.15s;
         }
 
         .breadcrumb a:hover {
-            color: var(--charcoal);
+            color: #f59e0b;
         }
 
         .breadcrumb-separator {
-            color: #d1d5db;
+            color: rgba(255,255,255,0.3);
         }
 
         .breadcrumb-current {
-            color: var(--charcoal);
+            color: #f59e0b;
             font-weight: 500;
         }
 
-        /* Category label map for display */
-        .category-display-name {
-            text-transform: capitalize;
+        @keyframes hero-glow-drift {
+            0%, 100% {
+                transform: translate3d(0, 0, 0) scale(1);
+                opacity: 0.7;
+            }
+            50% {
+                transform: translate3d(-24px, 18px, 0) scale(1.08);
+                opacity: 1;
+            }
+        }
+
+        .hero-ambient-glow {
+            animation: hero-glow-drift 12s ease-in-out infinite;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .hero-ambient-glow {
+                animation: none;
+            }
         }
     </style>
 </head>
-<body class="bg-gray-50">
-    <!-- Header — Same as index.html -->
+<body data-page="allProducts">
+    <!-- Header — Unchanged -->
     <header class="sticky top-0 z-50 bg-white shadow-sm">
         <div class="container mx-auto px-6 py-4">
             <div class="flex items-center justify-between">
@@ -359,111 +409,125 @@
                     </a>
                 </nav>
 
-               <!-- Mobile Menu Button -->
-            <button id="mobileMenuButton" class="md:hidden relative w-10 h-10 flex items-center justify-center rounded-xl hover:bg-gray-100 transition-colors group">
-                <span class="sr-only">Open menu</span>
-                <div class="relative w-6 h-6">
-                    <span class="absolute block w-6 h-0.5 bg-gray-700 transition-all duration-300 ease-out -translate-y-2 group-[.active]:translate-y-0 group-[.active]:rotate-45"></span>
-                    <span class="absolute block w-6 h-0.5 bg-gray-700 transition-all duration-300 ease-out group-[.active]:opacity-0"></span>
-                    <span class="absolute block w-6 h-0.5 bg-gray-700 transition-all duration-300 ease-out translate-y-2 group-[.active]:translate-y-0 group-[.active]:-rotate-45"></span>
-                </div>
-            </button>
-
-            <!-- Mobile Menu Overlay -->
-            <div id="mobileMenuOverlay" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 hidden transition-opacity duration-300"></div>
-
-            <!-- Mobile Menu Drawer -->
-            <div id="mobileMenu" class="fixed top-0 left-0 h-full w-80 bg-white z-50 transform -translate-x-full transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] shadow-2xl">
-                <!-- Header -->
-                <div class="flex items-center justify-between px-6 py-5 border-b border-gray-100">
-                    <div class="flex items-center gap-3">
-                        <img src="/images/logo.png" alt="UniVerse" class="h-10 w-10 object-contain">
+                <!-- Mobile Menu Button -->
+                <button id="mobileMenuButton" class="md:hidden relative w-10 h-10 flex items-center justify-center rounded-xl hover:bg-gray-100 transition-colors group">
+                    <span class="sr-only">Open menu</span>
+                    <div class="relative w-6 h-6">
+                        <span class="absolute block w-6 h-0.5 bg-gray-700 transition-all duration-300 ease-out -translate-y-2 group-[.active]:translate-y-0 group-[.active]:rotate-45"></span>
+                        <span class="absolute block w-6 h-0.5 bg-gray-700 transition-all duration-300 ease-out group-[.active]:opacity-0"></span>
+                        <span class="absolute block w-6 h-0.5 bg-gray-700 transition-all duration-300 ease-out translate-y-2 group-[.active]:translate-y-0 group-[.active]:-rotate-45"></span>
                     </div>
-                    <button id="closeMobileMenu" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors">
-                        <i class="fas fa-times text-gray-500 text-lg"></i>
-                    </button>
+                </button>
+
+                <!-- Mobile Menu Overlay -->
+                <div id="mobileMenuOverlay" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 hidden transition-opacity duration-300"></div>
+
+                <!-- Mobile Menu Drawer -->
+                <div id="mobileMenu" class="fixed top-0 left-0 h-full w-80 bg-white z-50 transform -translate-x-full transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] shadow-2xl">
+                    <div class="flex items-center justify-between px-6 py-5 border-b border-gray-100">
+                        <div class="flex items-center gap-3">
+                            <img src="/images/logo.png" alt="UniVerse" class="h-10 w-10 object-contain">
+                        </div>
+                        <button id="closeMobileMenu" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors">
+                            <i class="fas fa-times text-gray-500 text-lg"></i>
+                        </button>
+                    </div>
+
+                    <nav class="px-4 py-6 space-y-1">
+                        <div class="px-4 py-4 space-y-3">
+                            <a href="../components/login.html" class="flex items-center justify-center gap-2 w-full px-4 py-3 bg-gray-900 text-white rounded-xl font-medium hover:bg-gray-800 transition-all">
+                                <i class="fas fa-sign-in-alt text-sm"></i>
+                                Sign In
+                            </a>
+                        </div>
+                        <a href="../index.html" class="flex items-center gap-4 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-all group">
+                            <span class="w-8 h-8 flex items-center justify-center rounded-lg bg-gray-100 group-hover:bg-gray-200 transition-colors">
+                                <i class="fas fa-home text-gray-500 group-hover:text-gray-700 text-sm"></i>
+                            </span>
+                            <span class="font-medium">Home</span>
+                        </a>
+
+                        <a href="../stores.html" class="flex items-center gap-4 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-all group">
+                            <span class="w-8 h-8 flex items-center justify-center rounded-lg bg-gray-100 group-hover:bg-gray-200 transition-colors">
+                                <i class="fas fa-store text-gray-500 group-hover:text-gray-700 text-sm"></i>
+                            </span>
+                            <span class="font-medium">Stores</span>
+                        </a>
+
+                        <a href="../homeScreens/allProducts.html" class="flex items-center gap-4 px-4 py-3 rounded-xl bg-gray-900 text-white hover:bg-gray-800 transition-all group">
+                            <span class="w-8 h-8 flex items-center justify-center rounded-lg bg-gray-100 group-hover:bg-gray-200 transition-colors">
+                                <i class="fas fa-box text-gray-500 group-hover:text-gray-700 text-sm"></i>
+                            </span>
+                            <span class="font-medium">Products</span>
+                        </a>
+
+                        <a href="#" class="flex items-center gap-4 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-all group">
+                            <span class="w-8 h-8 flex items-center justify-center rounded-lg bg-gray-100 group-hover:bg-gray-200 transition-colors">
+                                <i class="fas fa-pen-fancy text-gray-500 group-hover:text-gray-700 text-sm"></i>
+                            </span>
+                            <span class="font-medium">Blog</span>
+                        </a>
+
+                        <a href="../userManual.html" class="flex items-center gap-4 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-all group">
+                            <span class="w-8 h-8 flex items-center justify-center rounded-lg bg-gray-100 group-hover:bg-gray-200 transition-colors">
+                                <i class="fas fa-book text-gray-500 group-hover:text-gray-700 text-sm"></i>
+                            </span>
+                            <span class="font-medium">Guide</span>
+                        </a>
+                    </nav>
                 </div>
-
-                <!-- Navigation Links -->
-                <nav class="px-4 py-6 space-y-1">
-                    <!-- Auth Section -->
-                    <div class="px-4 py-4 space-y-3">
-                    <a href="../components/login.html" class="flex items-center justify-center gap-2 w-full px-4 py-3 bg-gray-900 text-white rounded-xl font-medium hover:bg-gray-800 transition-all">
-                        <i class="fas fa-sign-in-alt text-sm"></i>
-                        Sign In
-                    </a>
-
-                </div>
-                    <a href="../index.html" class="flex items-center gap-4 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-all group">
-                        <span class="w-8 h-8 flex items-center justify-center rounded-lg bg-gray-100 group-hover:bg-gray-200 transition-colors">
-                            <i class="fas fa-home text-gray-500 group-hover:text-gray-700 text-sm"></i>
-                        </span>
-                        <span class="font-medium">Home</span>
-                    </a>
-
-                    <a href="../stores.html" class="flex items-center gap-4 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-all group">
-                        <span class="w-8 h-8 flex items-center justify-center rounded-lg bg-gray-100 group-hover:bg-gray-200 transition-colors">
-                            <i class="fas fa-store text-gray-500 group-hover:text-gray-700 text-sm"></i>
-                        </span>
-                        <span class="font-medium">Stores</span>
-                    </a>
-
-                    <a href="../homeScreens/allProducts.html" class="flex items-center gap-4 px-4 py-3 rounded-xl bg-gray-900 text-white hover:bg-gray-800 transition-all group">
-                        <span class="w-8 h-8 flex items-center justify-center rounded-lg bg-gray-100 group-hover:bg-gray-200 transition-colors">
-                            <i class="fas fa-box text-gray-500 group-hover:text-gray-700 text-sm"></i>
-                        </span>
-                        <span class="font-medium">Products</span>
-                    </a>
-
-                    <a href="#" class="flex items-center gap-4 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-all group">
-                        <span class="w-8 h-8 flex items-center justify-center rounded-lg bg-gray-100 group-hover:bg-gray-200 transition-colors">
-                            <i class="fas fa-pen-fancy text-gray-500 group-hover:text-gray-700 text-sm"></i>
-                        </span>
-                        <span class="font-medium">Blog</span>
-                    </a>
-
-                    <a href="../userManual.html" class="flex items-center gap-4 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-all group">
-                        <span class="w-8 h-8 flex items-center justify-center rounded-lg bg-gray-100 group-hover:bg-gray-200 transition-colors">
-                            <i class="fas fa-book text-gray-500 group-hover:text-gray-700 text-sm"></i>
-                        </span>
-                        <span class="font-medium">Guide</span>
-                    </a>
-                </nav>
- 
             </div>
         </div>
     </header>
 
-    <!-- Page Hero -->
-    <section class="page-hero py-12 sm:py-16">
-        <div class="premium-container mx-auto px-6 relative z-10">
-            <nav class="breadcrumb mb-6" aria-label="Breadcrumb">
-                <a href="../index.html">Home</a>
-                <span class="breadcrumb-separator">/</span>
-                <span class="breadcrumb-current" aria-current="page">All Listings</span>
+    <!-- Hero Section -->
+    <section class="relative bg-gradient-to-br from-amber-950 via-amber-900 to-[#451a03] text-stone-100 border-b border-amber-500/40 overflow-hidden">
+        <!-- Subtle Background Glow -->
+        <div class="hero-ambient-glow absolute -top-24 right-0 w-96 h-96 bg-amber-400/25 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="container mx-auto px-6 py-16 sm:py-20 relative z-10">
+            
+            <!-- Breadcrumb -->
+            <nav class="flex items-center gap-2 text-xs text-stone-400 mb-8 font-medium tracking-wide">
+                <a href="../index.html" class="hover:text-amber-400 transition-colors">Home</a>
+                <span class="text-stone-600">/</span>
+                <span class="text-amber-400">Marketplace</span>
             </nav>
 
-            <div class="max-w-2xl">
-                <span class="text-xs uppercase tracking-[0.2em] text-gold mb-3 block">Marketplace</span>
-                <h1 class="text-3xl sm:text-4xl lg:text-5xl font-semibold text-charcoal mb-4" style="font-family: 'Playfair Display', serif;">
-                    All Listings
-                </h1>
-                <p class="text-graphite text-base sm:text-lg leading-relaxed">
-                    Browse everything available from student creators across all universities, including products and services.
-                </p>
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
+                <!-- Main Content -->
+                <div class="lg:col-span-8">
+                    <!-- Tag Badge -->
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-semibold tracking-wide mb-6">
+                        <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+                        Student Marketplace
+                    </div>
+
+                    <!-- Headline -->
+                    <h1 class="text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-stone-100 font-sans leading-[1.15]">
+                        Discover products created by university students.
+                    </h1>
+
+                    <!-- Subheading -->
+                    <p class="mt-4 text-base sm:text-lg text-stone-400 max-w-2xl font-normal leading-relaxed">
+                        Explore items, services, and digital goods sold by creators across campuses nationwide.
+                    </p>
+                </div>
             </div>
+
         </div>
     </section>
 
-    <!-- Main Content -->
-    <main class="py-12 sm:py-16 bg-white">
-        <div class="premium-container mx-auto px-6">
-            <!-- Filter Bar -->
-            <div class="mb-6">
+    <!-- Main Content Area -->
+    <main class="py-12 sm:py-16">
+        <div class="container mx-auto px-6">
+            
+            <!-- Amber Filter Bar -->
+            <div class="mb-8">
                 <div class="filter-bar">
                     <div class="filter-search-wrap">
                         <i class="fas fa-search filter-search-icon"></i>
-                        <input type="text" id="searchInput" class="filter-search-input" placeholder="Search products...">
+                        <input type="text" id="searchInput" class="filter-search-input" placeholder="Search catalog...">
                     </div>
 
                     <div class="filter-select-wrap">
@@ -552,13 +616,14 @@
             </div>
 
             <!-- Results count -->
-            <p class="text-sm text-graphite mb-6">
-                Showing <span id="productCount" class="font-medium text-charcoal">0</span> products
-            </p>
+            <div class="flex items-center justify-between mb-6 pb-3 border-b border-stone-200">
+                <p class="text-sm font-medium text-stone-600">
+                    Showing <span id="productCount" class="font-semibold text-amber-900">0</span> unique offerings
+                </p>
+            </div>
 
             <!-- Product Grid -->
             <div id="productsGrid" class="products-grid">
-                <!-- Loading skeletons -->
                 <div class="skeleton-card"></div>
                 <div class="skeleton-card"></div>
                 <div class="skeleton-card"></div>
@@ -576,8 +641,8 @@
                 <div class="empty-state-icon">
                     <i data-feather="package" class="w-full h-full"></i>
                 </div>
-                <h3 class="text-xl font-medium text-charcoal mb-2">No products found</h3>
-                <p class="text-graphite text-sm">Try adjusting your search or filters to find what you are looking for.</p>
+                <h3 class="text-xl font-semibold text-stone-800 mb-2 classical-heading">No Artifacts Discovered</h3>
+                <p class="text-stone-500 text-sm">Adjust your filter selections to reveal other campus treasures.</p>
             </div>
 
             <!-- Error State -->
@@ -585,24 +650,24 @@
                 <div class="empty-state-icon">
                     <i data-feather="alert-circle" class="w-full h-full"></i>
                 </div>
-                <h3 class="text-xl font-medium text-charcoal mb-2">Unable to load products</h3>
-                <p class="text-graphite text-sm mb-6">Something went wrong while fetching products.</p>
-                <button onclick="loadProducts()" class="inline-flex items-center px-6 py-3 border border-charcoal text-charcoal text-sm font-medium rounded-lg hover:bg-charcoal hover:text-white transition-all duration-300">
+                <h3 class="text-xl font-semibold text-stone-800 mb-2 classical-heading">Unable to Load Collection</h3>
+                <p class="text-stone-500 text-sm mb-6">A temporary disruption prevented loading the store listings.</p>
+                <button onclick="loadProducts()" class="inline-flex items-center px-6 py-3 border-2 border-amber-800 text-amber-900 text-xs font-bold tracking-wider uppercase rounded-lg hover:bg-amber-900 hover:text-white transition-all duration-300">
                     <i data-feather="refresh-cw" class="w-4 h-4 mr-2"></i>
-                    Try Again
+                    Retry Connection
                 </button>
             </div>
         </div>
     </main>
 
-    <!-- Footer — Same as index.html -->
+    <!-- Footer — Unchanged -->
     <footer class="premium-footer py-16">
         <div class="premium-container mx-auto px-6">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
                 <div class="col-span-1 md:col-span-2">
                     <div class="flex items-center mb-6">
                         <img src="../images/keltec.jpg" alt="Keltec" class="h-12 w-12 rounded-full border border-white border-opacity-20">
-                        <span class="ml-4 serif-font text-2xl font-medium text-white">Keltec</span>
+                        <span class="serif-font text-2xl font-medium text-white">Keltec</span>
                     </div>
                     <p class="text-white text-opacity-60 max-w-md text-sm leading-relaxed">
                         A curation of exceptional student commerce. Where quality meets authenticity.
@@ -638,7 +703,6 @@
 
     <script src="../javascript/mobileView.js"></script>
     <script>
-        // ── STATE ───────────────────────────────────────
         let allProducts = [];
         let currentFilters = {
             search: '',
@@ -647,7 +711,6 @@
             sort: 'newest'
         };
 
-        // Category display names
         const CATEGORY_LABELS = {
             electronics: 'Electronics & Gadgets',
             fashion: 'Fashion & Apparel',
@@ -666,10 +729,7 @@
             digital: 'Services & Digital Listings'
         };
 
-        // ── INIT ────────────────────────────────────────
         document.addEventListener('DOMContentLoaded', () => {
-        
-            // Check URL for pre-selected category or university
             const urlParams = new URLSearchParams(window.location.search);
             const preCategory = urlParams.get('category');
             const preUniversity = urlParams.get('university');
@@ -682,10 +742,8 @@
                 currentFilters.university = preUniversity;
             }
 
-            // Load products
             loadProducts();
 
-            // Setup filter listeners
             document.getElementById('searchInput').addEventListener('input', debounce(() => {
                 currentFilters.search = document.getElementById('searchInput').value.toLowerCase().trim();
                 applyFilters();
@@ -707,13 +765,11 @@
             });
         });
 
-        // ── FETCH PRODUCTS ──────────────────────────────
         async function loadProducts() {
             const grid = document.getElementById('productsGrid');
             const emptyState = document.getElementById('emptyState');
             const errorState = document.getElementById('errorState');
 
-            // Show loading
             grid.innerHTML = `
                 <div class="skeleton-card"></div>
                 <div class="skeleton-card"></div>
@@ -747,11 +803,9 @@
             }
         }
 
-        // ── APPLY FILTERS ───────────────────────────────
         function applyFilters() {
             let filtered = [...allProducts];
 
-            // Search filter
             if (currentFilters.search) {
                 filtered = filtered.filter(p => 
                     p.productName?.toLowerCase().includes(currentFilters.search) ||
@@ -760,17 +814,14 @@
                 );
             }
 
-            // Category filter
             if (currentFilters.category) {
                 filtered = filtered.filter(p => p.productCategory === currentFilters.category);
             }
 
-            // University filter — matches against the owner's university field
             if (currentFilters.university) {
                 filtered = filtered.filter(p => p.owner?.university === currentFilters.university);
             }
 
-            // Sort
             if (currentFilters.sort === 'price-low') {
                 filtered.sort((a, b) => (a.productPrice || 0) - (b.productPrice || 0));
             } else if (currentFilters.sort === 'price-high') {
@@ -783,7 +834,6 @@
             updateFilterChips();
         }
 
-        // ── RENDER PRODUCTS ─────────────────────────────
         function renderProducts(products) {
             const grid = document.getElementById('productsGrid');
             const emptyState = document.getElementById('emptyState');
@@ -835,7 +885,6 @@
             if (typeof feather !== 'undefined') feather.replace();
         }
 
-        // ── FILTER CHIPS ────────────────────────────────
         function updateFilterChips() {
             const container = document.getElementById('filterChips');
             const chips = [];
@@ -882,7 +931,6 @@
                 </span>
             `).join('');
 
-            // Store remove handlers on elements for access
             chips.forEach((chip, i) => {
                 const btn = container.querySelectorAll('.filter-chip button')[i];
                 if (btn) btn.onclick = chip.onRemove;
@@ -891,11 +939,8 @@
             if (typeof feather !== 'undefined') feather.replace();
         }
 
-        function removeFilterChip(btn) {
-            // Handled by stored onclick
-        }
+        function removeFilterChip(btn) {}
 
-        // ── UTILITIES ───────────────────────────────────
         function debounce(fn, ms) {
             let timeout;
             return (...args) => {
@@ -914,5 +959,14 @@
                 .replace(/>/g, '&gt;');
         }
     </script>
+    <!-- AI JavaScript 
+    <script src="../companion/memory.js"></script>
+    <script src="../companion/personality.js"></script>
+    <script src="../companion/companion.js"></script>
+    <script src="../companion/menu.js"></script>
+    <script src="../companion/src/chat.js"></script>
+    <script src="../companion/src/ai.js"></script>
+    <script src="../companion/src/session.js"></script>
+    -->
 </body>
 </html>
