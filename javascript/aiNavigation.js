@@ -1,7 +1,7 @@
 const AI_NAVIGATION = {
     home: "/index.html",
     stores: "/stores.html",
-    allProducts: "/homeScreens/allProducts.html",
+    products: "/homeScreens/allProducts.html",
     featured: "/homeScreens/featured.html",
     storeDetail: "/components/displayStore.html",
     productDetail: "/components/productDetail.html"
