@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // HELPER FUNCTIONS
     // ============================================
     
-    const API_BASE = 'https://uni-verse-api.vercel.app';
+    const API_BASE = 'https://api.universeweb.co';
 
     // Get user and store data from localStorage
     function getAuthData() {

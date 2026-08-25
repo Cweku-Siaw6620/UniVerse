@@ -18,7 +18,7 @@
     }
 
     try {
-      const response = await fetch(`https://uni-verse-api.vercel.app/api/verification/status/${encodeURIComponent(userId)}`);
+      const response = await fetch(`https://api.universeweb.co/api/verification/status/${encodeURIComponent(userId)}`);
       const data = await response.json();
 
       const status = response.ok && data?.success

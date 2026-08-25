@@ -38,14 +38,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 // ── FETCH ─────────────────────────────────────────
 async function fetchProductDetails(productId) {
-  const res = await fetch(`https://uni-verse-api.vercel.app/api/products/id/${productId}`);
+  const res = await fetch(`https://api.universeweb.co/api/products/id/${productId}`);
   if (!res.ok) throw new Error("Failed to fetch product");
   return await res.json();
 }
 
 async function fetchStoreDetails(storeId) {
   const res = await fetch(
-    `https://uni-verse-api.vercel.app/api/stores/storeID/${storeId}`
+    `https://api.universeweb.co/api/stores/storeID/${storeId}`
   );
   if (!res.ok) {
     throw new Error("Failed to fetch store");
@@ -211,7 +211,7 @@ function setupButtonActions(product, store) {
 if (contactBtn && store.sellerNumber) {
     contactBtn.onclick = () => {
         const clean = store.sellerNumber.replace(/\D/g, '');
-        const productUrl = `https://uni-verse-api.vercel.app/products/${product._id}`;
+        const productUrl = `https://api.universeweb.co/products/${product._id}`;
         const msg = encodeURIComponent(
             `Hi, I'm interested in your product:\n\n*${product.productName}*\nPrice: ₵${(product.productPrice || 0).toFixed(2)}\n${productUrl}`
         );
@@ -234,7 +234,7 @@ function setupShareFunctionality(product) {
     const shareData = {
       title: `${product.productName} - UniVerse`,
       text:  `Check out ${product.productName} on UniVerse for ₵${(product.productPrice || 0).toFixed(2)}`,
-      url:   `https://uni-verse-api.vercel.app/products/${product._id}`,
+      url:   `https://api.universeweb.co/products/${product._id}`,
     };
     if (navigator.share) {
       navigator.share(shareData).catch(() => {});
@@ -249,7 +249,7 @@ function setupShareFunctionality(product) {
 // ── RELATED PRODUCTS ──────────────────────────────
 async function fetchRelatedProducts(category, currentProductId) {
   try {
-    const res = await fetch(`https://uni-verse-api.vercel.app/api/products/category/${encodeURIComponent(category)}`);
+    const res = await fetch(`https://api.universeweb.co/api/products/category/${encodeURIComponent(category)}`);
     if (!res.ok) throw new Error('Failed');
     const data = await res.json();
     const products  = data.products || data;

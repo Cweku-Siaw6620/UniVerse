@@ -84,7 +84,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       try {
         const response = await fetch(
-          "https://uni-verse-api.vercel.app/api/stores",
+          "https://api.universeweb.co/api/stores",
           {
             method: "POST",
             credentials: "include",

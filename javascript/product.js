@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     async function fetchStoreData() {
         try {
-            const res = await fetch(`https://uni-verse-api.vercel.app/api/stores/${encodeURIComponent(userId)}`);
+            const res = await fetch(`https://api.universeweb.co/api/stores/${encodeURIComponent(userId)}`);
             if (!res.ok) throw new Error("Failed to fetch store");
 
             currentStore = await res.json();
@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const storeId = store._id;
 
-            const response = await fetch(`https://uni-verse-api.vercel.app/api/products/${encodeURIComponent(storeId)}`);
+            const response = await fetch(`https://api.universeweb.co/api/products/${encodeURIComponent(storeId)}`);
             if (!response.ok) throw new Error("Failed to fetch products");
 
             const result = await response.json();
@@ -488,7 +488,7 @@ document.addEventListener('DOMContentLoaded', function () {
         confirmBtn.disabled = true;
 
         try {
-            const res = await fetch(`https://uni-verse-api.vercel.app/api/products/${productId}`, {
+            const res = await fetch(`https://api.universeweb.co/api/products/${productId}`, {
                 method: 'DELETE',
                 credentials: 'include',
             });
@@ -755,7 +755,7 @@ document.addEventListener('DOMContentLoaded', function () {
             formData.append('productCategory', document.getElementById('edit-product-category').value);
             formData.append('productDescription', document.getElementById('edit-product-description').value.trim());
 
-            const response = await fetch(`https://uni-verse-api.vercel.app/api/products/${productId}`, {
+            const response = await fetch(`https://api.universeweb.co/api/products/${productId}`, {
                 method: 'PUT',
                 credentials: 'include',
                 body: formData
@@ -801,7 +801,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         try {
-            const res = await fetch(`https://uni-verse-api.vercel.app/api/products/${productId}/featured`, {
+            const res = await fetch(`https://api.universeweb.co/api/products/${productId}/featured`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ storeId: product.storeId })

@@ -413,7 +413,7 @@
             }
 
             // Signed in → check if they have a store
-            fetch(`https://uni-verse-api.vercel.app/api/stores/${encodeURIComponent(user.id)}/exists`)
+            fetch(`https://api.universeweb.co/api/stores/${encodeURIComponent(user.id)}/exists`)
                 .then(res => res.json())
                 .then(result => {
                     if (result.hasStore) {
@@ -446,6 +446,6 @@
     <script src="companion/src/chat.js"></script>
     <script src="companion/src/ai.js"></script>
     <script src="companion/src/session.js"></script>
-   -->
+-->
 </body>
 </html>

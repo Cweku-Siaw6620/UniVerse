@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   async function fetchStoreData() {
     try {
-      const res = await fetch(`https://uni-verse-api.vercel.app/api/stores/${encodeURIComponent(userId)}`);
+      const res = await fetch(`https://api.universeweb.co/api/stores/${encodeURIComponent(userId)}`);
       if (!res.ok) throw new Error("Failed to fetch store");
 
       const store = await res.json();
@@ -96,7 +96,7 @@ const planLimits = {
 // Fetch store data from API for product management
 async function fetchStoreForProducts() {
     try {
-        const res = await fetch(`https://uni-verse-api.vercel.app/api/stores/${encodeURIComponent(userId)}`);
+        const res = await fetch(`https://api.universeweb.co/api/stores/${encodeURIComponent(userId)}`);
         if (!res.ok) throw new Error("Failed to fetch store");
         
         const store = await res.json();
@@ -238,7 +238,7 @@ addProductForm.addEventListener('submit', async function(e) {
     formData.append("storeId", currentStore._id);
 
     try {
-        const response = await fetch("https://uni-verse-api.vercel.app/api/products", {
+        const response = await fetch("https://api.universeweb.co/api/products", {
             method: "POST",
             credentials: "include",
             body: formData,
@@ -281,7 +281,7 @@ async function fetchProducts() {
         return;
     }
     try {
-        const response = await fetch(`https://uni-verse-api.vercel.app/api/products/${encodeURIComponent(storeId)}`);
+        const response = await fetch(`https://api.universeweb.co/api/products/${encodeURIComponent(storeId)}`);
         if (!response.ok) throw new Error("Failed to fetch products");
 
         products = await response.json();
@@ -378,7 +378,7 @@ initializeProductSection();
 // PLAN STATUS + PAYSTACK PAYMENT FLOW
 // ============================================================
 (() => {
-  const API = 'https://uni-verse-api.vercel.app';
+  const API = 'https://api.universeweb.co';
 
   const PLANS = {
     premium:        { amount: 50, limit: 45,  label: 'Premium'       },

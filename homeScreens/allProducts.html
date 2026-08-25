@@ -731,8 +731,17 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             const urlParams = new URLSearchParams(window.location.search);
+            console.log("AI SEARCH URL:", window.location.search);
+            console.log("AI SEARCH TERM:", urlParams.get("search"));
+            console.log("SEARCH INPUT:", document.getElementById("searchInput"));
+            const preSearch = urlParams.get('search');
             const preCategory = urlParams.get('category');
             const preUniversity = urlParams.get('university');
+
+            if (preSearch) {
+                document.getElementById('searchInput').value = preSearch;
+                currentFilters.search = preSearch.toLowerCase().trim();
+            }
             if (preCategory) {
                 document.getElementById('categoryFilter').value = preCategory;
                 currentFilters.category = preCategory;
@@ -786,7 +795,7 @@
             errorState.classList.add('hidden');
 
             try {
-                const res = await fetch('https://uni-verse-api.vercel.app/api/products/all');
+                const res = await fetch('https://api.universeweb.co/api/products/all');
                 if (!res.ok) throw new Error('Failed to fetch');
 
                 const products = await res.json();

@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
   async function fetchStoreDetails() {
     try {
       const res = await fetch(
-        `https://uni-verse-api.vercel.app/api/stores/slug/${storeSlug}`
+        `https://api.universeweb.co/api/stores/slug/${storeSlug}`
       );
 
       if (!res.ok) throw new Error("Store not found");
@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.target.closest('#shareStoreBtn')) {
       const store = JSON.parse(localStorage.getItem("currentViewedStore"));
       if (store && store.slug) {
-        const link = `https://uni-verse-api.vercel.app/stores/${store.slug}`;
+        const link = `https://api.universeweb.co/stores/${store.slug}`;
         navigator.clipboard.writeText(link);
         alert("Store link copied!");
       }
@@ -182,7 +182,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const countryCode = '233';
           const cleanNumber = store.sellerNumber.replace(/\D/g, '');
           const sellerName = store.sellerName || 'there';
-          const storeUrl = `https://uni-verse-api.vercel.app/stores/${store.slug}`;
+          const storeUrl = `https://api.universeweb.co/stores/${store.slug}`;
           const storeName = store.storeName || 'your store';
           const message = encodeURIComponent(
             `Hello ${sellerName},\nI found your store, "${storeName}", on UniVerse and would like to learn more about your products and services.\nStore Link: ${storeUrl}`
@@ -270,7 +270,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     try {
       const res = await fetch(
-        `https://uni-verse-api.vercel.app/api/products/${resolvedStoreId}`
+        `https://api.universeweb.co/api/products/${resolvedStoreId}`
       );
 
       if (!res.ok) throw new Error("Failed to fetch products");

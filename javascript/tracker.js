@@ -11,7 +11,7 @@
  */
 
 const UniTracker = (() => {
-    const API = 'https://uni-verse-api.vercel.app';
+    const API = 'https://api.universeweb.co';
 
     function getCurrentUserId() {
         try {

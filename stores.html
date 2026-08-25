@@ -167,7 +167,7 @@
                             <div class="h-8 w-8 rounded-full border-2 border-white bg-amber-500 flex items-center justify-center text-[10px] font-bold text-white">+2K</div>
                         </div>
                         <div>
-                            <span class="font-semibold text-slate-900">2,000+</span>
+                            <span class="font-semibold text-slate-900">200+</span>
                             <span class="text-slate-500">students trust us</span>
                         </div>
                     </div>
@@ -180,9 +180,6 @@
                             <i data-feather="star" class="h-4 w-4 fill-amber-400 text-amber-400"></i>
                             <i data-feather="star" class="h-4 w-4 fill-amber-400 text-amber-400"></i>
                         </div>
-                        <span class="text-slate-500">4.9/5 from</span>
-                        <span class="font-semibold text-slate-900">1,200+</span>
-                        <span class="text-slate-500">reviews</span>
                     </div>
                 </div>
                 </div>
@@ -388,7 +385,7 @@
         
         async function fetchShops() {
           try {
-            const res = await fetch("https://uni-verse-api.vercel.app/api/stores");
+            const res = await fetch("https://api.universeweb.co/api/stores");
             if (!res.ok) throw new Error("Failed to fetch stores");
 
             const stores = await res.json();
@@ -538,7 +535,7 @@
     const carousel = document.getElementById('featuredCarousel');
 
     try {
-        const res  = await fetch('https://uni-verse-api.vercel.app/api/stores/featured');
+        const res  = await fetch('https://api.universeweb.co/api/stores/featured');
         const data = await res.json();
 
         if (!data.success || !data.stores || !data.stores.length) {
@@ -654,6 +651,6 @@
     <script src="companion/src/chat.js"></script>
     <script src="companion/src/ai.js"></script>
     <script src="companion/src/session.js"></script>
-    -->
+   -->
 </body>
 </html>

@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
           dropdown.querySelector(`#logoutBtn${isMobile ? 'Mobile' : ''}`).addEventListener('click', async () => {
               try {
-                await fetch('https://uni-verse-api.vercel.app/api/auth/logout', {
+                await fetch('https://api.universeweb.co/api/auth/logout', {
                 method: 'POST',
                 credentials: 'include'
                 });
@@ -89,8 +89,8 @@ document.addEventListener('DOMContentLoaded', async function () {
                 localStorage.removeItem("recentlyViewed");
               } catch (err) {
                   console.error("Failed to remove user from localStorage:", err);
-                }
-                window.location.href = '../index.html';
+              }
+              window.location.href = '../index.html';
           });
 
           profileWrapper.appendChild(profileImg);
@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', async function () {
           });
 
           // Fetch store status and update link
-          fetch(`https://uni-verse-api.vercel.app/api/stores/${encodeURIComponent(user.id)}/exists`)
+          fetch(`https://api.universeweb.co/api/stores/${encodeURIComponent(user.id)}/exists`)
               .then(res => res.json())
               .then(result => {
                   const storeLink = dropdown.querySelector('#storeLink');
@@ -310,7 +310,7 @@ async function loadFeaturedProducts() {
   }
 
     try {
-        const res = await fetch("https://uni-verse-api.vercel.app/api/products/featured");
+        const res = await fetch("https://api.universeweb.co/api/products/featured");
         const data = await res.json();
         
         if (!data.success || !data.products?.length) {
@@ -373,7 +373,7 @@ async function loadRecentlyViewed() {
             if (!prod?._id) return null;  // ← guard bad entries
 
             try {
-                const res = await fetch(`https://uni-verse-api.vercel.app/api/products/id/${encodeURIComponent(prod._id)}`);
+                const res = await fetch(`https://api.universeweb.co/api/products/id/${encodeURIComponent(prod._id)}`);
                 if (!res.ok) return null;  // ← return null on failure
                 return await res.json();
             } catch (err) {
@@ -416,7 +416,7 @@ async function loadAllProducts() {
     if (!container) return;
 
     try {
-        const res = await fetch("https://uni-verse-api.vercel.app/api/products/all");
+        const res = await fetch("https://api.universeweb.co/api/products/all");
         if (!res.ok) throw new Error("Failed to fetch");
         const products = await res.json();
 
@@ -486,9 +486,9 @@ async function getWhatsAppLink(product, sellerData) {
     if (!sellerId) return whatsappLink;
     
     try {
-        let sellerRes = await fetch(`https://uni-verse-api.vercel.app/api/stores/storeID/${encodeURIComponent(sellerId)}`);
+        let sellerRes = await fetch(`https://api.universeweb.co/api/stores/storeID/${encodeURIComponent(sellerId)}`);
         if (!sellerRes.ok) {
-            sellerRes = await fetch(`https://uni-verse-api.vercel.app/api/stores/${encodeURIComponent(sellerId)}`);
+            sellerRes = await fetch(`https://api.universeweb.co/api/stores/${encodeURIComponent(sellerId)}`);
         }
         if (!sellerRes.ok) throw new Error();
         
@@ -568,7 +568,7 @@ async function updateMobileDashboardLink() {
 
     // CASE 2: Logged in → check store status
     try {
-        const res = await fetch(`https://uni-verse-api.vercel.app/api/stores/${encodeURIComponent(user.id)}/exists`);
+        const res = await fetch(`https://api.universeweb.co/api/stores/${encodeURIComponent(user.id)}/exists`);
         const result = await res.json();
 
         if (result.hasStore) {

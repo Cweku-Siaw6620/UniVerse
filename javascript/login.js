@@ -1,7 +1,7 @@
 function handleGoogleLogin(response) {
       const idToken = response.credential;
 
-      fetch('https://uni-verse-api.vercel.app/api/auth/google', {
+      fetch('https://api.universeweb.co/api/auth/google', {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
