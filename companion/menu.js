@@ -77,6 +77,9 @@ function openCompanionMenu() {
     if (typeof currentCompanion !== "undefined") {
         document.getElementById("menu-name").textContent = currentCompanion.name;
         document.getElementById("menu-avatar").src = currentCompanion.images.idle;
+        
+    // Set companion theme
+    menuEl.setAttribute("data-companion", currentCompanion.name.toLowerCase()); 
     }
     updateSwitchButton();
 

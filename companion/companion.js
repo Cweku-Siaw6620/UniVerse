@@ -240,6 +240,11 @@ function switchCompanion(companionName) {
     companion.src = currentCompanion.images.idle;
     currentState = "idle";
 
+    document.getElementById("companion-container").setAttribute(
+        "data-companion",
+        currentCompanion.name.toLowerCase()
+    );
+
     speak(
         currentCompanion.greetings[currentPage] ||
         `Hi! I'm ${currentCompanion.name}!`
@@ -251,6 +256,11 @@ function switchCompanion(companionName) {
 //more like the brain function
 function initializeCompanion() {
     setState('moving')
+       // Set initial companion theme
+    document.getElementById("companion-container").setAttribute(
+        "data-companion",
+        currentCompanion.name.toLowerCase()
+    );
     moveCompanion();
     setExpression("idle");
     startIdleConversation();
