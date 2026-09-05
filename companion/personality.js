@@ -159,7 +159,8 @@ const rei = {
         idle: "../images/rei/rei_idle.png",
         surprised: "../images/rei/rei_surprised.png",
         thinking: "../images/rei/rei_thinking.png",
-        wave: "../images/rei/rei_wave.png"
+        wave: "../images/rei/rei_wave.png",
+        laugh: "../images/rei/rei_laugh.png",
     },
     greetings: {
         home: "Hi! I'm Rei! 😊",

@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniVerse | Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: #f1f5f9;
+            color: #0f172a;
+            min-height: 100vh;
+        }
+
+        /* ── Sidebar ─────────────────────────────────────────── */
+        .admin-sidebar {
+            background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+            width: 260px;
+            min-height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            z-index: 50;
+            padding: 24px 16px;
+            overflow-y: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .admin-sidebar::-webkit-scrollbar { width: 4px; }
+        .admin-sidebar::-webkit-scrollbar-track { background: transparent; }
+        .admin-sidebar::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
+
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            margin-bottom: 24px;
+        }
+
+        .sidebar-brand img {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            object-fit: cover;
+        }
+
+        .sidebar-brand span {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            font-weight: 600;
+            color: white;
+        }
+
+        .sidebar-brand small {
+            display: block;
+            font-size: 10px;
+            font-weight: 400;
+            color: #94a3b8;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-top: -2px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            color: #94a3b8;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+
+        .nav-item:hover {
+            background: rgba(255,255,255,0.06);
+            color: white;
+        }
+
+        .nav-item.active {
+            background: rgba(99, 102, 241, 0.15);
+            color: #818cf8;
+        }
+
+        .nav-item i {
+            width: 20px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        .nav-item .badge {
+            margin-left: auto;
+            background: rgba(255,255,255,0.08);
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #94a3b8;
+        }
+
+        .nav-item.active .badge {
+            background: rgba(99, 102, 241, 0.2);
+            color: #818cf8;
+        }
+
+        .sidebar-divider {
+            border: none;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            margin: 16px 0;
+        }
+
+        /* ── Main Content ────────────────────────────────────── */
+        .admin-main {
+            margin-left: 260px;
+            padding: 28px 32px;
+            min-height: 100vh;
+        }
+
+        /* ── Stats Cards ────────────────────────────────────── */
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 22px 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            border: 1px solid #eef2f6;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.06);
+        }
+
+        .stat-card .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .stat-card .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #0f172a;
+            letter-spacing: -0.5px;
+        }
+
+        .stat-card .stat-label {
+            font-size: 13px;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .stat-card .stat-change {
+            font-size: 12px;
+            font-weight: 600;
+            padding: 2px 10px;
+            border-radius: 20px;
+        }
+
+        .stat-change.up { background: #dcfce7; color: #16a34a; }
+        .stat-change.down { background: #fee2e2; color: #dc2626; }
+
+        /* ── Charts & Tables ────────────────────────────────── */
+        .chart-container {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid #eef2f6;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+
+        .chart-container .chart-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .chart-container .chart-subtitle {
+            font-size: 13px;
+            color: #94a3b8;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: #eef2f6;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .progress-bar .fill {
+            height: 100%;
+            border-radius: 8px;
+            transition: width 1s ease;
+        }
+
+        .fill-purple { background: #818cf8; }
+        .fill-green { background: #22c55e; }
+        .fill-amber { background: #f59e0b; }
+        .fill-rose { background: #f43f5e; }
+        .fill-blue { background: #3b82f6; }
+
+        /* ── Table ───────────────────────────────────────────── */
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        .admin-table th {
+            text-align: left;
+            padding: 12px 16px;
+            color: #64748b;
+            font-weight: 600;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid #eef2f6;
+        }
+
+        .admin-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #f1f5f9;
+            color: #1e293b;
+        }
+
+        .admin-table tr:hover td {
+            background: #f8fafc;
+        }
+
+        .status-badge {
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .status-badge.active { background: #dcfce7; color: #16a34a; }
+        .status-badge.expired { background: #fee2e2; color: #dc2626; }
+        .status-badge.pending { background: #fef3c7; color: #d97706; }
+
+        /* ── Engagement Score Badge ─────────────────────────── */
+        .engagement-score {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .engagement-score.high { background: #dcfce7; color: #16a34a; }
+        .engagement-score.medium { background: #fef3c7; color: #d97706; }
+        .engagement-score.low { background: #f1f5f9; color: #64748b; }
+
+        /* ── Responsive ─────────────────────────────────────── */
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #0f172a;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        @media (max-width: 1024px) {
+            .admin-sidebar {
+                transform: translateX(-100%);
+            }
+            .admin-sidebar.open {
+                transform: translateX(0);
+            }
+            .admin-main {
+                margin-left: 0;
+                padding: 20px 16px;
+            }
+            .mobile-menu-toggle {
+                display: block;
+            }
+            .stat-card .stat-value {
+                font-size: 22px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .admin-main {
+                padding: 16px 12px;
+            }
+            .stat-card {
+                padding: 16px;
+            }
+            .stat-card .stat-value {
+                font-size: 18px;
+            }
+            .stat-card .stat-icon {
+                width: 36px;
+                height: 36px;
+                font-size: 16px;
+            }
+        }
+
+        /* ── Mobile overlay ──────────────────────────────────── */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.4);
+            z-index: 40;
+        }
+
+        .sidebar-overlay.open {
+            display: block;
+        }
+
+        /* ── Loading Shimmer ─────────────────────────────────── */
+        .shimmer {
+            background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* ── Score breakdown tooltip ────────────────────────── */
+        .score-detail {
+            font-size: 10px;
+            color: #94a3b8;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .score-detail span {
+            background: #f1f5f9;
+            padding: 1px 8px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- ─── SIDEBAR ─── -->
+<aside class="admin-sidebar" id="adminSidebar">
+    <div class="sidebar-brand">
+        <img src="/images/logo.png" alt="UniVerse">
+        <div>
+            <span>UniVerse</span>
+            <small>Admin Panel</small>
+        </div>
+    </div>
+
+    <nav>
+        <a href="#" class="nav-item active" data-section="overview">
+            <i class="fas fa-chart-pie"></i> Overview
+            <span class="badge">Live</span>
+        </a>
+        <a href="#" class="nav-item" data-section="users">
+            <i class="fas fa-users"></i> Users
+        </a>
+        <a href="#" class="nav-item" data-section="stores">
+            <i class="fas fa-store"></i> Stores
+        </a>
+        <a href="#" class="nav-item" data-section="products">
+            <i class="fas fa-box"></i> Products
+        </a>
+        <a href="#" class="nav-item" data-section="plans">
+            <i class="fas fa-crown"></i> Plans
+        </a>
+        <a href="#" class="nav-item" data-section="events">
+            <i class="fas fa-bolt"></i> Events
+        </a>
+        <hr class="sidebar-divider">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-arrow-left"></i> Back to Site
+        </a>
+    </nav>
+</aside>
+
+<!-- ─── OVERLAY ─── -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<!-- ─── MAIN ─── -->
+<main class="admin-main">
+
+    <!-- ─── Top Bar ─── -->
+    <div class="flex items-center justify-between mb-8">
+        <div class="flex items-center gap-4">
+            <button class="mobile-menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div>
+                <h1 class="text-2xl font-bold text-slate-900 font-serif">Dashboard</h1>
+                <p class="text-sm text-slate-500" id="lastUpdated">Loading...</p>
+            </div>
+        </div>
+        <div class="flex items-center gap-3">
+            <div class="bg-white border border-slate-200 rounded-xl px-4 py-2 text-sm flex items-center gap-2">
+                <span class="relative flex h-2.5 w-2.5">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
+                </span>
+                <span class="text-slate-600 font-medium">System Online</span>
+            </div>
+            <div class="bg-white border border-slate-200 rounded-xl px-4 py-2 text-sm text-slate-600">
+                <i class="far fa-clock mr-2"></i>
+                <span id="liveTime"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── STATS ROW ─── -->
+    <div id="statsContainer" class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-8">
+        <div class="stat-card shimmer h-28"></div>
+        <div class="stat-card shimmer h-28"></div>
+        <div class="stat-card shimmer h-28"></div>
+        <div class="stat-card shimmer h-28"></div>
+    </div>
+
+    <!-- ─── ROW 2: Charts ─── -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8" id="chartsContainer">
+        <div class="chart-container lg:col-span-2">
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                    <h3 class="chart-title">Users &amp; Stores</h3>
+                    <p class="chart-subtitle">User acquisition &amp; store creation correlation</p>
+                </div>
+                <div class="flex items-center gap-4 text-xs text-slate-500">
+                    <span><span class="inline-block w-3 h-3 rounded-full bg-[#818cf8] mr-1"></span> Users</span>
+                    <span><span class="inline-block w-3 h-3 rounded-full bg-[#22c55e] mr-1"></span> Stores</span>
+                </div>
+            </div>
+            <div class="relative h-64" id="userStoreChart">
+                <div class="absolute inset-0 flex items-center justify-center text-slate-400 text-sm">Loading chart...</div>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                    <h3 class="chart-title">Plans</h3>
+                    <p class="chart-subtitle">Premium vs Free</p>
+                </div>
+            </div>
+            <div id="planDistribution" class="space-y-4">
+                <div class="shimmer h-12 rounded"></div>
+                <div class="shimmer h-12 rounded"></div>
+                <div class="shimmer h-12 rounded"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── ROW 3: Top Stores & Recent Activity ─── -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <!-- Top Stores - UPDATED with Engagement Ranking -->
+        <div class="chart-container">
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                    <h3 class="chart-title">🏆 Top Stores</h3>
+                    <p class="chart-subtitle">Ranked by engagement score</p>
+                </div>
+                <div class="flex items-center gap-2 text-xs text-slate-400">
+                    <span class="inline-block w-2 h-2 rounded-full bg-emerald-500"></span> Views
+                    <span class="inline-block w-2 h-2 rounded-full bg-blue-500 ml-2"></span> Clicks
+                    <span class="inline-block w-2 h-2 rounded-full bg-amber-500 ml-2"></span> Plan bonus
+                </div>
+            </div>
+            <div id="topStoresList" class="space-y-3">
+                <div class="shimmer h-16 rounded"></div>
+                <div class="shimmer h-16 rounded"></div>
+                <div class="shimmer h-16 rounded"></div>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="chart-container">
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                    <h3 class="chart-title">⚡ Recent Activity</h3>
+                    <p class="chart-subtitle">Latest events on the platform</p>
+                </div>
+            </div>
+            <div id="recentActivity" class="space-y-3 max-h-80 overflow-y-auto">
+                <div class="shimmer h-16 rounded"></div>
+                <div class="shimmer h-16 rounded"></div>
+                <div class="shimmer h-16 rounded"></div>
+                <div class="shimmer h-16 rounded"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── ROW 4: All Stores Table ─── -->
+    <div id="section-overview">
+
+    <div class="chart-container mb-8">
+        <div class="flex items-center justify-between mb-6">
+            <div>
+                <h3 class="chart-title">📋 All Stores</h3>
+                <p class="chart-subtitle">Complete list of stores on UniVerse</p>
+            </div>
+            <div class="flex gap-2">
+                <input type="text" id="storeSearch" placeholder="Search stores..." class="px-4 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400">
+            </div>
+        </div>
+        <div class="table-wrap">
+            <table class="admin-table" id="storesTable">
+                <thead>
+                    <tr>
+                        <th>Store</th>
+                        <th>Owner</th>
+                        <th>Plan</th>
+                        <th>Engagement</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="storesTableBody">
+                    <tr><td colspan="5" class="text-center text-slate-400 py-8">Loading stores...</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="flex items-center justify-between mt-4 text-sm text-slate-500">
+            <span id="storeCount">0 stores</span>
+            <div class="flex gap-2">
+                <button id="prevPage" class="px-3 py-1 border border-slate-200 rounded-lg hover:bg-slate-50 transition disabled:opacity-50 disabled:cursor-not-allowed">←</button>
+                <span id="pageInfo" class="px-3 py-1">1 / 1</span>
+                <button id="nextPage" class="px-3 py-1 border border-slate-200 rounded-lg hover:bg-slate-50 transition disabled:opacity-50 disabled:cursor-not-allowed">→</button>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- ─── USERS SECTION ─── -->
+    <div id="section-users" class="hidden">
+        <div class="chart-container">
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                    <h3 class="chart-title">👥 All Users</h3>
+                    <p class="chart-subtitle">Every registered user on UniVerse</p>
+                </div>
+                <input type="text" id="userSearch" placeholder="Search users..." class="px-4 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400">
+            </div>
+            <div class="table-wrap">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Email</th>
+                            <th>University</th>
+                            <th>Affiliation</th>
+                            <th>Store</th>
+                            <th>Plan</th>
+                            <th>Joined</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTableBody">
+                        <tr><td colspan="7" class="text-center text-slate-400 py-8">Loading users...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="flex items-center justify-between mt-4 text-sm text-slate-500">
+                <span id="userCount">0 users</span>
+                <div class="flex gap-2">
+                    <button id="prevUserPage" class="px-3 py-1 border border-slate-200 rounded-lg hover:bg-slate-50 transition disabled:opacity-50">←</button>
+                    <span id="userPageInfo" class="px-3 py-1">1 / 1</span>
+                    <button id="nextUserPage" class="px-3 py-1 border border-slate-200 rounded-lg hover:bg-slate-50 transition disabled:opacity-50">→</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── STORES SECTION ─── -->
+    <div id="section-stores" class="hidden">
+        <div class="chart-container">
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                    <h3 class="chart-title">🏪 All Stores</h3>
+                    <p class="chart-subtitle">Detailed view of every store</p>
+                </div>
+                <input type="text" id="storeDetailSearch" placeholder="Search stores..." class="px-4 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400">
+            </div>
+            <div class="table-wrap">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Store</th>
+                            <th>Owner</th>
+                            <th>Category</th>
+                            <th>Products</th>
+                            <th>Plan</th>
+                            <th>Created</th>
+                        </tr>
+                    </thead>
+                    <tbody id="storesDetailBody">
+                        <tr><td colspan="6" class="text-center text-slate-400 py-8">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── PRODUCTS SECTION ─── -->
+    <div id="section-products" class="hidden">
+        <div class="chart-container">
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                    <h3 class="chart-title">📦 All Products</h3>
+                    <p class="chart-subtitle">Every product listed on UniVerse</p>
+                </div>
+                <input type="text" id="productSearch" placeholder="Search products..." class="px-4 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400">
+            </div>
+            <div class="table-wrap">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Store</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                            <th>Featured</th>
+                            <th>Hidden</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productsTableBody">
+                        <tr><td colspan="7" class="text-center text-slate-400 py-8">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── PLANS SECTION ─── -->
+    <div id="section-plans" class="hidden">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8" id="planStatsCards"></div>
+        <div class="chart-container">
+            <h3 class="chart-title mb-6">💳 Premium & Organizational Stores</h3>
+            <div class="table-wrap">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Store</th>
+                            <th>Owner</th>
+                            <th>Plan</th>
+                            <th>Activated</th>
+                            <th>Expires</th>
+                            <th>Days Left</th>
+                        </tr>
+                    </thead>
+                    <tbody id="plansTableBody">
+                        <tr><td colspan="6" class="text-center text-slate-400 py-8">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── EVENTS SECTION ─── -->
+    <div id="section-events" class="hidden">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8" id="eventStatsCards"></div>
+        <div class="chart-container mb-6">
+            <h3 class="chart-title mb-1">📈 Daily Activity (Last 30 Days)</h3>
+            <p class="chart-subtitle mb-4">Store views, product views, and WhatsApp clicks</p>
+            <div id="dailyEventsChart" class="h-64"></div>
+        </div>
+        <div class="chart-container">
+            <h3 class="chart-title mb-6">⚡ Recent Events</h3>
+            <div class="table-wrap">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>Store</th>
+                            <th>Product</th>
+                            <th>Time</th>
+                        </tr>
+                    </thead>
+                    <tbody id="eventsTableBody">
+                        <tr><td colspan="4" class="text-center text-slate-400 py-8">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<!-- ─── FOOTER ─── -->
+<footer class="text-center text-xs text-slate-400 py-6 border-t border-slate-200/50 mt-8 ml-0 lg:ml-[260px]">
+    <p>© 2026 UniVerse Admin Panel — All rights reserved.</p>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+<script>
+// ─── CONFIG ──────────────────────────────────────────────────
+const API_BASE = 'https://uni-verse-api.vercel.app/api';
+
+// ─── ACCESS PROTECTION ───────────────────────────────────────
+// Verify admin access on page load
+(async () => {
+    try {
+        const res = await fetch(`${API_BASE}/auth/me`, { credentials: 'include' });
+        if (!res.ok) throw new Error('Not authenticated');
+        const data = await res.json();
+        const ADMIN_EMAIL = data.user?.email;
+        // We rely on the backend to reject non-admin requests
+        // If me endpoint works, user is logged in — backend routes handle the rest
+    } catch {
+        document.body.innerHTML = `
+            <div class="min-h-screen flex items-center justify-center bg-slate-900">
+                <div class="text-center text-white">
+                    <i class="fas fa-lock text-5xl text-indigo-400 mb-4 block"></i>
+                    <h1 class="text-2xl font-bold mb-2">Admin Access Required</h1>
+                    <p class="text-slate-400 mb-6">You must be logged in as an admin to view this page.</p>
+                    <a href="/components/login.html" class="px-6 py-3 bg-indigo-600 rounded-xl text-white font-semibold hover:bg-indigo-700 transition">Sign In</a>
+                </div>
+            </div>`;
+    }
+})();
+
+// ─── STATE ───────────────────────────────────────────────────
+let allStores = [], allUsers = [], allProducts = [], allStoresFull = [];
+let currentPage = 1, currentUserPage = 1;
+const pageSize = 10;
+
+// ─── LIVE CLOCK ──────────────────────────────────────────────
+const liveTime = document.getElementById('liveTime');
+setInterval(() => {
+    liveTime.textContent = new Date().toLocaleTimeString('en-GH', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+}, 1000);
+
+// ─── MOBILE SIDEBAR ──────────────────────────────────────────
+const sidebar = document.getElementById('adminSidebar');
+const overlay = document.getElementById('sidebarOverlay');
+document.getElementById('menuToggle').addEventListener('click', () => {
+    sidebar.classList.toggle('open');
+    overlay.classList.toggle('open');
+});
+overlay.addEventListener('click', () => {
+    sidebar.classList.remove('open');
+    overlay.classList.remove('open');
+});
+
+// ─── SECTION NAVIGATION ──────────────────────────────────────
+const sections = ['overview', 'users', 'stores', 'products', 'plans', 'events'];
+const sectionLoaders = {};
+
+document.querySelectorAll('.nav-item[data-section]').forEach(link => {
+    link.addEventListener('click', async (e) => {
+        e.preventDefault();
+        const section = link.dataset.section;
+        document.querySelectorAll('.nav-item').forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+        sections.forEach(s => {
+            const el = document.getElementById(`section-${s}`);
+            if (el) el.classList.add('hidden');
+        });
+        const target = document.getElementById(`section-${section}`);
+        if (target) target.classList.remove('hidden');
+        document.querySelector('h1.text-2xl').textContent = link.querySelector('i').nextSibling?.textContent?.trim() || 'Dashboard';
+        if (sectionLoaders[section]) await sectionLoaders[section]();
+    });
+});
+
+// ─── FETCH HELPERS ────────────────────────────────────────────
+async function adminFetch(path) {
+    const res = await fetch(`${API_BASE}${path}`, { credentials: 'include' });
+    if (!res.ok) throw new Error(`Failed: ${path}`);
+    return res.json();
+}
+
+// ─── OVERVIEW ────────────────────────────────────────────────
+const statsContainer   = document.getElementById('statsContainer');
+const planDistribution = document.getElementById('planDistribution');
+const topStoresList    = document.getElementById('topStoresList');
+const recentActivity   = document.getElementById('recentActivity');
+const lastUpdated      = document.getElementById('lastUpdated');
+const storeCount       = document.getElementById('storeCount');
+const pageInfo         = document.getElementById('pageInfo');
+const storesTableBody  = document.getElementById('storesTableBody');
+const storeSearch      = document.getElementById('storeSearch');
+const prevPage         = document.getElementById('prevPage');
+const nextPage         = document.getElementById('nextPage');
+
+async function buildDashboard() {
+    try {
+        const [overviewData, storesData, productsData, engagedStores] = await Promise.all([
+            adminFetch('/admin/overview'),
+            adminFetch('/admin/stores'),
+            adminFetch('/admin/products'),
+            adminFetch('/stores').then(d => Array.isArray(d) ? d : [])
+        ]);
+
+        const { stats, growth } = overviewData;
+        const stores   = storesData.stores || [];
+        const products = productsData.products || [];
+
+        // Store globally
+        allStores     = stores;
+        allStoresFull = engagedStores;
+        allProducts   = products;
+
+        // ── STAT CARDS ──
+        statsContainer.innerHTML = `
+            <div class="stat-card">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="stat-icon bg-indigo-50 text-indigo-500"><i class="fas fa-users"></i></div>
+                    <span class="stat-change up">+${growth[growth.length-1]?.users || 0} this mo</span>
+                </div>
+                <div class="stat-value">${stats.totalUsers.toLocaleString()}</div>
+                <div class="stat-label">Total Users</div>
+            </div>
+            <div class="stat-card">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="stat-icon bg-emerald-50 text-emerald-500"><i class="fas fa-store"></i></div>
+                    <span class="stat-change up">+${growth[growth.length-1]?.stores || 0} this mo</span>
+                </div>
+                <div class="stat-value">${stats.totalStores.toLocaleString()}</div>
+                <div class="stat-label">Total Stores</div>
+            </div>
+            <div class="stat-card">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="stat-icon bg-amber-50 text-amber-500"><i class="fas fa-box"></i></div>
+                </div>
+                <div class="stat-value">${stats.totalProducts.toLocaleString()}</div>
+                <div class="stat-label">Total Products</div>
+            </div>
+            <div class="stat-card">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="stat-icon bg-purple-50 text-purple-500"><i class="fas fa-crown"></i></div>
+                </div>
+                <div class="stat-value">${(stats.premiumStores + stats.orgStores).toLocaleString()}</div>
+                <div class="stat-label">Paid Plans</div>
+            </div>
+        `;
+
+        // ── GROWTH CHART ──
+        const chartEl = document.getElementById('userStoreChart');
+        chartEl.innerHTML = '';
+        const chart = echarts.init(chartEl);
+        chart.setOption({
+            grid: { left: 10, right: 10, top: 20, bottom: 30, containLabel: true },
+            tooltip: { trigger: 'axis' },
+            legend: { bottom: 0 },
+            xAxis: { type: 'category', data: growth.map(g => g.label) },
+            yAxis: { type: 'value', minInterval: 1 },
+            series: [
+                { name: 'Users', type: 'bar', data: growth.map(g => g.users), itemStyle: { color: '#818cf8', borderRadius: [4,4,0,0] } },
+                { name: 'Stores', type: 'bar', data: growth.map(g => g.stores), itemStyle: { color: '#22c55e', borderRadius: [4,4,0,0] } }
+            ]
+        });
+        window.addEventListener('resize', () => chart.resize());
+
+        // ── PLAN DISTRIBUTION ──
+        const planColors = {
+            free: { bar: '#e2e8f0', text: '#64748b', label: 'Free' },
+            premium: { bar: '#818cf8', text: '#4f46e5', label: 'Premium ⭐' },
+            organizational: { bar: '#f59e0b', text: '#d97706', label: 'Organizational 🏢' }
+        };
+        const planData = { free: stats.freeStores, premium: stats.premiumStores, organizational: stats.orgStores };
+        planDistribution.innerHTML = Object.entries(planData).map(([plan, count]) => {
+            const pct = stats.totalStores ? (count / stats.totalStores * 100).toFixed(1) : 0;
+            const c = planColors[plan];
+            return `<div>
+                <div class="flex justify-between text-sm mb-1">
+                    <span class="font-medium" style="color:${c.text}">${c.label}</span>
+                    <span class="text-slate-500">${count} (${pct}%)</span>
+                </div>
+                <div class="progress-bar"><div class="fill" style="width:${pct}%;background:${c.bar}"></div></div>
+            </div>`;
+        }).join('');
+
+        // ── TOP STORES (engagement from public stores endpoint) ──
+        const storesWithScore = engagedStores.slice(0, 5);
+        topStoresList.innerHTML = storesWithScore.length ? storesWithScore.map((s, i) => `
+            <div class="flex items-center gap-4 p-3 bg-slate-50 rounded-xl hover:bg-slate-100 transition">
+                <span class="text-sm font-bold text-slate-400 w-6">#${i+1}</span>
+                <img src="${s.storeLogo || '/images/placeholder.png'}" class="w-10 h-10 rounded-full object-cover border border-slate-200">
+                <div class="flex-1 min-w-0">
+                    <div class="font-medium text-slate-800 truncate">${s.storeName}</div>
+                    <div class="text-xs text-slate-500">${s.sellerName || ''}</div>
+                </div>
+                <span class="text-xs font-semibold px-3 py-1 rounded-full ${s.plan === 'premium' ? 'bg-indigo-100 text-indigo-700' : s.plan === 'organizational' ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-600'}">
+                    ${s.plan === 'premium' ? '⭐ Premium' : s.plan === 'organizational' ? '🏢 Org' : 'Free'}
+                </span>
+            </div>
+        `).join('') : '<div class="text-slate-400 text-sm text-center py-4">No stores found</div>';
+
+        // ── RECENT ACTIVITY ──
+        const recent = [
+            ...stores.slice(0, 5).map(s => ({ type: 'store_created', name: s.storeName, time: s.createdAt })),
+            ...products.slice(0, 5).map(p => ({ type: 'product_added', name: p.productName, time: p.createdAt }))
+        ].sort((a, b) => new Date(b.time) - new Date(a.time)).slice(0, 8);
+
+        const eventIcons = {
+            store_created: { icon: 'fa-store-alt', color: 'text-emerald-500 bg-emerald-50' },
+            product_added: { icon: 'fa-box', color: 'text-amber-500 bg-amber-50' }
+        };
+        recentActivity.innerHTML = recent.map(e => {
+            const ev = eventIcons[e.type];
+            const label = e.type === 'store_created' ? 'created store' : 'added a product';
+            const time = new Date(e.time).toLocaleDateString('en-GH', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+            return `<div class="flex items-center gap-3 p-3 bg-slate-50 rounded-xl hover:bg-slate-100 transition">
+                <div class="w-8 h-8 rounded-full ${ev.color} flex items-center justify-center">
+                    <i class="fas ${ev.icon} text-xs"></i>
+                </div>
+                <div class="flex-1">
+                    <div class="text-sm font-medium text-slate-800">${e.name}</div>
+                    <div class="text-xs text-slate-500">${label} · ${time}</div>
+                </div>
+            </div>`;
+        }).join('') || '<div class="text-slate-400 text-sm text-center py-4">No recent activity</div>';
+
+        // ── STORES TABLE ──
+        renderStoresTable();
+
+        lastUpdated.textContent = `Last updated: ${new Date().toLocaleString('en-GH', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}`;
+
+    } catch (error) {
+        console.error('Dashboard error:', error);
+        statsContainer.innerHTML = `<div class="col-span-full text-center py-12 text-red-500">
+            <i class="fas fa-exclamation-triangle text-3xl mb-4 block"></i>
+            <p>Failed to load dashboard. ${error.message}</p>
+            <button onclick="buildDashboard()" class="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-lg">Retry</button>
+        </div>`;
+    }
+}
+
+// ─── STORES TABLE ─────────────────────────────────────────────
+function renderStoresTable() {
+    const term = storeSearch.value.toLowerCase().trim();
+    const filtered = allStores.filter(s =>
+        s.storeName?.toLowerCase().includes(term) ||
+        s.sellerName?.toLowerCase().includes(term)
+    );
+    const total = filtered.length;
+    const totalPages = Math.ceil(total / pageSize) || 1;
+    if (currentPage > totalPages) currentPage = totalPages;
+    const pageStores = filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+
+    storeCount.textContent = `${total} stores`;
+    pageInfo.textContent = `${currentPage} / ${totalPages}`;
+    prevPage.disabled = currentPage <= 1;
+    nextPage.disabled = currentPage >= totalPages;
+
+    storesTableBody.innerHTML = pageStores.length ? pageStores.map(s => {
+        const planClass = s.plan === 'premium' ? 'status-badge active' : s.plan === 'organizational' ? 'status-badge pending' : 'status-badge';
+        const planLabel = s.plan === 'organizational' ? '🏢 Org' : s.plan === 'premium' ? '⭐ Premium' : 'Free';
+        return `<tr>
+            <td class="font-medium">${s.storeName || 'Unnamed'}</td>
+            <td>${s.owner?.name || s.sellerName || 'Unknown'}</td>
+            <td><span class="${planClass}">${planLabel}</span></td>
+            <td>${s.productCount || 0} products</td>
+            <td><span class="status-badge active">Active</span></td>
+        </tr>`;
+    }).join('') : `<tr><td colspan="5" class="text-center text-slate-400 py-8">No stores found</td></tr>`;
+}
+
+storeSearch.addEventListener('input', () => { currentPage = 1; renderStoresTable(); });
+prevPage.addEventListener('click', () => { if (currentPage > 1) { currentPage--; renderStoresTable(); } });
+nextPage.addEventListener('click', () => { currentPage++; renderStoresTable(); });
+
+// ─── USERS SECTION ────────────────────────────────────────────
+sectionLoaders.users = async () => {
+    const body = document.getElementById('usersTableBody');
+    const searchEl = document.getElementById('userSearch');
+    const countEl = document.getElementById('userCount');
+    const pageInfoEl = document.getElementById('userPageInfo');
+    const prevBtn = document.getElementById('prevUserPage');
+    const nextBtn = document.getElementById('nextUserPage');
+
+    body.innerHTML = `<tr><td colspan="7" class="text-center text-slate-400 py-8">Loading...</td></tr>`;
+
+    try {
+        const data = await adminFetch('/admin/users');
+        allUsers = data.users || [];
+
+        const render = () => {
+            const term = searchEl.value.toLowerCase().trim();
+            const filtered = allUsers.filter(u =>
+                u.name?.toLowerCase().includes(term) ||
+                u.email?.toLowerCase().includes(term) ||
+                u.university?.toLowerCase().includes(term)
+            );
+            const total = filtered.length;
+            const totalPages = Math.ceil(total / pageSize) || 1;
+            if (currentUserPage > totalPages) currentUserPage = totalPages;
+            const page = filtered.slice((currentUserPage - 1) * pageSize, currentUserPage * pageSize);
+
+            countEl.textContent = `${total} users`;
+            pageInfoEl.textContent = `${currentUserPage} / ${totalPages}`;
+            prevBtn.disabled = currentUserPage <= 1;
+            nextBtn.disabled = currentUserPage >= totalPages;
+
+            body.innerHTML = page.length ? page.map(u => {
+                const affClass = u.affiliation === 'student_verified' ? 'status-badge active' : u.affiliation === 'student_pending' ? 'status-badge pending' : 'status-badge';
+                const affLabel = u.affiliation === 'student_verified' ? '✅ Verified' : u.affiliation === 'student_pending' ? '⏳ Pending' : u.affiliation || 'External';
+                const planLabel = u.store?.plan === 'premium' ? '⭐ Premium' : u.store?.plan === 'organizational' ? '🏢 Org' : u.store ? 'Free' : '—';
+                const joined = new Date(u.createdAt).toLocaleDateString('en-GH', { year: 'numeric', month: 'short', day: 'numeric' });
+                return `<tr>
+                    <td>
+                        <div class="flex items-center gap-2">
+                            <img src="${u.picture || '/images/placeholder.png'}" class="w-7 h-7 rounded-full object-cover">
+                            <span class="font-medium">${u.name}</span>
+                        </div>
+                    </td>
+                    <td class="text-slate-500">${u.email}</td>
+                    <td>${u.university || '—'}</td>
+                    <td><span class="${affClass}">${affLabel}</span></td>
+                    <td>${u.store?.storeName || '—'}</td>
+                    <td>${planLabel}</td>
+                    <td class="text-slate-400">${joined}</td>
+                </tr>`;
+            }).join('') : `<tr><td colspan="7" class="text-center text-slate-400 py-8">No users found</td></tr>`;
+        };
+
+        render();
+        searchEl.addEventListener('input', () => { currentUserPage = 1; render(); });
+        prevBtn.addEventListener('click', () => { if (currentUserPage > 1) { currentUserPage--; render(); } });
+        nextBtn.addEventListener('click', () => { currentUserPage++; render(); });
+
+    } catch (err) {
+        body.innerHTML = `<tr><td colspan="7" class="text-center text-red-400 py-8">Failed to load users</td></tr>`;
+    }
+};
+
+// ─── STORES DETAIL SECTION ────────────────────────────────────
+sectionLoaders.stores = async () => {
+    const body = document.getElementById('storesDetailBody');
+    body.innerHTML = `<tr><td colspan="6" class="text-center text-slate-400 py-8">Loading...</td></tr>`;
+    const searchEl = document.getElementById('storeDetailSearch');
+
+    try {
+        const data = await adminFetch('/admin/stores');
+        const stores = data.stores || [];
+
+        const render = (term = '') => {
+            const filtered = stores.filter(s =>
+                s.storeName?.toLowerCase().includes(term) ||
+                s.owner?.name?.toLowerCase().includes(term)
+            );
+            body.innerHTML = filtered.length ? filtered.map(s => {
+                const planClass = s.plan === 'premium' ? 'status-badge active' : s.plan === 'organizational' ? 'status-badge pending' : 'status-badge';
+                const planLabel = s.plan === 'organizational' ? '🏢 Org' : s.plan === 'premium' ? '⭐ Premium' : 'Free';
+                const created = new Date(s.createdAt).toLocaleDateString('en-GH', { year: 'numeric', month: 'short', day: 'numeric' });
+                return `<tr>
+                    <td>
+                        <div class="flex items-center gap-2">
+                            <img src="${s.storeLogo || '/images/placeholder.png'}" class="w-7 h-7 rounded-full object-cover border border-slate-200">
+                            <span class="font-medium">${s.storeName}</span>
+                        </div>
+                    </td>
+                    <td>${s.owner?.name || s.sellerName || '—'}</td>
+                    <td>${s.storeCategory || '—'}</td>
+                    <td>${s.productCount || 0}</td>
+                    <td><span class="${planClass}">${planLabel}</span></td>
+                    <td class="text-slate-400">${created}</td>
+                </tr>`;
+            }).join('') : `<tr><td colspan="6" class="text-center text-slate-400 py-8">No stores found</td></tr>`;
+        };
+
+        render();
+        searchEl.addEventListener('input', () => render(searchEl.value.toLowerCase().trim()));
+    } catch {
+        body.innerHTML = `<tr><td colspan="6" class="text-center text-red-400 py-8">Failed to load stores</td></tr>`;
+    }
+};
+
+// ─── PRODUCTS SECTION ─────────────────────────────────────────
+sectionLoaders.products = async () => {
+    const body = document.getElementById('productsTableBody');
+    body.innerHTML = `<tr><td colspan="7" class="text-center text-slate-400 py-8">Loading...</td></tr>`;
+    const searchEl = document.getElementById('productSearch');
+
+    try {
+        const data = await adminFetch('/admin/products');
+        const products = data.products || [];
+
+        const render = (term = '') => {
+            const filtered = products.filter(p =>
+                p.productName?.toLowerCase().includes(term) ||
+                p.storeId?.storeName?.toLowerCase().includes(term)
+            );
+            body.innerHTML = filtered.length ? filtered.slice(0, 100).map(p => {
+                return `<tr>
+                    <td>
+                        <div class="flex items-center gap-2">
+                            <img src="${p.productImage || '/images/placeholder.png'}" class="w-7 h-7 rounded object-cover border border-slate-200">
+                            <span class="font-medium">${p.productName}</span>
+                        </div>
+                    </td>
+                    <td>${p.storeId?.storeName || '—'}</td>
+                    <td>${p.productCategory || '—'}</td>
+                    <td>₵${(p.productPrice || 0).toFixed(2)}</td>
+                    <td>${p.productStock || 0}</td>
+                    <td>${p.featured ? '<span class="status-badge active">Yes</span>' : '—'}</td>
+                    <td>${p.hidden ? '<span class="status-badge expired">Hidden</span>' : '—'}</td>
+                </tr>`;
+            }).join('') : `<tr><td colspan="7" class="text-center text-slate-400 py-8">No products found</td></tr>`;
+        };
+
+        render();
+        searchEl.addEventListener('input', () => render(searchEl.value.toLowerCase().trim()));
+    } catch {
+        body.innerHTML = `<tr><td colspan="7" class="text-center text-red-400 py-8">Failed to load products</td></tr>`;
+    }
+};
+
+// ─── PLANS SECTION ────────────────────────────────────────────
+sectionLoaders.plans = async () => {
+    const body = document.getElementById('plansTableBody');
+    const cards = document.getElementById('planStatsCards');
+    body.innerHTML = `<tr><td colspan="6" class="text-center text-slate-400 py-8">Loading...</td></tr>`;
+
+    try {
+        const data = await adminFetch('/admin/stores');
+        const stores = data.stores || [];
+        const paid = stores.filter(s => s.plan !== 'free');
+        const premium = stores.filter(s => s.plan === 'premium').length;
+        const org = stores.filter(s => s.plan === 'organizational').length;
+
+        cards.innerHTML = `
+            <div class="stat-card">
+                <div class="stat-icon bg-indigo-50 text-indigo-500 mb-3"><i class="fas fa-crown"></i></div>
+                <div class="stat-value">${premium}</div>
+                <div class="stat-label">Premium Stores</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon bg-amber-50 text-amber-500 mb-3"><i class="fas fa-building"></i></div>
+                <div class="stat-value">${org}</div>
+                <div class="stat-label">Organizational Stores</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon bg-emerald-50 text-emerald-500 mb-3"><i class="fas fa-coins"></i></div>
+                <div class="stat-value">₵${((premium * 35) + (org * 80)).toLocaleString()}</div>
+                <div class="stat-label">Est. Monthly Revenue</div>
+            </div>
+        `;
+
+        const now = new Date();
+        body.innerHTML = paid.length ? paid.map(s => {
+            const activated = s.planActivatedAt ? new Date(s.planActivatedAt).toLocaleDateString('en-GH', { month: 'short', day: 'numeric', year: 'numeric' }) : '—';
+            const expires = s.planExpiresAt ? new Date(s.planExpiresAt).toLocaleDateString('en-GH', { month: 'short', day: 'numeric', year: 'numeric' }) : '—';
+            const daysLeft = s.planExpiresAt ? Math.max(0, Math.ceil((new Date(s.planExpiresAt) - now) / (1000 * 60 * 60 * 24))) : '—';
+            const planClass = s.plan === 'premium' ? 'status-badge active' : 'status-badge pending';
+            const planLabel = s.plan === 'organizational' ? '🏢 Organizational' : '⭐ Premium';
+            const daysClass = typeof daysLeft === 'number' && daysLeft <= 5 ? 'text-red-500 font-bold' : 'text-slate-600';
+            return `<tr>
+                <td class="font-medium">${s.storeName}</td>
+                <td>${s.owner?.name || s.sellerName || '—'}</td>
+                <td><span class="${planClass}">${planLabel}</span></td>
+                <td>${activated}</td>
+                <td>${expires}</td>
+                <td class="${daysClass}">${typeof daysLeft === 'number' ? daysLeft + ' days' : '—'}</td>
+            </tr>`;
+        }).join('') : `<tr><td colspan="6" class="text-center text-slate-400 py-8">No paid plans found</td></tr>`;
+    } catch {
+        body.innerHTML = `<tr><td colspan="6" class="text-center text-red-400 py-8">Failed to load plans</td></tr>`;
+    }
+};
+
+// ─── EVENTS SECTION ───────────────────────────────────────────
+sectionLoaders.events = async () => {
+    const body = document.getElementById('eventsTableBody');
+    const cards = document.getElementById('eventStatsCards');
+    body.innerHTML = `<tr><td colspan="4" class="text-center text-slate-400 py-8">Loading...</td></tr>`;
+
+    try {
+        const data = await adminFetch('/admin/events');
+        const events = data.events || [];
+        const daily = data.daily || [];
+
+        const storeViews   = events.filter(e => e.type === 'store_view').length;
+        const productViews = events.filter(e => e.type === 'product_view').length;
+        const clicks       = events.filter(e => e.type === 'whatsapp_click').length;
+
+        cards.innerHTML = `
+            <div class="stat-card">
+                <div class="stat-icon bg-indigo-50 text-indigo-500 mb-3"><i class="fas fa-eye"></i></div>
+                <div class="stat-value">${storeViews}</div>
+                <div class="stat-label">Store Views (last 200)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon bg-emerald-50 text-emerald-500 mb-3"><i class="fas fa-box-open"></i></div>
+                <div class="stat-value">${productViews}</div>
+                <div class="stat-label">Product Views (last 200)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon bg-green-50 text-green-500 mb-3"><i class="fab fa-whatsapp"></i></div>
+                <div class="stat-value">${clicks}</div>
+                <div class="stat-label">WhatsApp Clicks (last 200)</div>
+            </div>
+        `;
+
+        // Daily chart
+        const chartEl = document.getElementById('dailyEventsChart');
+        chartEl.innerHTML = '';
+        if (daily.length) {
+            const chart = echarts.init(chartEl);
+            chart.setOption({
+                grid: { left: 10, right: 10, top: 10, bottom: 30, containLabel: true },
+                tooltip: { trigger: 'axis' },
+                legend: { bottom: 0 },
+                xAxis: { type: 'category', data: daily.map(d => d._id.slice(5)) },
+                yAxis: { type: 'value', minInterval: 1 },
+                series: [
+                    { name: 'Store Views',    type: 'line', smooth: true, data: daily.map(d => d.storeViews),   itemStyle: { color: '#818cf8' }, areaStyle: { color: 'rgba(129,140,248,0.1)' } },
+                    { name: 'Product Views',  type: 'line', smooth: true, data: daily.map(d => d.productViews), itemStyle: { color: '#22c55e' }, areaStyle: { color: 'rgba(34,197,94,0.1)' } },
+                    { name: 'WhatsApp Clicks',type: 'line', smooth: true, data: daily.map(d => d.clicks),       itemStyle: { color: '#f59e0b' }, areaStyle: { color: 'rgba(245,158,11,0.1)' } }
+                ]
+            });
+            window.addEventListener('resize', () => chart.resize());
+        } else {
+            chartEl.innerHTML = '<div class="flex items-center justify-center h-full text-slate-400 text-sm">No event data yet</div>';
+        }
+
+        const typeIcons = {
+            store_view:      '👁️',
+            product_view:    '📦',
+            whatsapp_click:  '💬'
+        };
+        body.innerHTML = events.length ? events.slice(0, 50).map(e => {
+            const time = new Date(e.createdAt).toLocaleString('en-GH', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+            return `<tr>
+                <td>${typeIcons[e.type] || '•'} ${e.type.replace(/_/g, ' ')}</td>
+                <td>${e.storeId?.storeName || '—'}</td>
+                <td>${e.productId?.productName || '—'}</td>
+                <td class="text-slate-400">${time}</td>
+            </tr>`;
+        }).join('') : `<tr><td colspan="4" class="text-center text-slate-400 py-8">No events recorded yet</td></tr>`;
+
+    } catch {
+        body.innerHTML = `<tr><td colspan="4" class="text-center text-red-400 py-8">Failed to load events</td></tr>`;
+    }
+};
+
+// ─── INIT ────────────────────────────────────────────────────
+buildDashboard();
+setInterval(buildDashboard, 60000);
+</script>
+</body>
+</html>

@@ -273,7 +273,7 @@ MongoDB Atlas
 
 ---
 
-# ✨ Features
+#  Features
 
 - Google Sign-In
 - Student Verification

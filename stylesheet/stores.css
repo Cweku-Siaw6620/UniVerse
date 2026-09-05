@@ -111,7 +111,7 @@
 .store-card-btn {
     flex-shrink: 0;
     padding: 0.5rem 1rem;
-    background: #6d28d9;
+    background: #aa7b34;
     color: white;
     font-size: 0.75rem;
     font-weight: 600;
@@ -121,7 +121,7 @@
 }
 
 .store-card-btn:hover {
-    background: #5b21b6;
+    background: #b87516;
 }
 
 /* Category badge sizing */
@@ -174,7 +174,7 @@
     }
 }
         .store-card-btn:hover {
-            background-color: #333;
+            background-color: #d5ba60;
         }
         
         /* Search bar styling */
@@ -320,7 +320,7 @@
         }
 
         .store-search-input:focus {
-            border-color: #7c3aed;
+            border-color: #d69a2d;
             background: #ffffff;
         }
 
@@ -366,7 +366,7 @@
         }
 
         .store-filter-select:focus {
-            border-color: #7c3aed;
+            border-color: #d69a2d;
             background: #ffffff;
         }
 
@@ -376,7 +376,7 @@
             justify-content: center;
             gap: 8px;
             padding: 11px 22px;
-            background: #6d28d9;
+            background: #81715b;
             color: #ffffff;
             font-size: 14px;
             font-weight: 600;
@@ -389,7 +389,7 @@
         }
 
         .store-filter-btn:hover {
-            background: #5b21b6;
+            background: #b87516;
         }
 
         @media (max-width: 768px) {
@@ -411,11 +411,11 @@
             border-radius:999px;
             background:linear-gradient(
                 135deg,
-                rgba(99,102,241,.12),
-                rgba(168,85,247,.12)
+                #f0bf8b1f,
+                #f0bf8b1f,
             );
-            border:1px solid rgba(99,102,241,.15);
-            color:#6366f1;
+            border:1px solid rgba(134, 129, 125, 0.15);
+            color:#000000;
             font-size:11px;
             font-weight:600;
             letter-spacing:.5px;
@@ -473,8 +473,8 @@
 }
 
 .featured-nav-btn:hover {
-    background: #6d28d9;
-    border-color: #6d28d9;
+    background: #d08a24;
+    border-color: #d08a24;
     color: #ffffff;
 }
 
@@ -598,7 +598,7 @@
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background: #7c3aed;
+    background: #d08a24;
     color: #ffffff;
     display: flex;
     align-items: center;
@@ -658,7 +658,7 @@
 }
 
 .featured-plan-badge.premium {
-    color: #7c3aed;
+    color: #c88a2a;
 }
 
 .featured-plan-badge.organizational {
@@ -683,15 +683,15 @@
     border-radius: 10px;
     font-size: 13px;
     font-weight: 600;
-    color: #6d28d9;
+    color: #d08a24;
     background: transparent;
     transition: all 0.2s ease;
     cursor: pointer;
 }
 
 .featured-card:hover .featured-card-btn {
-    background: #6d28d9;
-    border-color: #6d28d9;
+    background: #d08a24;
+    border-color: #d08a24;
     color: #ffffff;
 }
 

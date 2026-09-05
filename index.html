@@ -31,8 +31,10 @@
                 <nav class="hidden md:flex items-center gap-2 text-sm font-semibold text-gray-800">
                   <a href="index.html" class="px-4 py-2 rounded hover:bg-gray-100 transition bg-gray-100">Home</a>
                   <a href="stores.html" class="px-4 py-2 rounded hover:bg-gray-100 transition">Stores</a>
+                  <a href="./homeScreens/allProducts.html" class="px-4 py-2 rounded hover:bg-gray-100 transition">Products</a>
                   <a href="#" class="px-4 py-2 rounded hover:bg-gray-100 transition">Blog</a>
-                  <a href="userManual.html" class="px-4 py-2 rounded bg-blue-500 hover:bg-blue-600 transition text-white">Guide</a>
+                  <a href="userManual.html" class="px-4 py-2 rounded hover:bg-gray-100 transition">Guide</a>
+                  <a id="adminDesktopLink" href="./Admin.html" class="hidden px-4 py-2 rounded text-red-700 hover:bg-red-50 transition font-semibold">Admin</a>
                   <a href="./components/login.html"
                     class="ml-6 px-5 py-2 bg-gray-900 text-white rounded hover:bg-gray-700 transition">
                     Sign In
@@ -393,6 +395,21 @@
     </script>
     <script>
         (function() {
+            const adminEmail = 'kelvinashong02@gmail.com';
+            const adminLink = document.getElementById('adminDesktopLink');
+            if (adminLink) {
+                try {
+                    const userData = localStorage.getItem('user');
+                    const user = userData ? JSON.parse(userData) : null;
+                    const email = user && user.email ? String(user.email).trim().toLowerCase() : '';
+                    if (email === adminEmail.toLowerCase()) {
+                        adminLink.classList.remove('hidden');
+                    }
+                } catch (err) {
+                    console.warn('Failed to parse user from localStorage for admin nav:', err);
+                }
+            }
+
             const ctaBtn = document.getElementById('hero-cta-secondary');
             if (!ctaBtn) return;
 
