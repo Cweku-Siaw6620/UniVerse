@@ -106,7 +106,29 @@ document.getElementById("close-menu-btn").addEventListener("click", closeCompani
 backdropEl.addEventListener("click", closeCompanionMenu);
 document.addEventListener("keydown", (e) => e.key === "Escape" && closeCompanionMenu());
 
-document.getElementById("chat-btn").addEventListener("click", () => {
+async function isUserLoggedIn() {
+    try {
+        const response = await fetch(`https://api.universeweb.co/api/auth/me`, {
+            credentials: "include"
+        });
+        return response.ok;
+    } catch (error) {
+        console.error("Auth check failed:", error);
+        return false;
+    }
+}
+
+document.getElementById("chat-btn").addEventListener("click", async () => {
+    const loggedIn = await isUserLoggedIn();
+
+    if (!loggedIn) {
+        closeCompanionMenu();
+        const loginPrompt = currentCompanion.name === "Rei"
+            ? "You'll need to log in first before we can chat! 💗"
+            : "You'll need to log in first before we can chat!";
+        expressAndSpeak("thinking", loginPrompt);
+        return;
+    }
     // Close the companion menu
     closeCompanionMenu();
     chatMode = true;

@@ -1,6 +1,24 @@
 class ChatManager {
     async send(message) {
-        //console.log("User:", message);
+        // Limit excessively long messages
+        const MAX_MESSAGE_LENGTH = 1000;
+
+        message = message.trim();
+
+        if (message.length > MAX_MESSAGE_LENGTH) {
+
+            const messageLimitResponse =
+                currentCompanion.name === "Rei"
+                    ? "Whoa, that's a lot to read at once 😅💗. Try shortening that a little."
+                    : "Whoa, that's a lot to read at once 😅. Try shortening that a little.";
+
+            expressAndSpeak(
+                "thinking",
+                messageLimitResponse
+            );
+
+            return;
+        }
         setState("thinking");
         setExpression("thinking");
 
@@ -10,37 +28,90 @@ class ChatManager {
             page: window.location.pathname,
             message: message
         };
-        const response = await fetch(
-            "https://api.universeweb.co/api/ai/chat",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(request)
-            }
-        );
-        const data = await response.json();
 
-        // Kal/Rei speaks
-        setState("idle");
-        console.log("AI RESPONSE:", data);
-        expressAndSpeak(
-            data.emotion || "happy",
-            data.text
-        );
+        try {
+            const controller = new AbortController();
+            const timeout = setTimeout(() => {
+                controller.abort();
+            }, 10000);
 
-        // Handle AI action
-        if (data.action) {
-            if (data.action.type === "NAVIGATE") {
-                handleAIAction(data.action);
+            const response = await fetch(
+                "https://api.universeweb.co/api/ai/chat",
+                {
+                    method: "POST",
+                    credentials: "include",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(request),
+                    signal: controller.signal
+                }
+            );
+            clearTimeout(timeout);
+
+            if (!response.ok) { 
+                if (response.status === 429) {
+                    const data = await response.json();
+                    setState("idle");
+                    expressAndSpeak("thinking", data.message);
+                    return;
+                }
+                throw new Error(`AI request failed: ${response.status}`);
             }
-            if (data.action.type === "SEARCH_PRODUCTS") {
-                searchProductsAI(data.action.query, data.action.sort);
+            const data = await response.json();
+
+            if (!data || !data.success || !data.text) {
+                throw new Error("Invalid AI response received.");
             }
-            if (data.action.type === "FILTER_PRODUCTS") {
-                filterProductsAI(data.action.category);
+
+            setState("idle");
+
+            //console.log("AI RESPONSE:", data);
+
+            expressAndSpeak(
+                data.emotion || "happy",
+                data.text
+            );
+
+            if (data.action) {
+                if (data.action.type === "NAVIGATE") {
+                    handleAIAction(data.action);
+                }
+                if (data.action.type === "SEARCH_PRODUCTS") {
+                    searchProductsAI(
+                        data.action.query,
+                        data.action.sort
+                    );
+                }
+                if (data.action.type === "FILTER_PRODUCTS") {
+                    filterProductsAI(data.action.category);
+                }
             }
+        } catch (error) {
+            console.error("AI CHAT ERROR:", error);
+
+            setState("idle");
+
+            let fallbackMessage;
+
+            if (error.name === "AbortError") {
+
+                fallbackMessage =
+                    currentCompanion.name === "Rei"
+                        ? "Aww... that took too long to reach me. 💗 Let's try again."
+                        : "Hmm... you're catching me on a slow connection. Let's try that again.";
+
+            } else {
+
+                // Normal connection/server failure
+                fallbackMessage =
+                    currentCompanion.name === "Rei"
+                        ? "Oops... I can't reach my AI brain right now. 💗 Try again in a moment."
+                        : "Hmm... I'm having a little trouble connecting right now. Give me a moment and try again.";
+            }
+
+            // Show a natural reaction instead of breaking silently
+            expressAndSpeak("thinking", fallbackMessage);
         }
     }
 }
