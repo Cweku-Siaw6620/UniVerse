@@ -22,6 +22,29 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  function getPlanInfo(store) {
+    const plan = store.plan || 'free';
+    return {
+      plan,
+      isPremium: plan === 'premium' || plan === 'organizational'
+    };
+  }
+
+  function applyStoreTheme(store) {
+    const info = getPlanInfo(store);
+    document.body.classList.toggle('store-premium', info.isPremium);
+    document.body.classList.toggle('store-free', !info.isPremium);
+    return info;
+  }
+
+  function buildWhatsAppLink(store) {
+    const cleanNumber = (store.sellerNumber || '').replace(/\D/g, '');
+    const message = encodeURIComponent(
+      `Hello ${store.sellerName || 'there'},\nI found your store, "${store.storeName || 'your store'}", on UniVerse and would like to learn more about your products.\nStore Link: ${window.location.href}`
+    );
+    return `https://api.whatsapp.com/send?phone=233${cleanNumber}&text=${message}`;
+  }
+
   // Fetch store details from API
   async function fetchStoreDetails() {
     try {
@@ -51,6 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       // Update all store information sections
+      const planInfo = applyStoreTheme(storeData);
       updateStoreHeader(storeData);
       updateSellerContact(storeData);
       updateStoreStats(storeData);
@@ -81,40 +105,126 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Update store header with logo and basic info
   function updateStoreHeader(store) {
-    const storeHeader = document.getElementById('storeHeader');
-    if (storeHeader) {
-      storeHeader.innerHTML = `
-        <img src="${store.storeLogo || 'https://images.unsplash.com/photo-1563013544-824ae1b704d3?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80'}" 
-             alt="${store.storeName}" 
-             class="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg">
-        <div class="flex-1 text-center md:text-left">
-          <h1 class="text-3xl font-bold text-gray-800 mb-2">${escapeHtml(store.storeName)}</h1>
-          <p class="text-gray-600 mb-1">
-            <i data-feather="user" class="w-4 h-4 inline mr-1"></i>
-            <span class="font-medium">Seller:</span> 
-            <span id="sellerName" class="inline-flex items-center gap-2 flex-wrap">${escapeHtml(store.sellerName || 'Not specified')}${store.ownerVerified ? window.uniVerseVerification.getVerifiedBadgeHtml() : ''}</span>
-          </p>
-          <p class="text-gray-600">
-            <i data-feather="phone" class="w-4 h-4 inline mr-1"></i>
-            <span class="font-medium">Contact:</span> 
-            <span id="sellerNumber">${escapeHtml(store.sellerNumber || 'Not provided')}</span>
-          </p>
-          <button id="shareStoreBtn" class="w-full flex items-center justify-center font-medium py-2.5 px-4 rounded-lg transition-all duration-300 bg-white-100 text-black hover:bg-green-600 mt-4">
-          Share link to store
+    const { isPremium, plan } = getPlanInfo(store);
+
+    if (isPremium) {
+      // Hide the standard info/contact grid, render the hero instead
+      const grid = document.getElementById('storeTopGrid');
+      if (grid) grid.classList.add('hidden');
+      renderPremiumHero(store, plan);
+      return;
+    }
+    renderFreeHeader(store);
+  }
+
+  // Render premium hero section for premium stores
+  function renderPremiumHero(store, plan) {
+    const mount = document.getElementById('premiumHeroMount');
+    if (!mount) return;
+
+    const badgeMeta = plan === 'organizational'
+      ? { label: 'Verified Organization', icon: 'award' }
+      : { label: 'Premium Seller', icon: 'crown' };
+
+    const cover = store.storeLogo || store.bannerImage ||
+      'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1600&q=80';
+    const logo = store.storeLogo ||
+      'https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=400&q=80';
+    const categories = store.categories || store.tags || ['Student Business'];
+
+    mount.innerHTML = `
+    <section class="store-hero">
+      <div class="store-hero__bg" style="background-image:url('${cover}')"></div>
+      <div class="store-hero__scrim"></div>
+
+      <div class="store-hero__inner">
+        <span class="store-hero__badge">
+          <i data-feather="${badgeMeta.icon}" class="w-3.5 h-3.5"></i>${badgeMeta.label}
+        </span>
+
+        <div class="store-hero__identity">
+          <img class="store-hero__logo" src="${logo}" alt="${escapeHtml(store.storeName)}">
+          <div class="store-hero__identity-text">
+            <h1 class="store-hero__name">
+              ${escapeHtml(store.storeName)}
+              ${store.ownerVerified ? window.uniVerseVerification.getVerifiedBadgeHtml() : ''}
+            </h1>
+            <p class="store-hero__meta">
+              <i data-feather="user" class="w-4 h-4"></i>
+              ${escapeHtml(store.sellerName || 'Seller')}
+              ${store.location ? `&nbsp;·&nbsp;<i data-feather="map-pin" class="w-4 h-4"></i> ${escapeHtml(store.location)}` : ''}
+            </p>
+            <div class="store-hero__cats">
+              ${categories.map(c => `<span>${escapeHtml(c)}</span>`).join('')}
+            </div>
+          </div>
+        </div>
+
+        ${store.storeDescription ? `<p class="store-hero__desc">${escapeHtml(store.storeDescription)}</p>` : ''}
+
+        <div class="store-hero__actions">
+          ${store.sellerNumber ? `
+            <a href="${buildWhatsAppLink(store)}" target="_blank" class="store-hero__cta store-hero__cta--gold">
+              <i data-feather="message-circle" class="w-4 h-4"></i> Chat on WhatsApp
+            </a>` : ''}
+          <button id="shareStoreBtn" class="store-hero__cta store-hero__cta--ghost">
+            <i data-feather="share-2" class="w-4 h-4"></i> Share store
           </button>
           ${store.personalWebsite ? `
-            <p class="text-gray-600 mt-1">
-              <a href="${store.personalWebsite}" target="_blank" class="whatsapp-btn w-full flex items-center justify-center font-medium py-2.5 px-4 rounded-lg transition-all duration-300">
-                <i data-feather="globe" class="w-4 h-4 inline mr-1"></i>
-              Visit Personal Website
-              </a>
-            </p>
-          ` : ''}
+            <a href="${store.personalWebsite}" target="_blank" class="store-hero__cta store-hero__cta--ghost">
+              <i data-feather="globe" class="w-4 h-4"></i> Website
+            </a>` : ''}
         </div>
-      `;
-      feather.replace();
-    }
+
+        <div class="store-hero__stats">
+          <div class="store-hero__stat"><strong data-product-count>0</strong><span>Products</span></div>
+          <div class="store-hero__stat"><strong>${store.rating || 'New'}</strong><span>Rating</span></div>
+          <div class="store-hero__stat"><strong>${store.createdAt ? new Date(store.createdAt).getFullYear() : '2026'}</strong><span>Member Since</span></div>
+          <div class="store-hero__stat"><strong>${store.responseRate || '100%'}</strong><span>Response Rate</span></div>
+        </div>
+      </div>
+    </section>`;
+
+    feather.replace();
   }
+
+  // Free-plan store header (light theme card layout)
+function renderFreeHeader(store) {
+  const storeHeader = document.getElementById('storeHeader');
+  if (!storeHeader) return;
+
+  storeHeader.innerHTML = `
+    <img src="${store.storeLogo || 'https://images.unsplash.com/photo-1563013544-824ae1b704d3?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80'}"
+         alt="${escapeHtml(store.storeName)}"
+         class="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg">
+    <div class="flex-1 text-center md:text-left">
+      <h1 class="text-3xl font-bold text-gray-800 mb-2">${escapeHtml(store.storeName)}</h1>
+      <p class="text-gray-600 mb-1">
+        <i data-feather="user" class="w-4 h-4 inline mr-1"></i>
+        <span class="font-medium">Seller:</span>
+        <span id="sellerName" class="inline-flex items-center gap-2 flex-wrap">${escapeHtml(store.sellerName || 'Not specified')}${store.ownerVerified ? window.uniVerseVerification.getVerifiedBadgeHtml() : ''}</span>
+      </p>
+      <p class="text-gray-600">
+        <i data-feather="phone" class="w-4 h-4 inline mr-1"></i>
+        <span class="font-medium">Contact:</span>
+        <span id="sellerNumber">${escapeHtml(store.sellerNumber || 'Not provided')}</span>
+      </p>
+      <button id="shareStoreBtn" class="w-full flex items-center justify-center gap-2 font-medium py-2.5 px-4 rounded-lg transition-all duration-300 bg-gray-100 hover:bg-gray-200 text-gray-800 mt-4">
+        <i data-feather="share-2" class="w-4 h-4"></i>
+        Share link to store
+      </button>
+      ${store.personalWebsite ? `
+        <p class="text-gray-600 mt-2">
+          <a href="${store.personalWebsite}" target="_blank" class="whatsapp-btn w-full flex items-center justify-center font-medium py-2.5 px-4 rounded-lg transition-all duration-300">
+            <i data-feather="globe" class="w-4 h-4 inline mr-1"></i>
+            Visit Personal Website
+          </a>
+        </p>
+      ` : ''}
+    </div>
+  `;
+  feather.replace();
+}
 
   // Update seller contact section
   function updateSellerContact(store) {
@@ -231,32 +341,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Update product count
   function updateProductCount(count) {
-    const productCount = document.getElementById('productCount');
-    if (productCount) {
-      productCount.innerHTML = `<span class="font-medium">${count}</span>`;
-    }
+    document.querySelectorAll('[data-product-count]').forEach(el => {
+      el.textContent = count;
+    });
+    const legacy = document.getElementById('productCount');
+    if (legacy) legacy.innerHTML = `<span class="font-medium">${count}</span>`;
   }
 
-  // Update detailed store description
   function updateDetailedDescription() {
     const detailedDesc = document.getElementById('detailedDescription');
     if (detailedDesc && storeData) {
       detailedDesc.innerHTML = `
-        <p class="text-gray-700 leading-relaxed mb-4">
+        <p class="about-lead">
           ${escapeHtml(storeData.storeDescription || 'Welcome to our store! We offer quality products with great customer service.')}
         </p>
         ${storeData.additionalInfo ? `
-          <p class="text-gray-700 leading-relaxed">
-            ${escapeHtml(storeData.additionalInfo)}
-          </p>
+          <p class="about-body">${escapeHtml(storeData.additionalInfo)}</p>
         ` : ''}
         ${storeData.mission ? `
-          <div class="mt-6 p-4 bg-green-50 rounded-lg border border-green-100">
-            <h4 class="font-semibold text-green-800 mb-2 flex items-center">
-              <i data-feather="target" class="w-4 h-4 mr-2"></i>
-              Our Mission
-            </h4>
-            <p class="text-green-700">${escapeHtml(storeData.mission)}</p>
+          <div class="about-mission">
+            <h4><i data-feather="target" class="w-4 h-4"></i>Our Mission</h4>
+            <p>${escapeHtml(storeData.mission)}</p>
           </div>
         ` : ''}
       `;
@@ -282,11 +387,16 @@ document.addEventListener('DOMContentLoaded', () => {
       // Update product count
       updateProductCount(products.length);
 
-      if (!products.length) {
-        grid.innerHTML = '';
-        noProducts.classList.remove('hidden');
-        return;
+    if (!products.length) {
+      grid.innerHTML = '';
+      noProducts.classList.remove('hidden');
+      const cta = document.getElementById('emptyWhatsAppCta');
+      if (cta && storeData?.sellerNumber) {
+        cta.href = buildWhatsAppLink(storeData);
+        cta.style.display = 'inline-flex';
       }
+      return;
+    }
 
       noProducts.classList.add('hidden');
       grid.innerHTML = '';

@@ -17,6 +17,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     updateBreadcrumb(product);
     setupButtonActions(product, store);
     await fetchRelatedProducts(product.productCategory, productId);
+    await fetchStoreProducts(product.storeId, product._id, store);
     setupShareFunctionality(product);
 
     // Track for recently viewed (localStorage-based, not analytics)
@@ -294,6 +295,69 @@ async function fetchRelatedProducts(category, currentProductId) {
 
   } catch (err) {
     console.error("Related products error:", err);
+  }
+}
+
+// ── STORE PRODUCTS ("More From This Store") ──────
+async function fetchStoreProducts(storeId, currentProductId, store) {
+  try {
+    const id = typeof storeId === 'object' ? (storeId._id || storeId) : storeId;
+    const res = await fetch(`https://api.universeweb.co/api/products/${id}`);
+    if (!res.ok) throw new Error('Failed');
+    const data = await res.json();
+    const products = Array.isArray(data) ? data : (data.products || []);
+
+    // Skip listings hidden by the plan's product cap, and the product already on screen
+    const visible = products
+      .filter(p => !p.hidden && p._id !== currentProductId)
+      .slice(0, 4);
+
+    const section   = document.getElementById('storeProductsSection');
+    const container = document.getElementById('storeProducts');
+    const viewLink  = document.getElementById('viewStoreLink');
+
+    // Nothing else from this seller — leave the section hidden rather than showing it empty
+    if (!visible.length || !section || !container) return;
+
+    if (viewLink) {
+      viewLink.href = `displayStore.html?slug=${store.slug || store._id}`;
+    }
+
+    container.innerHTML = '';
+    visible.forEach((p, i) => {
+      const card = document.createElement('div');
+      card.className = 'carousel-item snap-start fade-up';
+      card.style.animationDelay = `${i * 0.05}s`;
+      card.onclick = () => window.location.href = `productDetail.html?id=${p._id}`;
+      const isFeatured = Boolean(p.featured);
+      card.innerHTML = `
+        <div class="overlay-card">
+          <div class="overlay-card-image">
+            <img src="${p.productImage || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&h=800&fit=crop'}" 
+                 alt="${escapeHtml(p.productName)}"
+                 loading="lazy">
+            <div class="overlay-card-gradient"></div>
+            ${isFeatured ? `
+            <span class="overlay-card-badge">
+              <i data-feather="star" class="w-3 h-3"></i> Featured
+            </span>` : ''}
+            <div class="overlay-card-info">
+              <h3 class="overlay-card-name">${escapeHtml(p.productName)}</h3>
+              <p class="overlay-card-price">₵${(p.productPrice || 0).toFixed(2)}</p>
+            </div>
+          </div>
+        </div>
+      `;
+      container.appendChild(card);
+    });
+
+    section.classList.remove('hidden');
+
+    // Re-run feather after store products are injected
+    if (typeof feather !== 'undefined') feather.replace();
+
+  } catch (err) {
+    console.error("Store products error:", err);
   }
 }
 

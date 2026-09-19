@@ -282,10 +282,10 @@ document.addEventListener('DOMContentLoaded', function () {
             if (planBadge) {
                 if (plan === 'organizational') {
                     planBadge.className = 'px-3 py-1 bg-purple-100 text-purple-700 text-sm font-medium rounded-full';
-                    planBadge.textContent = '🏢 Organizational';
+                    planBadge.textContent = 'Organizational';
                 } else if (plan === 'premium') {
                     planBadge.className = 'px-3 py-1 bg-yellow-100 text-yellow-700 text-sm font-medium rounded-full';
-                    planBadge.textContent = '⭐ Premium';
+                    planBadge.textContent = 'Premium';
                 } else {
                     planBadge.className = 'px-3 py-1 bg-green-100 text-green-700 text-sm font-medium rounded-full';
                     planBadge.textContent = 'Free';

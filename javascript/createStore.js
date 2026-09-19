@@ -152,7 +152,7 @@ document.addEventListener("DOMContentLoaded", function () {
       phoneVerified = true;
       verifiedPhoneNumber = phoneNumber;
 
-      otpStatus.textContent = "✓ Phone number verified";
+      otpStatus.textContent = " Phone number verified";
       otpStatus.className = "text-sm mt-2 text-green-600 font-medium";
 
       sellerNumberInput.disabled = true;
