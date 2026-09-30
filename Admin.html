@@ -14,14 +14,15 @@
         }
 
         body {
-            background: #f1f5f9;
-            color: #0f172a;
+            background: #FAF7F1;
+            color: #1C1917;
             min-height: 100vh;
+            font-size: 15px;
         }
 
         /* ── Sidebar ─────────────────────────────────────────── */
         .admin-sidebar {
-            background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+            background: linear-gradient(180deg, #1C1917 0%, #292420 100%);
             width: 260px;
             min-height: 100vh;
             position: fixed;
@@ -36,14 +37,14 @@
 
         .admin-sidebar::-webkit-scrollbar { width: 4px; }
         .admin-sidebar::-webkit-scrollbar-track { background: transparent; }
-        .admin-sidebar::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
+        .admin-sidebar::-webkit-scrollbar-thumb { background: #57524B; border-radius: 4px; }
 
         .sidebar-brand {
             display: flex;
             align-items: center;
             gap: 12px;
             padding-bottom: 24px;
-            border-bottom: 1px solid rgba(255,255,255,0.06);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
             margin-bottom: 24px;
         }
 
@@ -56,17 +57,17 @@
 
         .sidebar-brand span {
             font-family: 'Playfair Display', serif;
-            font-size: 20px;
+            font-size: 21px;
             font-weight: 600;
-            color: white;
+            color: #FAF7F1;
         }
 
         .sidebar-brand small {
             display: block;
-            font-size: 10px;
+            font-size: 11px;
             font-weight: 400;
-            color: #94a3b8;
-            letter-spacing: 0.5px;
+            color: #B9812E;
+            letter-spacing: 0.6px;
             text-transform: uppercase;
             margin-top: -2px;
         }
@@ -77,22 +78,22 @@
             gap: 14px;
             padding: 12px 16px;
             border-radius: 12px;
-            color: #94a3b8;
+            color: #C9C2B6;
             text-decoration: none;
             transition: all 0.2s ease;
-            font-size: 14px;
+            font-size: 14.5px;
             font-weight: 500;
             margin-bottom: 2px;
         }
 
         .nav-item:hover {
             background: rgba(255,255,255,0.06);
-            color: white;
+            color: #FAF7F1;
         }
 
         .nav-item.active {
-            background: rgba(99, 102, 241, 0.15);
-            color: #818cf8;
+            background: rgba(185, 129, 46, 0.18);
+            color: #E3A94F;
         }
 
         .nav-item i {
@@ -108,17 +109,26 @@
             border-radius: 20px;
             font-size: 11px;
             font-weight: 600;
-            color: #94a3b8;
+            color: #C9C2B6;
         }
 
         .nav-item.active .badge {
-            background: rgba(99, 102, 241, 0.2);
-            color: #818cf8;
+            background: rgba(185, 129, 46, 0.25);
+            color: #E3A94F;
+        }
+
+        .nav-item.logout-item {
+            color: #E7A0A0;
+        }
+
+        .nav-item.logout-item:hover {
+            background: rgba(220, 38, 38, 0.12);
+            color: #F5B5B5;
         }
 
         .sidebar-divider {
             border: none;
-            border-top: 1px solid rgba(255,255,255,0.06);
+            border-top: 1px solid rgba(255,255,255,0.08);
             margin: 16px 0;
         }
 
@@ -131,17 +141,17 @@
 
         /* ── Stats Cards ────────────────────────────────────── */
         .stat-card {
-            background: white;
+            background: #FFFFFF;
             border-radius: 16px;
             padding: 22px 24px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-            border: 1px solid #eef2f6;
+            box-shadow: 0 1px 3px rgba(28,25,23,0.05);
+            border: 1px solid #EDE6D8;
             transition: all 0.3s ease;
         }
 
         .stat-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 12px 24px rgba(0,0,0,0.06);
+            box-shadow: 0 12px 24px rgba(28,25,23,0.08);
         }
 
         .stat-card .stat-icon {
@@ -155,51 +165,59 @@
         }
 
         .stat-card .stat-value {
-            font-size: 28px;
+            font-size: 29px;
             font-weight: 700;
-            color: #0f172a;
+            color: #1C1917;
             letter-spacing: -0.5px;
         }
 
         .stat-card .stat-label {
-            font-size: 13px;
-            color: #64748b;
+            font-size: 14px;
+            color: #78716C;
             font-weight: 500;
         }
 
         .stat-card .stat-change {
-            font-size: 12px;
+            font-size: 12.5px;
             font-weight: 600;
-            padding: 2px 10px;
+            padding: 3px 11px;
             border-radius: 20px;
         }
 
-        .stat-change.up { background: #dcfce7; color: #16a34a; }
-        .stat-change.down { background: #fee2e2; color: #dc2626; }
+        .stat-change.up { background: #FBE8CC; color: #A15C0E; }
+        .stat-change.down { background: #FEE2E2; color: #DC2626; }
 
         /* ── Charts & Tables ────────────────────────────────── */
         .chart-container {
-            background: white;
+            background: #FFFFFF;
             border-radius: 16px;
             padding: 24px;
-            border: 1px solid #eef2f6;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            border: 1px solid #EDE6D8;
+            box-shadow: 0 1px 3px rgba(28,25,23,0.05);
         }
 
         .chart-container .chart-title {
-            font-size: 16px;
+            font-size: 17px;
             font-weight: 600;
-            color: #0f172a;
+            color: #1C1917;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .chart-container .chart-title i {
+            color: #B9812E;
+            font-size: 15px;
         }
 
         .chart-container .chart-subtitle {
-            font-size: 13px;
-            color: #94a3b8;
+            font-size: 13.5px;
+            color: #A19B8F;
         }
 
         .progress-bar {
             height: 8px;
-            background: #eef2f6;
+            background: #F1EBDD;
             border-radius: 8px;
             overflow: hidden;
         }
@@ -210,11 +228,10 @@
             transition: width 1s ease;
         }
 
-        .fill-purple { background: #818cf8; }
+        .fill-amber { background: #B9812E; }
+        .fill-gold { background: #E3A94F; }
         .fill-green { background: #22c55e; }
-        .fill-amber { background: #f59e0b; }
-        .fill-rose { background: #f43f5e; }
-        .fill-blue { background: #3b82f6; }
+        .fill-ash { background: #D8D2C5; }
 
         /* ── Table ───────────────────────────────────────────── */
         .table-wrap {
@@ -224,40 +241,40 @@
         .admin-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 13px;
+            font-size: 14px;
         }
 
         .admin-table th {
             text-align: left;
             padding: 12px 16px;
-            color: #64748b;
+            color: #78716C;
             font-weight: 600;
-            font-size: 11px;
+            font-size: 11.5px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            border-bottom: 1px solid #eef2f6;
+            border-bottom: 1px solid #EDE6D8;
         }
 
         .admin-table td {
-            padding: 12px 16px;
-            border-bottom: 1px solid #f1f5f9;
-            color: #1e293b;
+            padding: 13px 16px;
+            border-bottom: 1px solid #F5F1E8;
+            color: #292420;
         }
 
         .admin-table tr:hover td {
-            background: #f8fafc;
+            background: #FBF8F1;
         }
 
         .status-badge {
             padding: 4px 14px;
             border-radius: 20px;
-            font-size: 11px;
+            font-size: 11.5px;
             font-weight: 600;
         }
 
-        .status-badge.active { background: #dcfce7; color: #16a34a; }
-        .status-badge.expired { background: #fee2e2; color: #dc2626; }
-        .status-badge.pending { background: #fef3c7; color: #d97706; }
+        .status-badge.active { background: #DCFCE7; color: #16A34A; }
+        .status-badge.expired { background: #FEE2E2; color: #DC2626; }
+        .status-badge.pending { background: #FBE8CC; color: #A15C0E; }
 
         /* ── Engagement Score Badge ─────────────────────────── */
         .engagement-score {
@@ -266,13 +283,13 @@
             gap: 4px;
             padding: 2px 10px;
             border-radius: 12px;
-            font-size: 10px;
+            font-size: 10.5px;
             font-weight: 700;
         }
 
-        .engagement-score.high { background: #dcfce7; color: #16a34a; }
-        .engagement-score.medium { background: #fef3c7; color: #d97706; }
-        .engagement-score.low { background: #f1f5f9; color: #64748b; }
+        .engagement-score.high { background: #DCFCE7; color: #16A34A; }
+        .engagement-score.medium { background: #FBE8CC; color: #A15C0E; }
+        .engagement-score.low { background: #F5F1E8; color: #78716C; }
 
         /* ── Responsive ─────────────────────────────────────── */
         .mobile-menu-toggle {
@@ -280,7 +297,7 @@
             background: none;
             border: none;
             font-size: 24px;
-            color: #0f172a;
+            color: #1C1917;
             cursor: pointer;
             padding: 8px;
         }
@@ -300,7 +317,7 @@
                 display: block;
             }
             .stat-card .stat-value {
-                font-size: 22px;
+                font-size: 23px;
             }
         }
 
@@ -312,7 +329,7 @@
                 padding: 16px;
             }
             .stat-card .stat-value {
-                font-size: 18px;
+                font-size: 19px;
             }
             .stat-card .stat-icon {
                 width: 36px;
@@ -326,7 +343,7 @@
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,0.4);
+            background: rgba(28,25,23,0.45);
             z-index: 40;
         }
 
@@ -336,7 +353,7 @@
 
         /* ── Loading Shimmer ─────────────────────────────────── */
         .shimmer {
-            background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+            background: linear-gradient(90deg, #F5F1E8 25%, #EDE6D8 50%, #F5F1E8 75%);
             background-size: 200% 100%;
             animation: shimmer 1.5s infinite;
         }
@@ -348,15 +365,15 @@
 
         /* ── Score breakdown tooltip ────────────────────────── */
         .score-detail {
-            font-size: 10px;
-            color: #94a3b8;
+            font-size: 10.5px;
+            color: #A19B8F;
             display: flex;
             gap: 8px;
             flex-wrap: wrap;
         }
 
         .score-detail span {
-            background: #f1f5f9;
+            background: #F5F1E8;
             padding: 1px 8px;
             border-radius: 10px;
         }
@@ -398,6 +415,9 @@
         <a href="index.html" class="nav-item">
             <i class="fas fa-arrow-left"></i> Back to Site
         </a>
+        <a href="#" class="nav-item logout-item" id="logoutBtn">
+            <i class="fas fa-right-from-bracket"></i> Log Out
+        </a>
     </nav>
 </aside>
 
@@ -414,19 +434,19 @@
                 <i class="fas fa-bars"></i>
             </button>
             <div>
-                <h1 class="text-2xl font-bold text-slate-900 font-serif">Dashboard</h1>
-                <p class="text-sm text-slate-500" id="lastUpdated">Loading...</p>
+                <h1 class="text-2xl font-bold text-stone-900 font-serif">Dashboard</h1>
+                <p class="text-sm text-stone-500" id="lastUpdated">Loading...</p>
             </div>
         </div>
         <div class="flex items-center gap-3">
-            <div class="bg-white border border-slate-200 rounded-xl px-4 py-2 text-sm flex items-center gap-2">
+            <div class="bg-white border border-stone-200 rounded-xl px-4 py-2 text-sm flex items-center gap-2">
                 <span class="relative flex h-2.5 w-2.5">
                     <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                     <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
                 </span>
-                <span class="text-slate-600 font-medium">System Online</span>
+                <span class="text-stone-600 font-medium">System Online</span>
             </div>
-            <div class="bg-white border border-slate-200 rounded-xl px-4 py-2 text-sm text-slate-600">
+            <div class="bg-white border border-stone-200 rounded-xl px-4 py-2 text-sm text-stone-600">
                 <i class="far fa-clock mr-2"></i>
                 <span id="liveTime"></span>
             </div>
@@ -449,13 +469,13 @@
                     <h3 class="chart-title">Users &amp; Stores</h3>
                     <p class="chart-subtitle">User acquisition &amp; store creation correlation</p>
                 </div>
-                <div class="flex items-center gap-4 text-xs text-slate-500">
-                    <span><span class="inline-block w-3 h-3 rounded-full bg-[#818cf8] mr-1"></span> Users</span>
+                <div class="flex items-center gap-4 text-xs text-stone-500">
+                    <span><span class="inline-block w-3 h-3 rounded-full bg-[#B9812E] mr-1"></span> Users</span>
                     <span><span class="inline-block w-3 h-3 rounded-full bg-[#22c55e] mr-1"></span> Stores</span>
                 </div>
             </div>
             <div class="relative h-64" id="userStoreChart">
-                <div class="absolute inset-0 flex items-center justify-center text-slate-400 text-sm">Loading chart...</div>
+                <div class="absolute inset-0 flex items-center justify-center text-stone-400 text-sm">Loading chart...</div>
             </div>
         </div>
 
@@ -476,14 +496,14 @@
 
     <!-- ─── ROW 3: Top Stores & Recent Activity ─── -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-        <!-- Top Stores - UPDATED with Engagement Ranking -->
+        <!-- Top Stores - Engagement Ranking -->
         <div class="chart-container">
             <div class="flex items-center justify-between mb-6">
                 <div>
-                    <h3 class="chart-title">🏆 Top Stores</h3>
+                    <h3 class="chart-title"><i class="fas fa-trophy"></i> Top Stores</h3>
                     <p class="chart-subtitle">Ranked by engagement score</p>
                 </div>
-                <div class="flex items-center gap-2 text-xs text-slate-400">
+                <div class="flex items-center gap-2 text-xs text-stone-400">
                     <span class="inline-block w-2 h-2 rounded-full bg-emerald-500"></span> Views
                     <span class="inline-block w-2 h-2 rounded-full bg-blue-500 ml-2"></span> Clicks
                     <span class="inline-block w-2 h-2 rounded-full bg-amber-500 ml-2"></span> Plan bonus
@@ -500,7 +520,7 @@
         <div class="chart-container">
             <div class="flex items-center justify-between mb-6">
                 <div>
-                    <h3 class="chart-title">⚡ Recent Activity</h3>
+                    <h3 class="chart-title"><i class="fas fa-bolt"></i> Recent Activity</h3>
                     <p class="chart-subtitle">Latest events on the platform</p>
                 </div>
             </div>
@@ -519,11 +539,11 @@
     <div class="chart-container mb-8">
         <div class="flex items-center justify-between mb-6">
             <div>
-                <h3 class="chart-title">📋 All Stores</h3>
+                <h3 class="chart-title"><i class="fas fa-list"></i> All Stores</h3>
                 <p class="chart-subtitle">Complete list of stores on UniVerse</p>
             </div>
             <div class="flex gap-2">
-                <input type="text" id="storeSearch" placeholder="Search stores..." class="px-4 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400">
+                <input type="text" id="storeSearch" placeholder="Search stores..." class="px-4 py-2 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-400">
             </div>
         </div>
         <div class="table-wrap">
@@ -538,16 +558,16 @@
                     </tr>
                 </thead>
                 <tbody id="storesTableBody">
-                    <tr><td colspan="5" class="text-center text-slate-400 py-8">Loading stores...</td></tr>
+                    <tr><td colspan="5" class="text-center text-stone-400 py-8">Loading stores...</td></tr>
                 </tbody>
             </table>
         </div>
-        <div class="flex items-center justify-between mt-4 text-sm text-slate-500">
+        <div class="flex items-center justify-between mt-4 text-sm text-stone-500">
             <span id="storeCount">0 stores</span>
             <div class="flex gap-2">
-                <button id="prevPage" class="px-3 py-1 border border-slate-200 rounded-lg hover:bg-slate-50 transition disabled:opacity-50 disabled:cursor-not-allowed">←</button>
+                <button id="prevPage" class="px-3 py-1 border border-stone-200 rounded-lg hover:bg-stone-50 transition disabled:opacity-50 disabled:cursor-not-allowed">&larr;</button>
                 <span id="pageInfo" class="px-3 py-1">1 / 1</span>
-                <button id="nextPage" class="px-3 py-1 border border-slate-200 rounded-lg hover:bg-slate-50 transition disabled:opacity-50 disabled:cursor-not-allowed">→</button>
+                <button id="nextPage" class="px-3 py-1 border border-stone-200 rounded-lg hover:bg-stone-50 transition disabled:opacity-50 disabled:cursor-not-allowed">&rarr;</button>
             </div>
         </div>
     </div>
@@ -558,10 +578,10 @@
         <div class="chart-container">
             <div class="flex items-center justify-between mb-6">
                 <div>
-                    <h3 class="chart-title">👥 All Users</h3>
+                    <h3 class="chart-title"><i class="fas fa-users"></i> All Users</h3>
                     <p class="chart-subtitle">Every registered user on UniVerse</p>
                 </div>
-                <input type="text" id="userSearch" placeholder="Search users..." class="px-4 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400">
+                <input type="text" id="userSearch" placeholder="Search users..." class="px-4 py-2 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-400">
             </div>
             <div class="table-wrap">
                 <table class="admin-table">
@@ -577,16 +597,16 @@
                         </tr>
                     </thead>
                     <tbody id="usersTableBody">
-                        <tr><td colspan="7" class="text-center text-slate-400 py-8">Loading users...</td></tr>
+                        <tr><td colspan="7" class="text-center text-stone-400 py-8">Loading users...</td></tr>
                     </tbody>
                 </table>
             </div>
-            <div class="flex items-center justify-between mt-4 text-sm text-slate-500">
+            <div class="flex items-center justify-between mt-4 text-sm text-stone-500">
                 <span id="userCount">0 users</span>
                 <div class="flex gap-2">
-                    <button id="prevUserPage" class="px-3 py-1 border border-slate-200 rounded-lg hover:bg-slate-50 transition disabled:opacity-50">←</button>
+                    <button id="prevUserPage" class="px-3 py-1 border border-stone-200 rounded-lg hover:bg-stone-50 transition disabled:opacity-50">&larr;</button>
                     <span id="userPageInfo" class="px-3 py-1">1 / 1</span>
-                    <button id="nextUserPage" class="px-3 py-1 border border-slate-200 rounded-lg hover:bg-slate-50 transition disabled:opacity-50">→</button>
+                    <button id="nextUserPage" class="px-3 py-1 border border-stone-200 rounded-lg hover:bg-stone-50 transition disabled:opacity-50">&rarr;</button>
                 </div>
             </div>
         </div>
@@ -597,10 +617,10 @@
         <div class="chart-container">
             <div class="flex items-center justify-between mb-6">
                 <div>
-                    <h3 class="chart-title">🏪 All Stores</h3>
+                    <h3 class="chart-title"><i class="fas fa-store"></i> All Stores</h3>
                     <p class="chart-subtitle">Detailed view of every store</p>
                 </div>
-                <input type="text" id="storeDetailSearch" placeholder="Search stores..." class="px-4 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400">
+                <input type="text" id="storeDetailSearch" placeholder="Search stores..." class="px-4 py-2 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-400">
             </div>
             <div class="table-wrap">
                 <table class="admin-table">
@@ -615,7 +635,7 @@
                         </tr>
                     </thead>
                     <tbody id="storesDetailBody">
-                        <tr><td colspan="6" class="text-center text-slate-400 py-8">Loading...</td></tr>
+                        <tr><td colspan="6" class="text-center text-stone-400 py-8">Loading...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -627,10 +647,10 @@
         <div class="chart-container">
             <div class="flex items-center justify-between mb-6">
                 <div>
-                    <h3 class="chart-title">📦 All Products</h3>
+                    <h3 class="chart-title"><i class="fas fa-box"></i> All Products</h3>
                     <p class="chart-subtitle">Every product listed on UniVerse</p>
                 </div>
-                <input type="text" id="productSearch" placeholder="Search products..." class="px-4 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400">
+                <input type="text" id="productSearch" placeholder="Search products..." class="px-4 py-2 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-400">
             </div>
             <div class="table-wrap">
                 <table class="admin-table">
@@ -646,7 +666,7 @@
                         </tr>
                     </thead>
                     <tbody id="productsTableBody">
-                        <tr><td colspan="7" class="text-center text-slate-400 py-8">Loading...</td></tr>
+                        <tr><td colspan="7" class="text-center text-stone-400 py-8">Loading...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -657,7 +677,7 @@
     <div id="section-plans" class="hidden">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8" id="planStatsCards"></div>
         <div class="chart-container">
-            <h3 class="chart-title mb-6">💳 Premium & Organizational Stores</h3>
+            <h3 class="chart-title mb-6"><i class="fas fa-credit-card"></i> Premium &amp; Organizational Stores</h3>
             <div class="table-wrap">
                 <table class="admin-table">
                     <thead>
@@ -671,7 +691,7 @@
                         </tr>
                     </thead>
                     <tbody id="plansTableBody">
-                        <tr><td colspan="6" class="text-center text-slate-400 py-8">Loading...</td></tr>
+                        <tr><td colspan="6" class="text-center text-stone-400 py-8">Loading...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -682,12 +702,12 @@
     <div id="section-events" class="hidden">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8" id="eventStatsCards"></div>
         <div class="chart-container mb-6">
-            <h3 class="chart-title mb-1">📈 Daily Activity (Last 30 Days)</h3>
+            <h3 class="chart-title mb-1"><i class="fas fa-chart-line"></i> Daily Activity (Last 30 Days)</h3>
             <p class="chart-subtitle mb-4">Store views, product views, and WhatsApp clicks</p>
             <div id="dailyEventsChart" class="h-64"></div>
         </div>
         <div class="chart-container">
-            <h3 class="chart-title mb-6">⚡ Recent Events</h3>
+            <h3 class="chart-title mb-6"><i class="fas fa-bolt"></i> Recent Events</h3>
             <div class="table-wrap">
                 <table class="admin-table">
                     <thead>
@@ -699,7 +719,7 @@
                         </tr>
                     </thead>
                     <tbody id="eventsTableBody">
-                        <tr><td colspan="4" class="text-center text-slate-400 py-8">Loading...</td></tr>
+                        <tr><td colspan="4" class="text-center text-stone-400 py-8">Loading...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -709,8 +729,8 @@
 </main>
 
 <!-- ─── FOOTER ─── -->
-<footer class="text-center text-xs text-slate-400 py-6 border-t border-slate-200/50 mt-8 ml-0 lg:ml-[260px]">
-    <p>© 2026 UniVerse Admin Panel — All rights reserved.</p>
+<footer class="text-center text-xs text-stone-400 py-6 border-t border-stone-200/60 mt-8 ml-0 lg:ml-[260px]">
+    <p>© 2026 UniVerse Admin Panel. All rights reserved.</p>
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
@@ -730,16 +750,28 @@ const API_BASE = 'https://api.universeweb.co/api';
         // If me endpoint works, user is logged in — backend routes handle the rest
     } catch {
         document.body.innerHTML = `
-            <div class="min-h-screen flex items-center justify-center bg-slate-900">
+            <div class="min-h-screen flex items-center justify-center bg-stone-900">
                 <div class="text-center text-white">
-                    <i class="fas fa-lock text-5xl text-indigo-400 mb-4 block"></i>
+                    <i class="fas fa-lock text-5xl text-amber-400 mb-4 block"></i>
                     <h1 class="text-2xl font-bold mb-2">Admin Access Required</h1>
-                    <p class="text-slate-400 mb-6">You must be logged in as an admin to view this page.</p>
-                    <a href="/components/login.html" class="px-6 py-3 bg-indigo-600 rounded-xl text-white font-semibold hover:bg-indigo-700 transition">Sign In</a>
+                    <p class="text-stone-400 mb-6">You must be logged in as an admin to view this page.</p>
+                    <a href="/components/login.html" class="px-6 py-3 bg-amber-600 rounded-xl text-white font-semibold hover:bg-amber-700 transition">Sign In</a>
                 </div>
             </div>`;
     }
 })();
+
+// ─── LOGOUT ──────────────────────────────────────────────────
+document.getElementById('logoutBtn').addEventListener('click', async (e) => {
+    e.preventDefault();
+    try {
+        await fetch(`${API_BASE}/auth/logout`, { method: 'POST', credentials: 'include' });
+    } catch (err) {
+        console.error('Logout error:', err);
+    } finally {
+        window.location.href = '/components/login.html';
+    }
+});
 
 // ─── STATE ───────────────────────────────────────────────────
 let allStores = [], allUsers = [], allProducts = [], allStoresFull = [];
@@ -772,7 +804,7 @@ document.querySelectorAll('.nav-item[data-section]').forEach(link => {
     link.addEventListener('click', async (e) => {
         e.preventDefault();
         const section = link.dataset.section;
-        document.querySelectorAll('.nav-item').forEach(l => l.classList.remove('active'));
+        document.querySelectorAll('.nav-item[data-section]').forEach(l => l.classList.remove('active'));
         link.classList.add('active');
         sections.forEach(s => {
             const el = document.getElementById(`section-${s}`);
@@ -827,7 +859,7 @@ async function buildDashboard() {
         statsContainer.innerHTML = `
             <div class="stat-card">
                 <div class="flex items-center justify-between mb-3">
-                    <div class="stat-icon bg-indigo-50 text-indigo-500"><i class="fas fa-users"></i></div>
+                    <div class="stat-icon bg-amber-50 text-amber-600"><i class="fas fa-users"></i></div>
                     <span class="stat-change up">+${growth[growth.length-1]?.users || 0} this mo</span>
                 </div>
                 <div class="stat-value">${stats.totalUsers.toLocaleString()}</div>
@@ -843,14 +875,14 @@ async function buildDashboard() {
             </div>
             <div class="stat-card">
                 <div class="flex items-center justify-between mb-3">
-                    <div class="stat-icon bg-amber-50 text-amber-500"><i class="fas fa-box"></i></div>
+                    <div class="stat-icon bg-stone-100 text-stone-600"><i class="fas fa-box"></i></div>
                 </div>
                 <div class="stat-value">${stats.totalProducts.toLocaleString()}</div>
                 <div class="stat-label">Total Products</div>
             </div>
             <div class="stat-card">
                 <div class="flex items-center justify-between mb-3">
-                    <div class="stat-icon bg-purple-50 text-purple-500"><i class="fas fa-crown"></i></div>
+                    <div class="stat-icon bg-amber-50 text-amber-700"><i class="fas fa-crown"></i></div>
                 </div>
                 <div class="stat-value">${(stats.premiumStores + stats.orgStores).toLocaleString()}</div>
                 <div class="stat-label">Paid Plans</div>
@@ -868,7 +900,7 @@ async function buildDashboard() {
             xAxis: { type: 'category', data: growth.map(g => g.label) },
             yAxis: { type: 'value', minInterval: 1 },
             series: [
-                { name: 'Users', type: 'bar', data: growth.map(g => g.users), itemStyle: { color: '#818cf8', borderRadius: [4,4,0,0] } },
+                { name: 'Users', type: 'bar', data: growth.map(g => g.users), itemStyle: { color: '#B9812E', borderRadius: [4,4,0,0] } },
                 { name: 'Stores', type: 'bar', data: growth.map(g => g.stores), itemStyle: { color: '#22c55e', borderRadius: [4,4,0,0] } }
             ]
         });
@@ -876,9 +908,9 @@ async function buildDashboard() {
 
         // ── PLAN DISTRIBUTION ──
         const planColors = {
-            free: { bar: '#e2e8f0', text: '#64748b', label: 'Free' },
-            premium: { bar: '#818cf8', text: '#4f46e5', label: 'Premium ⭐' },
-            organizational: { bar: '#f59e0b', text: '#d97706', label: 'Organizational 🏢' }
+            free: { bar: '#D8D2C5', text: '#78716C', label: 'Free' },
+            premium: { bar: '#B9812E', text: '#A15C0E', label: 'Premium' },
+            organizational: { bar: '#E3A94F', text: '#B9812E', label: 'Organizational' }
         };
         const planData = { free: stats.freeStores, premium: stats.premiumStores, organizational: stats.orgStores };
         planDistribution.innerHTML = Object.entries(planData).map(([plan, count]) => {
@@ -887,7 +919,7 @@ async function buildDashboard() {
             return `<div>
                 <div class="flex justify-between text-sm mb-1">
                     <span class="font-medium" style="color:${c.text}">${c.label}</span>
-                    <span class="text-slate-500">${count} (${pct}%)</span>
+                    <span class="text-stone-500">${count} (${pct}%)</span>
                 </div>
                 <div class="progress-bar"><div class="fill" style="width:${pct}%;background:${c.bar}"></div></div>
             </div>`;
@@ -896,18 +928,18 @@ async function buildDashboard() {
         // ── TOP STORES (engagement from public stores endpoint) ──
         const storesWithScore = engagedStores.slice(0, 5);
         topStoresList.innerHTML = storesWithScore.length ? storesWithScore.map((s, i) => `
-            <div class="flex items-center gap-4 p-3 bg-slate-50 rounded-xl hover:bg-slate-100 transition">
-                <span class="text-sm font-bold text-slate-400 w-6">#${i+1}</span>
-                <img src="${s.storeLogo || '/images/placeholder.png'}" class="w-10 h-10 rounded-full object-cover border border-slate-200">
+            <div class="flex items-center gap-4 p-3 bg-stone-50 rounded-xl hover:bg-stone-100 transition">
+                <span class="text-sm font-bold text-stone-400 w-6">#${i+1}</span>
+                <img src="${s.storeLogo || '/images/placeholder.png'}" class="w-10 h-10 rounded-full object-cover border border-stone-200">
                 <div class="flex-1 min-w-0">
-                    <div class="font-medium text-slate-800 truncate">${s.storeName}</div>
-                    <div class="text-xs text-slate-500">${s.sellerName || ''}</div>
+                    <div class="font-medium text-stone-800 truncate">${s.storeName}</div>
+                    <div class="text-xs text-stone-500">${s.sellerName || ''}</div>
                 </div>
-                <span class="text-xs font-semibold px-3 py-1 rounded-full ${s.plan === 'premium' ? 'bg-indigo-100 text-indigo-700' : s.plan === 'organizational' ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-600'}">
-                    ${s.plan === 'premium' ? '⭐ Premium' : s.plan === 'organizational' ? '🏢 Org' : 'Free'}
+                <span class="text-xs font-semibold px-3 py-1 rounded-full ${s.plan === 'premium' ? 'bg-amber-100 text-amber-800' : s.plan === 'organizational' ? 'bg-amber-50 text-amber-700' : 'bg-stone-100 text-stone-600'}">
+                    ${s.plan === 'premium' ? 'Premium' : s.plan === 'organizational' ? 'Org' : 'Free'}
                 </span>
             </div>
-        `).join('') : '<div class="text-slate-400 text-sm text-center py-4">No stores found</div>';
+        `).join('') : '<div class="text-stone-400 text-sm text-center py-4">No stores found</div>';
 
         // ── RECENT ACTIVITY ──
         const recent = [
@@ -917,22 +949,22 @@ async function buildDashboard() {
 
         const eventIcons = {
             store_created: { icon: 'fa-store-alt', color: 'text-emerald-500 bg-emerald-50' },
-            product_added: { icon: 'fa-box', color: 'text-amber-500 bg-amber-50' }
+            product_added: { icon: 'fa-box', color: 'text-amber-600 bg-amber-50' }
         };
         recentActivity.innerHTML = recent.map(e => {
             const ev = eventIcons[e.type];
             const label = e.type === 'store_created' ? 'created store' : 'added a product';
             const time = new Date(e.time).toLocaleDateString('en-GH', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-            return `<div class="flex items-center gap-3 p-3 bg-slate-50 rounded-xl hover:bg-slate-100 transition">
+            return `<div class="flex items-center gap-3 p-3 bg-stone-50 rounded-xl hover:bg-stone-100 transition">
                 <div class="w-8 h-8 rounded-full ${ev.color} flex items-center justify-center">
                     <i class="fas ${ev.icon} text-xs"></i>
                 </div>
                 <div class="flex-1">
-                    <div class="text-sm font-medium text-slate-800">${e.name}</div>
-                    <div class="text-xs text-slate-500">${label} · ${time}</div>
+                    <div class="text-sm font-medium text-stone-800">${e.name}</div>
+                    <div class="text-xs text-stone-500">${label} &middot; ${time}</div>
                 </div>
             </div>`;
-        }).join('') || '<div class="text-slate-400 text-sm text-center py-4">No recent activity</div>';
+        }).join('') || '<div class="text-stone-400 text-sm text-center py-4">No recent activity</div>';
 
         // ── STORES TABLE ──
         renderStoresTable();
@@ -944,7 +976,7 @@ async function buildDashboard() {
         statsContainer.innerHTML = `<div class="col-span-full text-center py-12 text-red-500">
             <i class="fas fa-exclamation-triangle text-3xl mb-4 block"></i>
             <p>Failed to load dashboard. ${error.message}</p>
-            <button onclick="buildDashboard()" class="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-lg">Retry</button>
+            <button onclick="buildDashboard()" class="mt-4 px-4 py-2 bg-amber-700 text-white rounded-lg">Retry</button>
         </div>`;
     }
 }
@@ -968,7 +1000,7 @@ function renderStoresTable() {
 
     storesTableBody.innerHTML = pageStores.length ? pageStores.map(s => {
         const planClass = s.plan === 'premium' ? 'status-badge active' : s.plan === 'organizational' ? 'status-badge pending' : 'status-badge';
-        const planLabel = s.plan === 'organizational' ? '🏢 Org' : s.plan === 'premium' ? '⭐ Premium' : 'Free';
+        const planLabel = s.plan === 'organizational' ? 'Org' : s.plan === 'premium' ? 'Premium' : 'Free';
         return `<tr>
             <td class="font-medium">${s.storeName || 'Unnamed'}</td>
             <td>${s.owner?.name || s.sellerName || 'Unknown'}</td>
@@ -976,7 +1008,7 @@ function renderStoresTable() {
             <td>${s.productCount || 0} products</td>
             <td><span class="status-badge active">Active</span></td>
         </tr>`;
-    }).join('') : `<tr><td colspan="5" class="text-center text-slate-400 py-8">No stores found</td></tr>`;
+    }).join('') : `<tr><td colspan="5" class="text-center text-stone-400 py-8">No stores found</td></tr>`;
 }
 
 storeSearch.addEventListener('input', () => { currentPage = 1; renderStoresTable(); });
@@ -992,7 +1024,7 @@ sectionLoaders.users = async () => {
     const prevBtn = document.getElementById('prevUserPage');
     const nextBtn = document.getElementById('nextUserPage');
 
-    body.innerHTML = `<tr><td colspan="7" class="text-center text-slate-400 py-8">Loading...</td></tr>`;
+    body.innerHTML = `<tr><td colspan="7" class="text-center text-stone-400 py-8">Loading...</td></tr>`;
 
     try {
         const data = await adminFetch('/admin/users');
@@ -1017,8 +1049,8 @@ sectionLoaders.users = async () => {
 
             body.innerHTML = page.length ? page.map(u => {
                 const affClass = u.affiliation === 'student_verified' ? 'status-badge active' : u.affiliation === 'student_pending' ? 'status-badge pending' : 'status-badge';
-                const affLabel = u.affiliation === 'student_verified' ? '✅ Verified' : u.affiliation === 'student_pending' ? '⏳ Pending' : u.affiliation || 'External';
-                const planLabel = u.store?.plan === 'premium' ? '⭐ Premium' : u.store?.plan === 'organizational' ? '🏢 Org' : u.store ? 'Free' : '—';
+                const affLabel = u.affiliation === 'student_verified' ? 'Verified' : u.affiliation === 'student_pending' ? 'Pending' : u.affiliation || 'External';
+                const planLabel = u.store?.plan === 'premium' ? 'Premium' : u.store?.plan === 'organizational' ? 'Org' : u.store ? 'Free' : '—';
                 const joined = new Date(u.createdAt).toLocaleDateString('en-GH', { year: 'numeric', month: 'short', day: 'numeric' });
                 return `<tr>
                     <td>
@@ -1027,14 +1059,14 @@ sectionLoaders.users = async () => {
                             <span class="font-medium">${u.name}</span>
                         </div>
                     </td>
-                    <td class="text-slate-500">${u.email}</td>
+                    <td class="text-stone-500">${u.email}</td>
                     <td>${u.university || '—'}</td>
                     <td><span class="${affClass}">${affLabel}</span></td>
                     <td>${u.store?.storeName || '—'}</td>
                     <td>${planLabel}</td>
-                    <td class="text-slate-400">${joined}</td>
+                    <td class="text-stone-400">${joined}</td>
                 </tr>`;
-            }).join('') : `<tr><td colspan="7" class="text-center text-slate-400 py-8">No users found</td></tr>`;
+            }).join('') : `<tr><td colspan="7" class="text-center text-stone-400 py-8">No users found</td></tr>`;
         };
 
         render();
@@ -1050,7 +1082,7 @@ sectionLoaders.users = async () => {
 // ─── STORES DETAIL SECTION ────────────────────────────────────
 sectionLoaders.stores = async () => {
     const body = document.getElementById('storesDetailBody');
-    body.innerHTML = `<tr><td colspan="6" class="text-center text-slate-400 py-8">Loading...</td></tr>`;
+    body.innerHTML = `<tr><td colspan="6" class="text-center text-stone-400 py-8">Loading...</td></tr>`;
     const searchEl = document.getElementById('storeDetailSearch');
 
     try {
@@ -1064,12 +1096,12 @@ sectionLoaders.stores = async () => {
             );
             body.innerHTML = filtered.length ? filtered.map(s => {
                 const planClass = s.plan === 'premium' ? 'status-badge active' : s.plan === 'organizational' ? 'status-badge pending' : 'status-badge';
-                const planLabel = s.plan === 'organizational' ? '🏢 Org' : s.plan === 'premium' ? '⭐ Premium' : 'Free';
+                const planLabel = s.plan === 'organizational' ? 'Org' : s.plan === 'premium' ? 'Premium' : 'Free';
                 const created = new Date(s.createdAt).toLocaleDateString('en-GH', { year: 'numeric', month: 'short', day: 'numeric' });
                 return `<tr>
                     <td>
                         <div class="flex items-center gap-2">
-                            <img src="${s.storeLogo || '/images/placeholder.png'}" class="w-7 h-7 rounded-full object-cover border border-slate-200">
+                            <img src="${s.storeLogo || '/images/placeholder.png'}" class="w-7 h-7 rounded-full object-cover border border-stone-200">
                             <span class="font-medium">${s.storeName}</span>
                         </div>
                     </td>
@@ -1077,9 +1109,9 @@ sectionLoaders.stores = async () => {
                     <td>${s.storeCategory || '—'}</td>
                     <td>${s.productCount || 0}</td>
                     <td><span class="${planClass}">${planLabel}</span></td>
-                    <td class="text-slate-400">${created}</td>
+                    <td class="text-stone-400">${created}</td>
                 </tr>`;
-            }).join('') : `<tr><td colspan="6" class="text-center text-slate-400 py-8">No stores found</td></tr>`;
+            }).join('') : `<tr><td colspan="6" class="text-center text-stone-400 py-8">No stores found</td></tr>`;
         };
 
         render();
@@ -1092,7 +1124,7 @@ sectionLoaders.stores = async () => {
 // ─── PRODUCTS SECTION ─────────────────────────────────────────
 sectionLoaders.products = async () => {
     const body = document.getElementById('productsTableBody');
-    body.innerHTML = `<tr><td colspan="7" class="text-center text-slate-400 py-8">Loading...</td></tr>`;
+    body.innerHTML = `<tr><td colspan="7" class="text-center text-stone-400 py-8">Loading...</td></tr>`;
     const searchEl = document.getElementById('productSearch');
 
     try {
@@ -1108,7 +1140,7 @@ sectionLoaders.products = async () => {
                 return `<tr>
                     <td>
                         <div class="flex items-center gap-2">
-                            <img src="${p.productImage || '/images/placeholder.png'}" class="w-7 h-7 rounded object-cover border border-slate-200">
+                            <img src="${p.productImage || '/images/placeholder.png'}" class="w-7 h-7 rounded object-cover border border-stone-200">
                             <span class="font-medium">${p.productName}</span>
                         </div>
                     </td>
@@ -1119,7 +1151,7 @@ sectionLoaders.products = async () => {
                     <td>${p.featured ? '<span class="status-badge active">Yes</span>' : '—'}</td>
                     <td>${p.hidden ? '<span class="status-badge expired">Hidden</span>' : '—'}</td>
                 </tr>`;
-            }).join('') : `<tr><td colspan="7" class="text-center text-slate-400 py-8">No products found</td></tr>`;
+            }).join('') : `<tr><td colspan="7" class="text-center text-stone-400 py-8">No products found</td></tr>`;
         };
 
         render();
@@ -1133,7 +1165,7 @@ sectionLoaders.products = async () => {
 sectionLoaders.plans = async () => {
     const body = document.getElementById('plansTableBody');
     const cards = document.getElementById('planStatsCards');
-    body.innerHTML = `<tr><td colspan="6" class="text-center text-slate-400 py-8">Loading...</td></tr>`;
+    body.innerHTML = `<tr><td colspan="6" class="text-center text-stone-400 py-8">Loading...</td></tr>`;
 
     try {
         const data = await adminFetch('/admin/stores');
@@ -1144,12 +1176,12 @@ sectionLoaders.plans = async () => {
 
         cards.innerHTML = `
             <div class="stat-card">
-                <div class="stat-icon bg-indigo-50 text-indigo-500 mb-3"><i class="fas fa-crown"></i></div>
+                <div class="stat-icon bg-amber-50 text-amber-700 mb-3"><i class="fas fa-crown"></i></div>
                 <div class="stat-value">${premium}</div>
                 <div class="stat-label">Premium Stores</div>
             </div>
             <div class="stat-card">
-                <div class="stat-icon bg-amber-50 text-amber-500 mb-3"><i class="fas fa-building"></i></div>
+                <div class="stat-icon bg-amber-50 text-amber-600 mb-3"><i class="fas fa-building"></i></div>
                 <div class="stat-value">${org}</div>
                 <div class="stat-label">Organizational Stores</div>
             </div>
@@ -1166,8 +1198,8 @@ sectionLoaders.plans = async () => {
             const expires = s.planExpiresAt ? new Date(s.planExpiresAt).toLocaleDateString('en-GH', { month: 'short', day: 'numeric', year: 'numeric' }) : '—';
             const daysLeft = s.planExpiresAt ? Math.max(0, Math.ceil((new Date(s.planExpiresAt) - now) / (1000 * 60 * 60 * 24))) : '—';
             const planClass = s.plan === 'premium' ? 'status-badge active' : 'status-badge pending';
-            const planLabel = s.plan === 'organizational' ? '🏢 Organizational' : '⭐ Premium';
-            const daysClass = typeof daysLeft === 'number' && daysLeft <= 5 ? 'text-red-500 font-bold' : 'text-slate-600';
+            const planLabel = s.plan === 'organizational' ? 'Organizational' : 'Premium';
+            const daysClass = typeof daysLeft === 'number' && daysLeft <= 5 ? 'text-red-500 font-bold' : 'text-stone-600';
             return `<tr>
                 <td class="font-medium">${s.storeName}</td>
                 <td>${s.owner?.name || s.sellerName || '—'}</td>
@@ -1176,7 +1208,7 @@ sectionLoaders.plans = async () => {
                 <td>${expires}</td>
                 <td class="${daysClass}">${typeof daysLeft === 'number' ? daysLeft + ' days' : '—'}</td>
             </tr>`;
-        }).join('') : `<tr><td colspan="6" class="text-center text-slate-400 py-8">No paid plans found</td></tr>`;
+        }).join('') : `<tr><td colspan="6" class="text-center text-stone-400 py-8">No paid plans found</td></tr>`;
     } catch {
         body.innerHTML = `<tr><td colspan="6" class="text-center text-red-400 py-8">Failed to load plans</td></tr>`;
     }
@@ -1186,7 +1218,7 @@ sectionLoaders.plans = async () => {
 sectionLoaders.events = async () => {
     const body = document.getElementById('eventsTableBody');
     const cards = document.getElementById('eventStatsCards');
-    body.innerHTML = `<tr><td colspan="4" class="text-center text-slate-400 py-8">Loading...</td></tr>`;
+    body.innerHTML = `<tr><td colspan="4" class="text-center text-stone-400 py-8">Loading...</td></tr>`;
 
     try {
         const data = await adminFetch('/admin/events');
@@ -1199,7 +1231,7 @@ sectionLoaders.events = async () => {
 
         cards.innerHTML = `
             <div class="stat-card">
-                <div class="stat-icon bg-indigo-50 text-indigo-500 mb-3"><i class="fas fa-eye"></i></div>
+                <div class="stat-icon bg-amber-50 text-amber-600 mb-3"><i class="fas fa-eye"></i></div>
                 <div class="stat-value">${storeViews}</div>
                 <div class="stat-label">Store Views (last 200)</div>
             </div>
@@ -1227,30 +1259,31 @@ sectionLoaders.events = async () => {
                 xAxis: { type: 'category', data: daily.map(d => d._id.slice(5)) },
                 yAxis: { type: 'value', minInterval: 1 },
                 series: [
-                    { name: 'Store Views',    type: 'line', smooth: true, data: daily.map(d => d.storeViews),   itemStyle: { color: '#818cf8' }, areaStyle: { color: 'rgba(129,140,248,0.1)' } },
+                    { name: 'Store Views',    type: 'line', smooth: true, data: daily.map(d => d.storeViews),   itemStyle: { color: '#B9812E' }, areaStyle: { color: 'rgba(185,129,46,0.1)' } },
                     { name: 'Product Views',  type: 'line', smooth: true, data: daily.map(d => d.productViews), itemStyle: { color: '#22c55e' }, areaStyle: { color: 'rgba(34,197,94,0.1)' } },
-                    { name: 'WhatsApp Clicks',type: 'line', smooth: true, data: daily.map(d => d.clicks),       itemStyle: { color: '#f59e0b' }, areaStyle: { color: 'rgba(245,158,11,0.1)' } }
+                    { name: 'WhatsApp Clicks',type: 'line', smooth: true, data: daily.map(d => d.clicks),       itemStyle: { color: '#E3A94F' }, areaStyle: { color: 'rgba(227,169,79,0.15)' } }
                 ]
             });
             window.addEventListener('resize', () => chart.resize());
         } else {
-            chartEl.innerHTML = '<div class="flex items-center justify-center h-full text-slate-400 text-sm">No event data yet</div>';
+            chartEl.innerHTML = '<div class="flex items-center justify-center h-full text-stone-400 text-sm">No event data yet</div>';
         }
 
         const typeIcons = {
-            store_view:      '👁️',
-            product_view:    '📦',
-            whatsapp_click:  '💬'
+            store_view:      'fa-eye',
+            product_view:    'fa-box-open',
+            whatsapp_click:  'fa-brands fa-whatsapp'
         };
         body.innerHTML = events.length ? events.slice(0, 50).map(e => {
             const time = new Date(e.createdAt).toLocaleString('en-GH', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+            const iconClass = typeIcons[e.type] || 'fa-circle';
             return `<tr>
-                <td>${typeIcons[e.type] || '•'} ${e.type.replace(/_/g, ' ')}</td>
+                <td><i class="fas ${iconClass} text-stone-400 mr-1"></i> ${e.type.replace(/_/g, ' ')}</td>
                 <td>${e.storeId?.storeName || '—'}</td>
                 <td>${e.productId?.productName || '—'}</td>
-                <td class="text-slate-400">${time}</td>
+                <td class="text-stone-400">${time}</td>
             </tr>`;
-        }).join('') : `<tr><td colspan="4" class="text-center text-slate-400 py-8">No events recorded yet</td></tr>`;
+        }).join('') : `<tr><td colspan="4" class="text-center text-stone-400 py-8">No events recorded yet</td></tr>`;
 
     } catch {
         body.innerHTML = `<tr><td colspan="4" class="text-center text-red-400 py-8">Failed to load events</td></tr>`;

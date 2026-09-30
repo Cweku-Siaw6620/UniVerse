@@ -496,7 +496,7 @@
 
 				// Premium / Organizational — fetch real analytics
 				try {
-					const res  = await fetch(`${API}/api/analytics/${store._id}`);
+					const res  = await fetch(`${API}/api/analytics/${store._id}`, { credentials: 'include' });
 					const data = await res.json();
 
 					if (!data.success) throw new Error('Analytics fetch failed');

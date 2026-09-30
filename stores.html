@@ -381,7 +381,22 @@
 
             const stores = await res.json();
             allShops = stores;
-            renderShops(allShops);
+            const params = new URLSearchParams(window.location.search);
+
+            const search = params.get("search");
+            const university = params.get("university");
+
+            if (search) {
+                document.getElementById("searchInput").value = search;
+            }
+            if (university) {
+                document.getElementById("universityFilter").value = university;
+            }
+            if (search || university) {
+                applyFilters();
+            } else {
+                renderShops(allShops);
+            }
 
           } catch (error) {
             console.error("Error fetching stores:", error);
@@ -634,7 +649,7 @@
         loadFeaturedStores();
     </script>
     
-     <!-- AI JavaScript  
+     <!-- AI JavaScript  -->
     <script src="companion/memory.js"></script>
     <script src="companion/personality.js"></script>
     <script src="companion/companion.js"></script>
@@ -643,6 +658,6 @@
     <script src="companion/src/chat.js"></script>
     <script src="companion/src/ai.js"></script>
     <script src="companion/src/session.js"></script>
--->
+
 </body>
 </html>

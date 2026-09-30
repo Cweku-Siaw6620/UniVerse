@@ -65,6 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
         store.owner?.affiliation === 'student_verified';
 
       storeData = {...store,ownerVerified };
+      window.currentUniVerseStore = storeData;
 
       // Save to localStorage
       try {
@@ -380,6 +381,7 @@ function renderFreeHeader(store) {
 
       if (!res.ok) throw new Error("Failed to fetch products");
       const products = await res.json();
+      window.currentUniVerseStoreProducts = products;
 
       const grid = document.getElementById('productGrid');
       const noProducts = document.getElementById('noProducts');

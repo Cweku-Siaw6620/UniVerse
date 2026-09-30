@@ -29,6 +29,34 @@ class ChatManager {
             message: message
         };
 
+        if (window.currentUniVerseStore) {
+            request.storeContext = {
+                id: window.currentUniVerseStore._id,
+                name: window.currentUniVerseStore.storeName,
+                description: window.currentUniVerseStore.storeDescription,
+                sellerName: window.currentUniVerseStore.sellerName,
+                location: window.currentUniVerseStore.location,
+                categories:
+                    window.currentUniVerseStore.categories ||
+                    window.currentUniVerseStore.tags ||
+                    [],
+                additionalInfo: window.currentUniVerseStore.additionalInfo,
+                mission: window.currentUniVerseStore.mission,
+                university:
+                    window.currentUniVerseStore.university ||
+                    window.currentUniVerseStore.owner?.university ||
+                    null
+            };
+
+            request.storeProducts =
+                (window.currentUniVerseStoreProducts || []).map(product => ({
+                    id: product._id,
+                    name: product.productName,
+                    price: product.productPrice,
+                    featured: product.featured
+                }));
+        }
+
         try {
             const controller = new AbortController();
             const timeout = setTimeout(() => {
@@ -86,6 +114,13 @@ class ChatManager {
                 if (data.action.type === "FILTER_PRODUCTS") {
                     filterProductsAI(data.action.category);
                 }
+                if (data.action.type === "SEARCH_STORES") {
+                    searchStoresAI(data.action.query);
+                }
+
+                if (data.action.type === "FILTER_STORES") {
+                    filterStoresAI(data.action.university);
+                }
             }
         } catch (error) {
             console.error("AI CHAT ERROR:", error);
@@ -141,6 +176,30 @@ function filterProductsAI(category) {
     sessionStorage.setItem("aiNavigation", "true");
     window.location.href =
         `/homeScreens/allProducts.html?category=${encodedCategory}`;
+}
+
+function searchStoresAI(query) {
+    if (!query) return;
+
+    const params = new URLSearchParams();
+    params.set("search", query.trim());
+
+    sessionStorage.setItem("aiNavigation", "true");
+
+    window.location.href =
+        `/stores.html?${params.toString()}`;
+}
+
+function filterStoresAI(university) {
+    if (!university) return;
+
+    const params = new URLSearchParams();
+    params.set("university", university.trim());
+
+    sessionStorage.setItem("aiNavigation", "true");
+
+    window.location.href =
+        `/stores.html?${params.toString()}`;
 }
 
 const chatManager = new ChatManager();
