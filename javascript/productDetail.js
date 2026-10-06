@@ -201,6 +201,9 @@ function setupButtonActions(product, store) {
   const visitBtn   = document.getElementById('visitStoreBtn');
   const contactBtn = document.getElementById('contactSellerBtn');
   const shareBtn   = document.getElementById('shareProductBtn');
+  const productTitle = document.getElementById('productTitle');
+
+  if (typeof UniWishlist !== 'undefined') UniWishlist.mountDetailHeart(productTitle, product, store);
 
   if (visitBtn) {
     // FIX: use store.slug not store.storeSlug — that field doesn't exist
@@ -248,22 +251,22 @@ function setupShareFunctionality(product) {
 }
 
 // ── RELATED PRODUCTS ──────────────────────────────
-// ── RELATED PRODUCTS ("More You Like") ────────────────────
 async function fetchRelatedProducts(category, currentProductId) {
   try {
-    const res = await fetch(`https://api.universeweb.co/api/products/${currentProductId}/recommendations?limit=8`);
+    const res = await fetch(`https://api.universeweb.co/api/products/category/${encodeURIComponent(category)}`);
     if (!res.ok) throw new Error('Failed');
     const data = await res.json();
-    const products = data.products || [];
+    const products  = data.products || data;
     const container = document.getElementById('relatedProducts');
+    const filtered  = products.filter(p => p._id !== currentProductId).slice(0, 4);
 
-    if (!products.length) {
+    if (!filtered.length) {
       container.innerHTML = '<p class="col-span-full text-center text-gray-400 py-8">No related products found</p>';
       return;
     }
 
     container.innerHTML = '';
-    products.forEach((p, i) => {
+    filtered.forEach((p, i) => {
       const card = document.createElement('div');
       card.className = 'carousel-item snap-start fade-up';
       card.style.animationDelay = `${i * 0.05}s`;
@@ -276,6 +279,7 @@ async function fetchRelatedProducts(category, currentProductId) {
                  alt="${escapeHtml(p.productName)}"
                  loading="lazy">
             <div class="overlay-card-gradient"></div>
+            ${typeof UniWishlist !== 'undefined' ? UniWishlist.heartHTML(p) : ''}
             ${isFeatured ? `
             <span class="overlay-card-badge">
               <i data-feather="star" class="w-3 h-3"></i> Featured
@@ -290,6 +294,7 @@ async function fetchRelatedProducts(category, currentProductId) {
       container.appendChild(card);
     });
 
+    // Re-run feather after related products are injected
     if (typeof feather !== 'undefined') feather.replace();
 
   } catch (err) {
@@ -336,6 +341,7 @@ async function fetchStoreProducts(storeId, currentProductId, store) {
                  alt="${escapeHtml(p.productName)}"
                  loading="lazy">
             <div class="overlay-card-gradient"></div>
+            ${typeof UniWishlist !== 'undefined' ? UniWishlist.heartHTML(p) : ''}
             ${isFeatured ? `
             <span class="overlay-card-badge">
               <i data-feather="star" class="w-3 h-3"></i> Featured

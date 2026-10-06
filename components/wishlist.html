@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex">
+    <title>Wishlist | UniVerse</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/logo.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/stylesheet/home.css">
+    <script src="/javascript/tracker.js"></script>
+    <script src="/javascript/wishlist.js"></script>
+    <style>
+        .wl-grid .overlay-card { width: 100%; }
+        .wl-grid .overlay-card-image, .wl-row .overlay-card-image { position: relative; }
+        .wl-grid article { min-width: 0; }
+        .wl-chat:disabled { opacity: .5; cursor: not-allowed; }
+        .wl-row .carousel-item { flex: 0 0 auto; }
+        .wl-input:focus { outline: 2px solid #E3A94F; outline-offset: 1px; }
+        .sr-only-live { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900">
+
+    <header class="sticky top-0 z-40 bg-white shadow-sm">
+        <div class="container mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <a href="/index.html" aria-label="UniVerse home">
+                <img src="/images/logo.png" alt="UniVerse" class="h-12 w-12 object-contain">
+            </a>
+            <nav class="flex items-center gap-1 text-sm font-semibold text-gray-800" aria-label="Main">
+                <a href="/index.html" class="px-3 py-2 rounded hover:bg-gray-100 transition">Home</a>
+                <a href="/homeScreens/allProducts.html" class="px-3 py-2 rounded hover:bg-gray-100 transition">Products</a>
+                <a href="/components/wishlist.html" class="px-3 py-2 rounded bg-gray-100 transition" aria-label="My wishlist">
+                    <i class="fa-solid fa-heart text-amber-600" aria-hidden="true"></i>
+                    <span data-wl-count class="ml-1 text-xs bg-amber-100 text-amber-800 rounded-full px-2 py-0.5" style="display:none">0</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 sm:px-6 py-8 max-w-6xl">
+
+        <!-- Shown to the owner when they open their own shared link -->
+        <div id="ownerBanner" class="hidden mb-6 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+            This is your shared wishlist. <a href="/components/wishlist.html" class="font-semibold underline">Manage it here</a>.
+        </div>
+
+        <section aria-labelledby="pageTitle" class="mb-6">
+            <h1 id="pageTitle" class="text-2xl sm:text-3xl font-bold text-gray-900">My Wishlist</h1>
+            <p id="pageSub" class="mt-1 text-sm text-gray-500"></p>
+        </section>
+
+        <!-- Share panel (own wishlist only) -->
+        <section id="sharePanel" class="hidden mb-8 rounded-2xl bg-white border border-gray-100 shadow-sm p-5 sm:p-6" aria-labelledby="shareHeading">
+            <h2 id="shareHeading" class="text-lg font-semibold text-gray-900">Share your wishlist</h2>
+            <p class="text-sm text-gray-500 mt-1">Send it to friends on WhatsApp. They see these items and can message the sellers directly. No account needed.</p>
+
+            <div class="mt-4 grid gap-3 sm:grid-cols-2">
+                <div>
+                    <label for="listTitle" class="block text-xs font-semibold text-gray-600 mb-1">List name</label>
+                    <input id="listTitle" type="text" maxlength="60" placeholder="My UniVerse wishlist"
+                           class="wl-input w-full rounded-lg border border-gray-200 px-3 py-2 text-sm">
+                </div>
+                <div>
+                    <label for="listName" class="block text-xs font-semibold text-gray-600 mb-1">Your name <span class="font-normal text-gray-400">(optional)</span></label>
+                    <input id="listName" type="text" maxlength="30" placeholder="Shown as: by Ama"
+                           class="wl-input w-full rounded-lg border border-gray-200 px-3 py-2 text-sm">
+                </div>
+            </div>
+
+            <div class="mt-4 flex flex-wrap items-center gap-3">
+                <button id="shareWhatsApp" type="button"
+                        class="inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold text-white transition hover:opacity-90"
+                        style="background:#25D366">
+                    <i class="fa-brands fa-whatsapp text-lg" aria-hidden="true"></i> Share on WhatsApp
+                </button>
+                <button id="copyLink" type="button"
+                        class="inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm font-semibold text-gray-800 hover:bg-gray-50 transition">
+                    <i class="fa-regular fa-copy" aria-hidden="true"></i> Copy link
+                </button>
+                <button id="stopSharing" type="button" class="hidden text-sm font-medium text-gray-500 hover:text-red-600 underline">
+                    Stop sharing
+                </button>
+            </div>
+
+            <p id="shareNote" class="hidden mt-3 text-xs text-gray-500">
+                Your link stays up to date when you add or remove items. It is removed automatically after 6 months without activity.
+            </p>
+            <p id="shareError" class="hidden mt-3 text-sm text-red-600" role="alert"></p>
+        </section>
+
+        <div id="statusMsg" class="py-10 text-center text-sm text-gray-500" role="status">Loading...</div>
+
+        <div id="grid" class="wl-grid grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
+
+        <p id="unavailableMsg" class="hidden mt-4 text-sm text-gray-500"></p>
+
+        <!-- Empty state (own wishlist) -->
+        <div id="emptyState" class="hidden text-center py-14">
+            <div class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-amber-50 text-amber-600">
+                <i class="fa-regular fa-heart text-2xl" aria-hidden="true"></i>
+            </div>
+            <h2 class="text-lg font-semibold text-gray-900">Nothing saved yet</h2>
+            <p class="mt-1 text-sm text-gray-500">Tap the heart on any product to keep it here, then share the list on WhatsApp.</p>
+            <a href="/homeScreens/allProducts.html" class="mt-5 inline-block rounded-lg bg-gray-900 px-5 py-2.5 text-sm font-semibold text-white hover:bg-gray-700 transition">Browse products</a>
+        </div>
+
+        <!-- Not found (shared link) -->
+        <div id="notFound" class="hidden text-center py-14">
+            <h2 class="text-lg font-semibold text-gray-900">This wishlist is no longer available</h2>
+            <p class="mt-1 text-sm text-gray-500">The owner may have stopped sharing it.</p>
+            <a href="/index.html" class="mt-5 inline-block rounded-lg bg-gray-900 px-5 py-2.5 text-sm font-semibold text-white hover:bg-gray-700 transition">Go to UniVerse</a>
+        </div>
+
+        <!-- Recommendations -->
+        <section id="recsSection" class="hidden mt-12" aria-labelledby="recsTitle">
+            <h2 id="recsTitle" class="text-xl font-bold text-gray-900">You might also like</h2>
+            <div id="recsRow" class="wl-row mt-4 flex gap-4 overflow-x-auto snap-x pb-3"></div>
+        </section>
+
+        <!-- Call to action for people who opened a shared link -->
+        <section id="ctaSection" class="hidden mt-12 rounded-2xl bg-white border border-gray-100 shadow-sm p-6 text-center">
+            <h2 class="text-lg font-semibold text-gray-900">Make your own wishlist</h2>
+            <p class="mt-1 text-sm text-gray-500">Tap the heart on anything you like on UniVerse, then share the list with your friends on WhatsApp.</p>
+            <a href="/index.html" class="mt-4 inline-block rounded-lg bg-gray-900 px-5 py-2.5 text-sm font-semibold text-white hover:bg-gray-700 transition">Explore UniVerse</a>
+        </section>
+    </main>
+
+    <script>
+    (() => {
+        const API = 'https://api.universeweb.co';
+        const FALLBACK_IMG = 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&h=600&fit=crop';
+        const shareId = new URLSearchParams(window.location.search).get('id');
+        const sharedMode = Boolean(shareId);
+
+        const $ = (id) => document.getElementById(id);
+        const esc = (v) => String(v ?? '')
+            .replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;')
+            .replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        const show = (el, on = true) => el.classList.toggle('hidden', !on);
+
+        let products = [];        // what is on screen right now
+        let chatSource = 'wishlist';
+
+        // ── Card ─────────────────────────────────────────
+        function cardHTML(p) {
+            const soldOut = Number(p.productStock) <= 0;
+            const phone = (p.store && p.store.sellerNumber) ? String(p.store.sellerNumber).replace(/\D/g, '') : '';
+            const storeLink = p.store && (p.store.slug || p.store._id)
+                ? `/components/displayStore.html?slug=${encodeURIComponent(p.store.slug || p.store._id)}` : '#';
+
+            return `
+            <article data-card="${esc(p._id)}">
+                <a href="/components/productDetail.html?id=${esc(p._id)}" class="block" aria-label="View ${esc(p.productName)}">
+                    <div class="overlay-card">
+                        <div class="overlay-card-image aspect-square">
+                            <img src="${esc(p.productImage || FALLBACK_IMG)}" alt="${esc(p.productName)}" loading="lazy">
+                            <div class="overlay-card-gradient"></div>
+                            ${soldOut ? '<span class="overlay-card-badge">Sold out</span>' : ''}
+                            ${UniWishlist.heartHTML(p)}
+                            <div class="overlay-card-info">
+                                <h3 class="overlay-card-name">${esc(p.productName)}</h3>
+                                <p class="overlay-card-price">₵${Number(p.productPrice || 0).toFixed(2)}</p>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                <div class="px-1 pt-2">
+                    ${p.store && p.store.storeName ? `<a href="${storeLink}" class="block truncate text-xs text-gray-500 hover:text-gray-800">${esc(p.store.storeName)}</a>` : ''}
+                    <button type="button" data-chat="${esc(p._id)}" ${soldOut || !phone ? 'disabled' : ''}
+                            class="wl-chat mt-2 w-full inline-flex items-center justify-center gap-2 rounded-lg border border-green-600 px-3 py-2 text-sm font-semibold text-green-700 hover:bg-green-50 transition">
+                        <i class="fa-brands fa-whatsapp" aria-hidden="true"></i> ${soldOut ? 'Sold out' : 'Chat with seller'}
+                    </button>
+                </div>
+            </article>`;
+        }
+
+        function renderGrid() {
+            $('grid').innerHTML = products.map(cardHTML).join('');
+            UniWishlist.refresh($('grid'));
+        }
+
+        // Message the seller, same wording as the product page
+        $('grid').addEventListener('click', (e) => {
+            const btn = e.target.closest('[data-chat]');
+            if (!btn || btn.disabled) return;
+            const p = products.find(x => x._id === btn.dataset.chat);
+            if (!p || !p.store || !p.store.sellerNumber) return;
+
+            // Ghana numbers: drop a leading 0 and add the 233 country code (left alone if already there)
+            const digits = String(p.store.sellerNumber).replace(/\D/g, '');
+            const phone = digits.startsWith('233') ? digits : '233' + digits.replace(/^0+/, '');
+            const productUrl = `${API}/products/${p._id}`;
+            const msg = encodeURIComponent(
+                `Hi, I'm interested in your product:\n\n*${p.productName}*\nPrice: ₵${Number(p.productPrice || 0).toFixed(2)}\n${productUrl}`
+            );
+            if (typeof UniTracker !== 'undefined') {
+                UniTracker.whatsappClick(p.storeId, p._id, p.ownerId, chatSource);
+            }
+            window.open(`https://api.whatsapp.com/send?phone=${phone}&text=${msg}`, '_blank');
+        });
+
+        // ── Recommendations ──────────────────────────────
+        async function loadRecs(seedId, excludeIds) {
+            try {
+                const url = seedId
+                    ? `${API}/api/products/${seedId}/recommendations?limit=10`
+                    : `${API}/api/recommendations/trending?limit=10`;
+                const res = await fetch(url);
+                if (!res.ok) return;
+                const data = await res.json();
+                const exclude = new Set(excludeIds || []);
+                const list = (data.products || []).filter(p => !exclude.has(String(p._id))).slice(0, 8);
+                if (!list.length) { show($('recsSection'), false); return; }
+
+                $('recsTitle').textContent = seedId ? 'You might also like' : 'Popular right now';
+                $('recsRow').innerHTML = list.map(p => `
+                    <div class="carousel-item snap-start">
+                        <div class="overlay-card" onclick="window.location.href='/components/productDetail.html?id=${esc(p._id)}'">
+                            <div class="overlay-card-image aspect-square">
+                                <img src="${esc(p.productImage || FALLBACK_IMG)}" alt="${esc(p.productName)}" loading="lazy">
+                                <div class="overlay-card-gradient"></div>
+                                ${UniWishlist.heartHTML(p)}
+                                <div class="overlay-card-info">
+                                    <h3 class="overlay-card-name">${esc(p.productName)}</h3>
+                                    <p class="overlay-card-price">₵${Number(p.productPrice || 0).toFixed(2)}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`).join('');
+                UniWishlist.refresh($('recsRow'));
+                show($('recsSection'), true);
+            } catch { /* recommendations are optional */ }
+        }
+
+        function setUnavailable(n) {
+            const el = $('unavailableMsg');
+            if (n > 0) {
+                el.textContent = n === 1
+                    ? '1 item is no longer available and is not shown.'
+                    : `${n} items are no longer available and are not shown.`;
+                show(el, true);
+            } else {
+                show(el, false);
+            }
+        }
+
+        // ══════════ OWN WISHLIST ══════════
+        async function loadOwn(opts = {}) {
+            const withRecs = opts.recs !== false;
+            show($('sharePanel'), false);
+            const listIds = UniWishlist.ids();
+
+            $('pageTitle').textContent = 'My Wishlist';
+
+            if (!listIds.length) {
+                products = [];
+                $('grid').innerHTML = '';
+                show($('statusMsg'), false);
+                show($('emptyState'), true);
+                show($('sharePanel'), false);
+                $('pageSub').textContent = '';
+                setUnavailable(0);
+                if (withRecs) loadRecs(null, []);
+                return;
+            }
+
+            show($('emptyState'), false);
+            try {
+                const res = await fetch(`${API}/api/wishlists/lookup`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ productIds: listIds })
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.message || 'Could not load your wishlist');
+
+                products = data.products || [];
+
+                // Items that were deleted by their sellers drop off quietly
+                UniWishlist.pruneMissing(data.missingIds);
+
+                renderGrid();
+                show($('statusMsg'), false);
+                show($('sharePanel'), products.length > 0);
+                $('pageSub').textContent = `${products.length} saved item${products.length === 1 ? '' : 's'}`;
+                setUnavailable((data.unavailable || 0) - (data.missingIds ? data.missingIds.length : 0));
+                if (withRecs) loadRecs(listIds[0], listIds);
+            } catch (err) {
+                $('statusMsg').textContent = err.message || 'Could not load your wishlist. Please try again.';
+                show($('statusMsg'), true);
+            }
+        }
+
+        function setupSharePanel() {
+            const state = UniWishlist.share.getState();
+            if (state) {
+                $('listTitle').value = state.title && state.title !== UniWishlist.DEFAULT_TITLE ? state.title : '';
+                $('listName').value = state.displayName || '';
+            }
+            refreshShareUi();
+
+            const opts = () => ({
+                title: $('listTitle').value.trim() || UniWishlist.DEFAULT_TITLE,
+                displayName: $('listName').value.trim()
+            });
+            const showError = (msg) => {
+                $('shareError').textContent = msg || '';
+                show($('shareError'), Boolean(msg));
+            };
+            const busy = (btn, on) => { btn.disabled = on; btn.style.opacity = on ? '.6' : ''; };
+
+            $('shareWhatsApp').addEventListener('click', async (e) => {
+                showError('');
+                busy(e.currentTarget, true);
+                try { await UniWishlist.share.toWhatsApp(opts()); refreshShareUi(); }
+                catch (err) { showError(err.message); }
+                busy(e.currentTarget, false);
+            });
+
+            $('copyLink').addEventListener('click', async (e) => {
+                showError('');
+                busy(e.currentTarget, true);
+                try {
+                    await UniWishlist.share.copyLink(opts());
+                    UniWishlist.toast('Link copied');
+                    refreshShareUi();
+                } catch (err) { showError(err.message); }
+                busy(e.currentTarget, false);
+            });
+
+            $('stopSharing').addEventListener('click', async () => {
+                if (!confirm('Stop sharing? The link you sent will stop working.')) return;
+                showError('');
+                try { await UniWishlist.share.stop(); refreshShareUi(); UniWishlist.toast('Sharing stopped'); }
+                catch (err) { showError(err.message); }
+            });
+
+            // If it is already shared, keep the shared name in step with the fields
+            let nameTimer = null;
+            const pushNames = () => {
+                if (!UniWishlist.share.getState()) return;
+                clearTimeout(nameTimer);
+                nameTimer = setTimeout(() => UniWishlist.share.publish(opts()).catch(() => {}), 800);
+            };
+            $('listTitle').addEventListener('input', pushNames);
+            $('listName').addEventListener('input', pushNames);
+        }
+
+        function refreshShareUi() {
+            const shared = Boolean(UniWishlist.share.getState());
+            show($('stopSharing'), shared);
+            show($('shareNote'), shared);
+        }
+
+        // Handle hearts toggled on this page (remove cards, or reload when something new was added)
+        window.addEventListener('uniwishlist:change', () => {
+            if (sharedMode) return;
+            const current = UniWishlist.ids();
+            const shown = products.map(p => p._id);
+
+            if (current.some(id => !shown.includes(id))) { loadOwn({ recs: false }); return; }
+
+            products = products.filter(p => current.includes(p._id));
+            shown.filter(id => !current.includes(id)).forEach(id => {
+                const card = document.querySelector(`#grid [data-card="${id}"]`);
+                if (card) card.remove();
+            });
+            $('pageSub').textContent = `${products.length} saved item${products.length === 1 ? '' : 's'}`;
+            if (!products.length) loadOwn();
+        });
+
+        // ══════════ SHARED WISHLIST ══════════
+        async function loadShared() {
+            const mine = UniWishlist.share.getState();
+            const isMine = Boolean(mine && mine.shareId === shareId);
+            chatSource = isMine ? 'wishlist' : 'shared_wishlist';
+            show($('ownerBanner'), isMine);
+
+            try {
+                const res = await fetch(`${API}/api/wishlists/${encodeURIComponent(shareId)}${isMine ? '?owner=1' : ''}`);
+                if (res.status === 404) {
+                    show($('statusMsg'), false);
+                    show($('notFound'), true);
+                    $('pageTitle').textContent = 'Wishlist';
+                    return;
+                }
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.message || 'Could not load this wishlist');
+
+                const wl = data.wishlist;
+                products = data.products || [];
+
+                document.title = `${wl.title} | UniVerse`;
+                $('pageTitle').textContent = wl.title;
+                const n = products.length;
+                $('pageSub').textContent =
+                    `${wl.displayName ? 'Shared by ' + wl.displayName + ' · ' : ''}${n} item${n === 1 ? '' : 's'}`;
+
+                show($('statusMsg'), false);
+                renderGrid();
+                setUnavailable(data.unavailable || 0);
+                show($('ctaSection'), !isMine);
+
+                if (!n) {
+                    $('statusMsg').textContent = 'This wishlist has no items right now.';
+                    show($('statusMsg'), true);
+                }
+                loadRecs(products[0] && products[0]._id, products.map(p => p._id));
+            } catch (err) {
+                $('statusMsg').textContent = err.message || 'Could not load this wishlist. Please try again.';
+                show($('statusMsg'), true);
+            }
+        }
+
+        // ── Start ────────────────────────────────────────
+        if (sharedMode) {
+            loadShared();
+        } else {
+            setupSharePanel();
+            loadOwn();
+        }
+    })();
+    </script>
+</body>
+</html>

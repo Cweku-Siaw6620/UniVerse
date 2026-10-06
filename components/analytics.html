@@ -196,6 +196,18 @@
 							<div id="daily-views-chart" class="w-full h-52"></div>
 						</div>
 					</div>
+					<div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
+						<div class="bg-white rounded-lg shadow-sm p-6">
+							<p class="text-sm text-gray-500 mb-1">Wishlist Saves</p>
+							<h3 class="text-3xl font-bold text-gray-900 mb-1" id="t2-total-saves">—</h3>
+							<p class="text-xs text-gray-400">Times shoppers saved your products, last 30 days</p>
+						</div>
+						<div class="bg-white rounded-lg shadow-sm p-6">
+							<p class="text-sm text-gray-500 mb-1">WhatsApp Clicks From Wishlists</p>
+							<h3 class="text-3xl font-bold text-gray-900 mb-1" id="t2-wishlist-clicks">—</h3>
+							<p class="text-xs text-gray-400">Chats started from a saved or shared list, last 30 days</p>
+						</div>
+					</div>
 					<div class="bg-white rounded-lg shadow-sm p-6 mb-8">
 						<h2 class="text-lg font-bold text-gray-900 mb-1">Top Products</h2>
 						<p class="text-sm text-gray-500 mb-4">Views and WhatsApp clicks per product (last 30 days)</p>
@@ -523,6 +535,8 @@
 
 				document.getElementById('tier2-content').classList.remove('hidden');
 				document.getElementById('t2-total-views').textContent = tier2.totalStoreViews ?? 0;
+				document.getElementById('t2-total-saves').textContent = tier2.totalSaves ?? 0;
+				document.getElementById('t2-wishlist-clicks').textContent = tier2.wishlistClicks ?? 0;
 
 				// Daily views line chart
 				const dailyChart = echarts.init(document.getElementById('daily-views-chart'));
@@ -574,6 +588,7 @@
 								<tr class="border-b border-gray-100 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
 									<th class="pb-3 pr-6">Product</th>
 									<th class="pb-3 pr-6 text-center">Views</th>
+										<th class="pb-3 pr-6 text-center">Saves</th>
 									<th class="pb-3 pr-6 text-center">WhatsApp Clicks</th>
 									<th class="pb-3 text-center">Click Rate</th>
 								</tr>
@@ -595,6 +610,7 @@
 												</div>
 											</td>
 											<td class="py-3 pr-6 text-center text-gray-700">${p.views}</td>
+												<td class="py-3 pr-6 text-center text-gray-700">${p.saves ?? 0}</td>
 											<td class="py-3 pr-6 text-center text-gray-700">${p.clicks}</td>
 											<td class="py-3 text-center ${rateColor}">${rate}</td>
 										</tr>

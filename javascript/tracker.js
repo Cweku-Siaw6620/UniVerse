@@ -4,9 +4,10 @@
  * Usage:
  *   UniTracker.storeView(storeId, ownerId)
  *   UniTracker.productView(storeId, productId, ownerId)
- *   UniTracker.whatsappClick(storeId, productId, ownerId)
+ *   UniTracker.whatsappClick(storeId, productId, ownerId, source)   // source is optional: 'wishlist' | 'shared_wishlist'
+ *   UniTracker.wishlistSave(storeId, productId, ownerId)
  *
- * ownerId — the store owner's user ID. If the logged-in user matches,
+ * ownerId, the store owner's user ID. If the logged-in user matches,
  * the event is silently skipped so owners don't inflate their own stats.
  */
 
@@ -39,7 +40,7 @@ const UniTracker = (() => {
                 body:    JSON.stringify(payload)
             });
         } catch {
-            // Tracking failures are silent — never surface to user
+            // Tracking failures are silent, never surface to user
         }
     }
 
@@ -54,9 +55,16 @@ const UniTracker = (() => {
             fire({ type: 'product_view', storeId, productId });
         },
 
-        whatsappClick(storeId, productId, ownerId) {
+        whatsappClick(storeId, productId, ownerId, source) {
             if (!storeId || !productId || isOwner(ownerId)) return;
-            fire({ type: 'whatsapp_click', storeId, productId });
+            const payload = { type: 'whatsapp_click', storeId, productId };
+            if (source) payload.source = source;
+            fire(payload);
+        },
+
+        wishlistSave(storeId, productId, ownerId) {
+            if (!storeId || !productId || isOwner(ownerId)) return;
+            fire({ type: 'wishlist_save', storeId, productId });
         }
     };
 })();
