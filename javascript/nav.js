@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
           dropdown.querySelector(`#logoutBtn${isMobile ? 'Mobile' : ''}`).addEventListener('click', async () => {
               try {
-                await fetch('https://api.universeweb.co/api/auth/logout', {
+                await fetch('http://localhost:5000/api/auth/logout', {
                 method: 'POST',
                 credentials: 'include'
                 });
@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', async function () {
           });
 
           // Fetch store status and update link
-          fetch(`https://api.universeweb.co/api/stores/${encodeURIComponent(user.id)}/exists`)
+          fetch(`http://localhost:5000/api/stores/${encodeURIComponent(user.id)}/exists`)
               .then(res => res.json())
               .then(result => {
                   const storeLink = dropdown.querySelector('#storeLink');
@@ -310,7 +310,7 @@ async function loadFeaturedProducts() {
   }
 
     try {
-        const res = await fetch("https://api.universeweb.co/api/products/featured");
+        const res = await fetch("http://localhost:5000/api/products/featured");
         const data = await res.json();
         
         if (!data.success || !data.products?.length) {
@@ -373,7 +373,7 @@ async function loadRecentlyViewed() {
             if (!prod?._id) return null;  // ← guard bad entries
 
             try {
-                const res = await fetch(`https://api.universeweb.co/api/products/id/${encodeURIComponent(prod._id)}`);
+                const res = await fetch(`http://localhost:5000/api/products/id/${encodeURIComponent(prod._id)}`);
                 if (!res.ok) return null;  // ← return null on failure
                 return await res.json();
             } catch (err) {
@@ -398,6 +398,113 @@ async function loadRecentlyViewed() {
     setupCarousel('recentCarousel', 'recentArrowLeft', 'recentArrowRight');
 }
 
+// ── MORE YOU MAY LIKE (seeded from most recent view) ─────
+async function loadMoreYouMayLike() {
+    const section = document.getElementById('moreYouMayLikeSection');
+    const carousel = document.getElementById('likeCarousel');
+    if (!section || !carousel) return;
+
+    const viewed = JSON.parse(localStorage.getItem("recentlyViewed") || "[]");
+
+    // State A: nothing viewed yet — no personalized section
+    if (!viewed.length || !viewed[0]?._id) {
+        section.classList.add('hidden');
+        return;
+    }
+
+    try {
+        const seedId = viewed[0]._id;
+        const res = await fetch(`http://localhost:5000/api/products/${encodeURIComponent(seedId)}/recommendations?limit=8`);
+        if (!res.ok) throw new Error('Failed');
+        const data = await res.json();
+        const products = (data.products || []).filter(p => p._id !== seedId);
+        products.forEach(p => shownRecIds.add(p._id));
+
+        if (!products.length) {
+            section.classList.add('hidden');
+            return;
+        }
+
+        section.classList.remove('hidden');
+        carousel.innerHTML = '';
+        const cards = await Promise.all(products.map(prod => createOverlayCard(prod)));
+        cards.forEach(card => carousel.appendChild(card));
+
+        if (typeof feather !== 'undefined') feather.replace();
+        setupCarousel('likeCarousel', 'likeArrowLeft', 'likeArrowRight');
+
+    } catch (err) {
+        console.error("More You May Like error:", err);
+        section.classList.add('hidden');
+    }
+}
+
+// IDs already shown in a recommendation row, so rows don't repeat each other
+const shownRecIds = new Set();
+
+async function renderRecSection(sectionId, carouselId, leftId, rightId, products, minCount = 1) {
+    const section  = document.getElementById(sectionId);
+    const carousel = document.getElementById(carouselId);
+    if (!section || !carousel) return;
+
+    if (products.length < minCount) {
+        section.classList.add('hidden');
+        return;
+    }
+    section.classList.remove('hidden');
+    carousel.innerHTML = '';
+    const cards = await Promise.all(products.map(p => createOverlayCard(p)));
+    cards.forEach(card => carousel.appendChild(card));
+    if (typeof feather !== 'undefined') feather.replace();
+    setupCarousel(carouselId, leftId, rightId);
+}
+
+// ── TRENDING ─────────────────────────────────────────────
+async function loadTrending() {
+    try {
+        const res = await fetch("http://localhost:5000/api/recommendations/trending?limit=8");
+        if (!res.ok) throw new Error('Failed');
+        const data = await res.json();
+        // Need at least 4 so the row doesn't look half empty
+        await renderRecSection('trendingSection', 'trendCarousel', 'trendArrowLeft', 'trendArrowRight', data.products || [], 4);
+    } catch (err) {
+        console.error("Trending error:", err);
+        document.getElementById('trendingSection')?.classList.add('hidden');
+    }
+}
+
+// ── NEW RELEASES ─────────────────────────────────────────
+async function loadNewReleases() {
+    try {
+        const res = await fetch("http://localhost:5000/api/products/new-releases?limit=8");
+        if (!res.ok) throw new Error('Failed');
+        const data = await res.json();
+        await renderRecSection('newReleasesSection', 'newCarousel', 'newArrowLeft', 'newArrowRight', data.products || [], 4);
+    } catch (err) {
+        console.error("New releases error:", err);
+        document.getElementById('newReleasesSection')?.classList.add('hidden');
+    }
+}
+
+// ── YOU MIGHT ALSO NEED ──────────────────────────────────
+async function loadYouMightNeed() {
+    const viewed = JSON.parse(localStorage.getItem("recentlyViewed") || "[]");
+    if (!viewed.length || !viewed[0]?._id) {
+        document.getElementById('youMightNeedSection')?.classList.add('hidden');
+        return;
+    }
+    try {
+        const res = await fetch(`http://localhost:5000/api/products/${encodeURIComponent(viewed[0]._id)}/complementary?limit=8`);
+        if (!res.ok) throw new Error('Failed');
+        const data = await res.json();
+        const products = (data.products || []).filter(p => !shownRecIds.has(p._id));
+        await renderRecSection('youMightNeedSection', 'needCarousel', 'needArrowLeft', 'needArrowRight', products, 2);
+    } catch (err) {
+        console.error("You Might Need error:", err);
+        document.getElementById('youMightNeedSection')?.classList.add('hidden');
+    }
+}
+
 // Track product views
 function trackProductView(product) {
     let viewed = JSON.parse(localStorage.getItem("recentlyViewed") || "[]");
@@ -410,51 +517,33 @@ function trackProductView(product) {
     localStorage.setItem("recentlyViewed", JSON.stringify(viewed));
 }
 
-// ── ALL PRODUCTS (MULTI-ROW) ──────────────────────
+// ── ALL PRODUCTS (compact grid) ───────────────────
 async function loadAllProducts() {
     const container = document.getElementById('allProductsScroll');
     if (!container) return;
 
     try {
-        const res = await fetch("https://api.universeweb.co/api/products/all");
+        const res = await fetch("http://localhost:5000/api/products/all?limit=16");
         if (!res.ok) throw new Error("Failed to fetch");
         const products = await res.json();
 
         if (!products.length) {
-            container.innerHTML = '<div class="text-center py-12 text-gray-400">No products available</div>';
+            container.innerHTML = '<div class="col-span-full text-center py-12 text-gray-400">No products available</div>';
             return;
         }
 
-        // Split into 3 rows
-        const rows = [[], [], []];
-        products.forEach((prod, i) => {
-            rows[i % 3].push(prod);
-        });
-
         container.innerHTML = '';
-        
-        rows.forEach((rowProducts, rowIndex) => {
-            const rowDiv = document.createElement('div');
-            rowDiv.className = 'multi-row';
-            
-            const promises = rowProducts.map((prod, i) => 
-                createOverlayCard(prod, { compact: true })
-            );
-            
-            Promise.all(promises).then(cards => {
-                cards.forEach(card => rowDiv.appendChild(card));
-                if (typeof feather !== 'undefined') feather.replace();
-                setupCarousel('allProductsScroll', 'allArrowLeft', 'allArrowRight');
-            });
-            
-            container.appendChild(rowDiv);
+        const cards = await Promise.all(products.slice(0, 16).map(prod => createOverlayCard(prod)));
+        cards.forEach(card => {
+            card.className = 'min-w-0';   // drop the carousel sizing, let the grid decide the width
+            container.appendChild(card);
         });
 
-       
+        if (typeof feather !== 'undefined') feather.replace();
 
     } catch (err) {
         console.error("All products error:", err);
-        container.innerHTML = '<div class="text-center py-12 text-gray-400">Unable to load products</div>';
+        container.innerHTML = '<div class="col-span-full text-center py-12 text-gray-400">Unable to load products</div>';
     }
 }
 
@@ -476,6 +565,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     
     loadRecentlyViewed();
+    loadTrending();
+    loadNewReleases();
+    await loadMoreYouMayLike();   // must finish first so shownRecIds is filled
+    await loadYouMightNeed();
     await updateMobileDashboardLink();
 });
 
@@ -486,9 +579,9 @@ async function getWhatsAppLink(product, sellerData) {
     if (!sellerId) return whatsappLink;
     
     try {
-        let sellerRes = await fetch(`https://api.universeweb.co/api/stores/storeID/${encodeURIComponent(sellerId)}`);
+        let sellerRes = await fetch(`http://localhost:5000/api/stores/storeID/${encodeURIComponent(sellerId)}`);
         if (!sellerRes.ok) {
-            sellerRes = await fetch(`https://api.universeweb.co/api/stores/${encodeURIComponent(sellerId)}`);
+            sellerRes = await fetch(`http://localhost:5000/api/stores/${encodeURIComponent(sellerId)}`);
         }
         if (!sellerRes.ok) throw new Error();
         
@@ -568,7 +661,7 @@ async function updateMobileDashboardLink() {
 
     // CASE 2: Logged in → check store status
     try {
-        const res = await fetch(`https://api.universeweb.co/api/stores/${encodeURIComponent(user.id)}/exists`);
+        const res = await fetch(`http://localhost:5000/api/stores/${encodeURIComponent(user.id)}/exists`);
         const result = await res.json();
 
         if (result.hasStore) {

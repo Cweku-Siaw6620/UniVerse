@@ -11,7 +11,7 @@
  */
 
 const UniTracker = (() => {
-    const API = 'https://api.universeweb.co';
+    const API = 'http://localhost:5000';
 
     function getCurrentUserId() {
         try {

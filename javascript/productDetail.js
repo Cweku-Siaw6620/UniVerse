@@ -39,14 +39,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 // ── FETCH ─────────────────────────────────────────
 async function fetchProductDetails(productId) {
-  const res = await fetch(`https://api.universeweb.co/api/products/id/${productId}`);
+  const res = await fetch(`http://localhost:5000/api/products/id/${productId}`);
   if (!res.ok) throw new Error("Failed to fetch product");
   return await res.json();
 }
 
 async function fetchStoreDetails(storeId) {
   const res = await fetch(
-    `https://api.universeweb.co/api/stores/storeID/${storeId}`
+    `http://localhost:5000/api/stores/storeID/${storeId}`
   );
   if (!res.ok) {
     throw new Error("Failed to fetch store");
@@ -212,7 +212,7 @@ function setupButtonActions(product, store) {
 if (contactBtn && store.sellerNumber) {
     contactBtn.onclick = () => {
         const clean = store.sellerNumber.replace(/\D/g, '');
-        const productUrl = `https://api.universeweb.co/products/${product._id}`;
+        const productUrl = `http://localhost:5000/products/${product._id}`;
         const msg = encodeURIComponent(
             `Hi, I'm interested in your product:\n\n*${product.productName}*\nPrice: ₵${(product.productPrice || 0).toFixed(2)}\n${productUrl}`
         );
@@ -235,7 +235,7 @@ function setupShareFunctionality(product) {
     const shareData = {
       title: `${product.productName} - UniVerse`,
       text:  `Check out ${product.productName} on UniVerse for ₵${(product.productPrice || 0).toFixed(2)}`,
-      url:   `https://api.universeweb.co/products/${product._id}`,
+      url:   `http://localhost:5000/products/${product._id}`,
     };
     if (navigator.share) {
       navigator.share(shareData).catch(() => {});
@@ -248,22 +248,22 @@ function setupShareFunctionality(product) {
 }
 
 // ── RELATED PRODUCTS ──────────────────────────────
+// ── RELATED PRODUCTS ("More You Like") ────────────────────
 async function fetchRelatedProducts(category, currentProductId) {
   try {
-    const res = await fetch(`https://api.universeweb.co/api/products/category/${encodeURIComponent(category)}`);
+    const res = await fetch(`http://localhost:5000/api/products/${currentProductId}/recommendations?limit=8`);
     if (!res.ok) throw new Error('Failed');
     const data = await res.json();
-    const products  = data.products || data;
+    const products = data.products || [];
     const container = document.getElementById('relatedProducts');
-    const filtered  = products.filter(p => p._id !== currentProductId).slice(0, 4);
 
-    if (!filtered.length) {
+    if (!products.length) {
       container.innerHTML = '<p class="col-span-full text-center text-gray-400 py-8">No related products found</p>';
       return;
     }
 
     container.innerHTML = '';
-    filtered.forEach((p, i) => {
+    products.forEach((p, i) => {
       const card = document.createElement('div');
       card.className = 'carousel-item snap-start fade-up';
       card.style.animationDelay = `${i * 0.05}s`;
@@ -290,7 +290,6 @@ async function fetchRelatedProducts(category, currentProductId) {
       container.appendChild(card);
     });
 
-    // Re-run feather after related products are injected
     if (typeof feather !== 'undefined') feather.replace();
 
   } catch (err) {
@@ -302,7 +301,7 @@ async function fetchRelatedProducts(category, currentProductId) {
 async function fetchStoreProducts(storeId, currentProductId, store) {
   try {
     const id = typeof storeId === 'object' ? (storeId._id || storeId) : storeId;
-    const res = await fetch(`https://api.universeweb.co/api/products/${id}`);
+    const res = await fetch(`http://localhost:5000/api/products/${id}`);
     if (!res.ok) throw new Error('Failed');
     const data = await res.json();
     const products = Array.isArray(data) ? data : (data.products || []);

@@ -376,7 +376,7 @@
         
         async function fetchShops() {
           try {
-            const res = await fetch("https://api.universeweb.co/api/stores");
+            const res = await fetch("http://localhost:5000/api/stores");
             if (!res.ok) throw new Error("Failed to fetch stores");
 
             const stores = await res.json();
@@ -541,7 +541,7 @@
     const carousel = document.getElementById('featuredCarousel');
 
     try {
-        const res  = await fetch('https://api.universeweb.co/api/stores/featured');
+        const res  = await fetch('http://localhost:5000/api/stores/featured');
         const data = await res.json();
 
         if (!data.success || !data.stores || !data.stores.length) {

@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // HELPER FUNCTIONS
     // ============================================
     
-    const API_BASE = 'https://api.universeweb.co';
+    const API_BASE = 'http://localhost:5000';
 
     // Get user and store data from localStorage
     function getAuthData() {

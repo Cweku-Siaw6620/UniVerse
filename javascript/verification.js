@@ -18,7 +18,7 @@
     }
 
     try {
-      const response = await fetch(`https://api.universeweb.co/api/verification/status/${encodeURIComponent(userId)}`);
+      const response = await fetch(`http://localhost:5000/api/verification/status/${encodeURIComponent(userId)}`);
       const data = await response.json();
 
       const status = response.ok && data?.success
