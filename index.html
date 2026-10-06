@@ -514,7 +514,7 @@
             }
 
             // Signed in → check if they have a store
-            fetch(`http://localhost:5000/api/stores/${encodeURIComponent(user.id)}/exists`)
+            fetch(`https://api.universeweb.co/api/stores/${encodeURIComponent(user.id)}/exists`)
                 .then(res => res.json())
                 .then(result => {
                     if (result.hasStore) {

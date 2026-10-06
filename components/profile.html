@@ -542,7 +542,7 @@ let userHasStore = null;
 // Fetch user's verification status
 async function fetchUserStatus() {
   try {
-    const response = await fetch(`http://localhost:5000/api/verification/status/${user.id}`);
+    const response = await fetch(`https://api.universeweb.co/api/verification/status/${user.id}`);
     const data = await response.json();
     
     if (data.success) {
@@ -564,7 +564,7 @@ async function updateProfileDisplay() {
   userEmail.textContent = user.email || '';
   
   try {
-    const storeRes = await fetch(`http://localhost:5000/api/stores/${user.id}/exists`);
+    const storeRes = await fetch(`https://api.universeweb.co/api/stores/${user.id}/exists`);
     const storeData = await storeRes.json();
     userHasStore = Boolean(storeData.hasStore);
     storeStatus.innerHTML = storeData.hasStore ? `🛍️ ${storeData.storeName}` : '❌ No Store';
@@ -651,7 +651,7 @@ async function loadActionButtons() {
     
     document.getElementById("myStoreBtn")?.addEventListener("click", async () => {
       try {
-        const storeRes = await fetch(`http://localhost:5000/api/stores/${user.id}`);
+        const storeRes = await fetch(`https://api.universeweb.co/api/stores/${user.id}`);
         const store = await storeRes.json();
         if (store && store._id) {
           window.location.href = "dashboard.html";
@@ -731,7 +731,7 @@ async function loadActionButtons() {
     
     document.getElementById("becomeExternalBtn")?.addEventListener("click", async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/auth/google/user/completeProfile", {
+        const response = await fetch("https://api.universeweb.co/api/auth/google/user/completeProfile", {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -801,7 +801,7 @@ approveBtn.addEventListener("click", async () => {
   if (!currentPendingUserId) return;
   
   try {
-    const response = await fetch("http://localhost:5000/api/verification/admin/approve", {
+    const response = await fetch("https://api.universeweb.co/api/verification/admin/approve", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ userId: currentPendingUserId })
@@ -831,7 +831,7 @@ rejectBtn.addEventListener("click", async () => {
   if (!reason) return;
   
   try {
-    const response = await fetch("http://localhost:5000/api/verification/admin/reject", {
+    const response = await fetch("https://api.universeweb.co/api/verification/admin/reject", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ 

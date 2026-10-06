@@ -64,7 +64,7 @@ class ChatManager {
             }, 10000);
 
             const response = await fetch(
-                "http://localhost:5000/api/ai/chat",
+                "https://api.universeweb.co/api/ai/chat",
                 {
                     method: "POST",
                     credentials: "include",

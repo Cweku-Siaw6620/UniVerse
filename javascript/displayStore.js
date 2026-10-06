@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
   async function fetchStoreDetails() {
     try {
       const res = await fetch(
-        `http://localhost:5000/api/stores/slug/${storeSlug}`
+        `https://api.universeweb.co/api/stores/slug/${storeSlug}`
       );
 
       if (!res.ok) throw new Error("Store not found");
@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.target.closest('#shareStoreBtn')) {
       const store = JSON.parse(localStorage.getItem("currentViewedStore"));
       if (store && store.slug) {
-        const link = `http://localhost:5000/stores/${store.slug}`;
+        const link = `https://api.universeweb.co/stores/${store.slug}`;
         navigator.clipboard.writeText(link);
         alert("Store link copied!");
       }
@@ -293,7 +293,7 @@ function renderFreeHeader(store) {
           const countryCode = '233';
           const cleanNumber = store.sellerNumber.replace(/\D/g, '');
           const sellerName = store.sellerName || 'there';
-          const storeUrl = `http://localhost:5000/stores/${store.slug}`;
+          const storeUrl = `https://api.universeweb.co/stores/${store.slug}`;
           const storeName = store.storeName || 'your store';
           const message = encodeURIComponent(
             `Hello ${sellerName},\nI found your store, "${storeName}", on UniVerse and would like to learn more about your products and services.\nStore Link: ${storeUrl}`
@@ -376,7 +376,7 @@ function renderFreeHeader(store) {
 
     try {
       const res = await fetch(
-        `http://localhost:5000/api/products/${resolvedStoreId}`
+        `https://api.universeweb.co/api/products/${resolvedStoreId}`
       );
 
       if (!res.ok) throw new Error("Failed to fetch products");

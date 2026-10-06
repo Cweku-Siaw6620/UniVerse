@@ -71,7 +71,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/verification/send-phone-otp",
+        "https://api.universeweb.co/api/verification/send-phone-otp",
         {
           method: "POST",
           credentials: "include",
@@ -122,7 +122,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/verification/verify-phone-otp",
+        "https://api.universeweb.co/api/verification/verify-phone-otp",
         {
           method: "POST",
           credentials: "include",
@@ -212,7 +212,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       try {
         const response = await fetch(
-          "http://localhost:5000/api/stores",
+          "https://api.universeweb.co/api/stores",
           {
             method: "POST",
             credentials: "include",

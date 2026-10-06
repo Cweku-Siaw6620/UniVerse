@@ -502,7 +502,7 @@
         document.getElementById("shareStoreBtn")?.addEventListener("click", () => {
         const store = JSON.parse(localStorage.getItem("store"));
 
-        const link = `http://localhost:5000/stores/${store.slug}`;
+        const link = `https://api.universeweb.co/stores/${store.slug}`;
 
         navigator.clipboard.writeText(link);
         alert("Store link copied!");

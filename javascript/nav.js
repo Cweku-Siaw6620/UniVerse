@@ -10,10 +10,10 @@ document.addEventListener('DOMContentLoaded', async function () {
     if (user && user.picture) {
       // Login selectors
       const loginSelectors = [
-        'nav a[href="/components/login"]',          // Desktop nav
-        'nav a[href="/login.html"]',                // Local component navs
-        '#mobileMenu a[href="/components/login"]',  // Mobile menu
-        '#mobileMenu a[href="/login.html"]',        // Local component mobile navs
+        'nav a[href*="/components/login"]',          // Desktop nav
+        'nav a[href$="/login.html"]',                // Local component navs
+        '#mobileMenu a[href*="/components/login"]',  // Mobile menu
+        '#mobileMenu a[href$="/login.html"]',        // Local component mobile navs
         '.auth-link'                                  // Fallback for mobile
       ];
       
@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
           dropdown.querySelector(`#logoutBtn${isMobile ? 'Mobile' : ''}`).addEventListener('click', async () => {
               try {
-                await fetch('http://localhost:5000/api/auth/logout', {
+                await fetch('https://api.universeweb.co/api/auth/logout', {
                 method: 'POST',
                 credentials: 'include'
                 });
@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', async function () {
           });
 
           // Fetch store status and update link
-          fetch(`http://localhost:5000/api/stores/${encodeURIComponent(user.id)}/exists`)
+          fetch(`https://api.universeweb.co/api/stores/${encodeURIComponent(user.id)}/exists`)
               .then(res => res.json())
               .then(result => {
                   const storeLink = dropdown.querySelector('#storeLink');
@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', async function () {
       // Replace desktop nav login link
       const desktopNav = document.querySelector('nav');
       if (desktopNav) {
-        const desktopLogin = desktopNav.querySelector('a[href="/components/login"]');
+        const desktopLogin = desktopNav.querySelector('a[href*="/components/login"]');
         if (desktopLogin) {
           const desktopProfile = createProfileComponent(false);
           desktopLogin.replaceWith(desktopProfile);
@@ -152,7 +152,7 @@ document.addEventListener('DOMContentLoaded', async function () {
       // Replace mobile menu login link
       const mobileMenu = document.getElementById('mobileMenu');
       if (mobileMenu) {
-        const mobileLogin = mobileMenu.querySelector('a[href="/components/login"]') || 
+        const mobileLogin = mobileMenu.querySelector('a[href*="/components/login"]') || 
                            mobileMenu.querySelector('.auth-link');
         if (mobileLogin) {
           const mobileProfile = createProfileComponent(true);
@@ -177,7 +177,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     // Intercept blog clicks in navbars while the blog page is still inactive.
     const inactiveBlogLinks = document.querySelectorAll(
-      'nav a[href="/blog.html"], nav a[href="/blog.html"], #mobileMenu a[href="/blog.html"], #mobileMenu a[href="/blog.html"]'
+      'nav a[href*="/blog.html"], nav a[href*="/blog.html"], #mobileMenu a[href*="/blog.html"], #mobileMenu a[href*="/blog.html"]'
     );
 
     inactiveBlogLinks.forEach(link => {
@@ -310,7 +310,7 @@ async function loadFeaturedProducts() {
   }
 
     try {
-        const res = await fetch("http://localhost:5000/api/products/featured");
+        const res = await fetch("https://api.universeweb.co/api/products/featured");
         const data = await res.json();
         
         if (!data.success || !data.products?.length) {
@@ -373,7 +373,7 @@ async function loadRecentlyViewed() {
             if (!prod?._id) return null;  // ← guard bad entries
 
             try {
-                const res = await fetch(`http://localhost:5000/api/products/id/${encodeURIComponent(prod._id)}`);
+                const res = await fetch(`https://api.universeweb.co/api/products/id/${encodeURIComponent(prod._id)}`);
                 if (!res.ok) return null;  // ← return null on failure
                 return await res.json();
             } catch (err) {
@@ -414,7 +414,7 @@ async function loadMoreYouMayLike() {
 
     try {
         const seedId = viewed[0]._id;
-        const res = await fetch(`http://localhost:5000/api/products/${encodeURIComponent(seedId)}/recommendations?limit=8`);
+        const res = await fetch(`https://api.universeweb.co/api/products/${encodeURIComponent(seedId)}/recommendations?limit=8`);
         if (!res.ok) throw new Error('Failed');
         const data = await res.json();
         const products = (data.products || []).filter(p => p._id !== seedId);
@@ -462,7 +462,7 @@ async function renderRecSection(sectionId, carouselId, leftId, rightId, products
 // ── TRENDING ─────────────────────────────────────────────
 async function loadTrending() {
     try {
-        const res = await fetch("http://localhost:5000/api/recommendations/trending?limit=8");
+        const res = await fetch("https://api.universeweb.co/api/recommendations/trending?limit=8");
         if (!res.ok) throw new Error('Failed');
         const data = await res.json();
         // Need at least 4 so the row doesn't look half empty
@@ -476,7 +476,7 @@ async function loadTrending() {
 // ── NEW RELEASES ─────────────────────────────────────────
 async function loadNewReleases() {
     try {
-        const res = await fetch("http://localhost:5000/api/products/new-releases?limit=8");
+        const res = await fetch("https://api.universeweb.co/api/products/new-releases?limit=8");
         if (!res.ok) throw new Error('Failed');
         const data = await res.json();
         await renderRecSection('newReleasesSection', 'newCarousel', 'newArrowLeft', 'newArrowRight', data.products || [], 4);
@@ -494,7 +494,7 @@ async function loadYouMightNeed() {
         return;
     }
     try {
-        const res = await fetch(`http://localhost:5000/api/products/${encodeURIComponent(viewed[0]._id)}/complementary?limit=8`);
+        const res = await fetch(`https://api.universeweb.co/api/products/${encodeURIComponent(viewed[0]._id)}/complementary?limit=8`);
         if (!res.ok) throw new Error('Failed');
         const data = await res.json();
         const products = (data.products || []).filter(p => !shownRecIds.has(p._id));
@@ -523,7 +523,7 @@ async function loadAllProducts() {
     if (!container) return;
 
     try {
-        const res = await fetch("http://localhost:5000/api/products/all?limit=16");
+        const res = await fetch("https://api.universeweb.co/api/products/all?limit=16");
         if (!res.ok) throw new Error("Failed to fetch");
         const products = await res.json();
 
@@ -579,9 +579,9 @@ async function getWhatsAppLink(product, sellerData) {
     if (!sellerId) return whatsappLink;
     
     try {
-        let sellerRes = await fetch(`http://localhost:5000/api/stores/storeID/${encodeURIComponent(sellerId)}`);
+        let sellerRes = await fetch(`https://api.universeweb.co/api/stores/storeID/${encodeURIComponent(sellerId)}`);
         if (!sellerRes.ok) {
-            sellerRes = await fetch(`http://localhost:5000/api/stores/${encodeURIComponent(sellerId)}`);
+            sellerRes = await fetch(`https://api.universeweb.co/api/stores/${encodeURIComponent(sellerId)}`);
         }
         if (!sellerRes.ok) throw new Error();
         
@@ -661,7 +661,7 @@ async function updateMobileDashboardLink() {
 
     // CASE 2: Logged in → check store status
     try {
-        const res = await fetch(`http://localhost:5000/api/stores/${encodeURIComponent(user.id)}/exists`);
+        const res = await fetch(`https://api.universeweb.co/api/stores/${encodeURIComponent(user.id)}/exists`);
         const result = await res.json();
 
         if (result.hasStore) {
