@@ -10,10 +10,10 @@ document.addEventListener('DOMContentLoaded', async function () {
     if (user && user.picture) {
       // Login selectors
       const loginSelectors = [
-        'nav a[href*="/components/login"]',          // Desktop nav
-        'nav a[href$="/login.html"]',                // Local component navs
-        '#mobileMenu a[href*="/components/login"]',  // Mobile menu
-        '#mobileMenu a[href$="/login.html"]',        // Local component mobile navs
+        'nav a[href="/components/login"]',          // Desktop nav
+        'nav a[href="/login.html"]',                // Local component navs
+        '#mobileMenu a[href="/components/login"]',  // Mobile menu
+        '#mobileMenu a[href="/login.html"]',        // Local component mobile navs
         '.auth-link'                                  // Fallback for mobile
       ];
       
@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', async function () {
       // Replace desktop nav login link
       const desktopNav = document.querySelector('nav');
       if (desktopNav) {
-        const desktopLogin = desktopNav.querySelector('a[href*="/components/login"]');
+        const desktopLogin = desktopNav.querySelector('a[href="/components/login"]');
         if (desktopLogin) {
           const desktopProfile = createProfileComponent(false);
           desktopLogin.replaceWith(desktopProfile);
@@ -152,7 +152,7 @@ document.addEventListener('DOMContentLoaded', async function () {
       // Replace mobile menu login link
       const mobileMenu = document.getElementById('mobileMenu');
       if (mobileMenu) {
-        const mobileLogin = mobileMenu.querySelector('a[href*="/components/login"]') || 
+        const mobileLogin = mobileMenu.querySelector('a[href="/components/login"]') || 
                            mobileMenu.querySelector('.auth-link');
         if (mobileLogin) {
           const mobileProfile = createProfileComponent(true);
@@ -177,7 +177,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     // Intercept blog clicks in navbars while the blog page is still inactive.
     const inactiveBlogLinks = document.querySelectorAll(
-      'nav a[href*="/blog.html"], nav a[href*="/blog.html"], #mobileMenu a[href*="/blog.html"], #mobileMenu a[href*="/blog.html"]'
+      'nav a[href="/blog.html"], nav a[href="/blog.html"], #mobileMenu a[href="/blog.html"], #mobileMenu a[href="/blog.html"]'
     );
 
     inactiveBlogLinks.forEach(link => {
