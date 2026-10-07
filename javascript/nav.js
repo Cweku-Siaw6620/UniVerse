@@ -175,6 +175,14 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     }
 
+        // Keep the blog navigation available in markup while it is inactive.
+        document.querySelectorAll('nav a').forEach(link => {
+            if (link.textContent.trim() === 'Blog' || link.querySelector('span')?.textContent.trim() === 'Blog') {
+                link.classList.add('hidden');
+                link.setAttribute('aria-hidden', 'true');
+            }
+        });
+
     // Intercept blog clicks in navbars while the blog page is still inactive.
     const inactiveBlogLinks = document.querySelectorAll(
       'nav a[href="/blog.html"], nav a[href="/blog.html"], #mobileMenu a[href="/blog.html"], #mobileMenu a[href="/blog.html"]'
